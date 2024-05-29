@@ -1,0 +1,54 @@
+---
+import DiscoverMovie from '@/components/DiscoverCard.astro'
+import { ChevronLeft, ChevronRight } from 'lucide-astro'
+import type { Movie } from 'tmdb-ts'
+
+export interface Props {
+  discover: Movie[]
+}
+
+const { discover } = Astro.props
+---
+
+<div
+  id='discover'
+  class='relative z-0 flex h-screen min-h-[30rem] w-full items-center'
+>
+  <button
+    class='swiper-button swiper-left absolute left-0 z-20 flex size-12 items-center justify-center text-white'
+  >
+    <ChevronLeft />
+  </button>
+  <button
+    id='swiper-right'
+    class='swiper-button swiper-right absolute right-0 z-20 flex size-12 items-center justify-center text-white'
+  >
+    <ChevronRight />
+  </button>
+  <div
+    class='swiper flex h-screen min-h-[30rem] w-full overflow-auto scrollbar-hide'
+  >
+    {
+      discover.map(movie => (
+        <DiscoverMovie
+          media='movie'
+          id={movie.id}
+          rating={movie.vote_average}
+          image={movie.backdrop_path}
+          language={movie.original_language}
+          releaseDate={movie.release_date}
+          title={movie.title}
+          overview={movie.overview}
+        />
+      ))
+    }
+  </div>
+</div>
+
+<script>
+  import { createSwiper } from '@/utils'
+
+  const discover = document.querySelector('#discover')
+
+  createSwiper(discover)
+</script>

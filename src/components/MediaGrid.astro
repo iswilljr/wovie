@@ -1,0 +1,42 @@
+---
+import MediaPoster from './MediaPoster.astro'
+import type { Movie, TV } from 'tmdb-ts'
+
+export interface Props {
+  media: 'tv' | 'movie'
+  title: string
+  results: Array<Movie | TV>
+}
+
+const { media, results, title } = Astro.props
+---
+
+<div class='flex w-full flex-col gap-6 p-4 sm:px-12'>
+  <div
+    class='z-10 flex w-full items-center gap-2 py-1 text-lg font-medium tracking-wide text-white md:text-2xl'
+  >
+    <div class='flex size-6 items-center justify-center rounded bg-primary-500'>
+      <slot name='icon' />
+    </div>
+    <p>{title}</p>
+  </div>
+  <div
+    class='relative z-10 grid w-full grid-cols-[repeat(auto-fill,minmax(150px,1fr))] flex-wrap gap-4'
+  >
+    {
+      results.map(movie => (
+        <MediaPoster
+          media={media}
+          id={movie.id}
+          rating={movie.vote_average}
+          image={movie.poster_path}
+          language={movie.original_language}
+          releaseDate={
+            'release_date' in movie ? movie.release_date : movie.first_air_date
+          }
+          title={'title' in movie ? movie.title : movie.name}
+        />
+      ))
+    }
+  </div>
+</div>
