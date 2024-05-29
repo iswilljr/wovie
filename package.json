@@ -20,7 +20,7 @@
     "typescript": "^5.4.5"
   },
   "devDependencies": {
-    "eslint": "9.2.0",
+    "eslint": "8.57.0",
     "eslint-config-prettier": "9.1.0",
     "eslint-config-standard-with-typescript": "43.0.1",
     "eslint-plugin-astro": "1.2.0",

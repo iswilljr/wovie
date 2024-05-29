@@ -3,6 +3,7 @@
 /** @type {import("eslint").ESLint.ConfigData["rules"]} */
 const disabledTypescriptEslintRules = {
   '@typescript-eslint/explicit-function-return-type': 'off',
+  '@typescript-eslint/strict-boolean-expressions': 'off',
   '@typescript-eslint/promise-function-async': 'off',
   '@typescript-eslint/no-misused-promises': 'off',
 }
@@ -15,9 +16,12 @@ const eslintConfig = {
     es2021: true,
     node: true,
   },
-  extends: ['plugin:astro/recommended', 'standard-with-typescript', 'plugin:prettier/recommended'],
+  extends: [
+    'plugin:astro/recommended',
+    'standard-with-typescript',
+    'plugin:prettier/recommended',
+  ],
   parserOptions: {
-    tsconfigRootDir: __dirname,
     project: ['./tsconfig.json'],
     ecmaVersion: 2021,
     sourceType: 'module',
@@ -28,7 +32,7 @@ const eslintConfig = {
   rules: {
     ...disabledTypescriptEslintRules,
   },
-  ignorePatterns: ['.eslintrc.cjs'],
+  ignorePatterns: ['.eslintrc.cjs', 'env.d.ts'],
   overrides: [
     {
       files: ['*.astro'],
