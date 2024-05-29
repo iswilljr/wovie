@@ -4,7 +4,10 @@ export function snakeCase(str: string) {
   return words(str).join('_')
 }
 
-export function isElementInViewport(el: Element | null, container: Element | null) {
+export function isElementInViewport(
+  el: Element | null,
+  container: Element | null
+) {
   if (!el || !container) return false
 
   const rect = el.getBoundingClientRect()
@@ -19,7 +22,11 @@ export function isElementInViewport(el: Element | null, container: Element | nul
 }
 
 export function formatDate(date: string) {
-  return new Intl.DateTimeFormat('en', { day: '2-digit', month: '2-digit', year: 'numeric' }).format(new Date(date))
+  return new Intl.DateTimeFormat('en', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  }).format(new Date(date))
 }
 
 export function createSwiper(root: Element | null, findLast?: boolean) {
@@ -51,7 +58,11 @@ export function createSwiper(root: Element | null, findLast?: boolean) {
           : activeItemIndex + 1
 
       console.log({ activeItemIndex, newItemIndex })
-      items?.item(newItemIndex).scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
+      items?.item(newItemIndex).scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'center',
+      })
     })
   })
 }
