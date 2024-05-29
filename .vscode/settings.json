@@ -1,0 +1,11 @@
+{
+  "cSpell.words": ["TMDB"],
+  "template-string-converter.validLanguages": [
+    "svelte",
+    "typescript",
+    "javascript",
+    "typescriptreact",
+    "javascriptreact",
+    "astro"
+  ]
+}
