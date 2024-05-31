@@ -1,7 +1,25 @@
 import { words } from 'tiny-case'
+import type {
+  BackdropSizes,
+  LogoSizes,
+  PosterSizes,
+  ProfileSizes,
+  StillSizes,
+} from 'tmdb-ts'
+
+export type ImageSize =
+  | `${LogoSizes}`
+  | `${StillSizes}`
+  | `${PosterSizes}`
+  | `${ProfileSizes}`
+  | `${BackdropSizes}`
 
 export function snakeCase(str: string) {
   return words(str).join('_')
+}
+
+export function getImagePath(imagePath: string, size: ImageSize) {
+  return `https://image.tmdb.org/t/p/${size}${imagePath}`
 }
 
 export function isElementInViewport(
