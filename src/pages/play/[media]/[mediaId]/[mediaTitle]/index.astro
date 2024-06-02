@@ -1,0 +1,84 @@
+---
+import MediaGrid from '@/components/MediaGrid.astro'
+import PlayMediaCard from '@/components/PlayMediaCard.astro'
+import Layout from '@/layouts/Layout.astro'
+import { getImagePath, getSeasonOrEpisode } from '@/utils'
+import { getMovie, getTVShow } from '@/utils/tmdb'
+import { Image } from 'astro:assets'
+
+const { media, mediaId } = Astro.params
+const id = +(mediaId ?? 0)
+
+if (media !== 'tv' && media !== 'movie') return Astro.rewrite('/')
+
+const result = await (media === 'movie' ? getMovie(id) : getTVShow(id)).catch(
+  () => null
+)
+
+if (!result) {
+  return Astro.rewrite('/')
+}
+
+const isTV = result.media_type === 'tv'
+const season = Astro.url.searchParams.get('season')
+const episode = Astro.url.searchParams.get('episode')
+
+const tvShowPath = `/${getSeasonOrEpisode(season)}/${getSeasonOrEpisode(episode)}`
+const iframeUrl = `https://vidsrc.pro/embed/${media}/${result.id}${isTV ? tvShowPath : ''}`
+
+const mediaTitle = isTV ? result.name : result.title
+---
+
+<Layout title={`Watch ${mediaTitle} | Wovie`}>
+  <div class='min-h-screen p-4 pt-20 sm:p-12 sm:pt-28'>
+    <div id='opacity-layer' class='pointer-events-none !fixed !inset-0 -z-[1]'>
+    </div>
+    <Image
+      width='1280'
+      height='720'
+      src={getImagePath(result.backdrop_path, 'w1280')}
+      alt={mediaTitle}
+      class='fixed inset-0 -z-[10] aspect-video h-screen w-full object-cover blur'
+    />
+    <div class='z-20 mx-auto max-w-5xl space-y-4'>
+      <div class='mx-auto flex w-full justify-between px-3 text-gray-300'>
+        <div class='flex w-full items-center gap-2'>
+          <a class='shrink-0 hover:underline' href='/'>Home</a>
+          <span>/</span>
+          <a class='shrink-0 hover:underline' href='/'
+            >{isTV ? 'Show' : 'Movie'}</a
+          >
+          <span>/</span>
+          <a
+            class='!line-clamp-1 shrink-0 text-[#00c1db] underline-offset-2 hover:underline'
+            href='/info/movie/823464'
+          >
+            {mediaTitle}
+          </a>
+        </div>
+      </div>
+      <div class='aspect-video w-full rounded-2xl bg-white/20 shadow-2xl'>
+        <iframe
+          class='aspect-video w-full rounded-2xl'
+          allowfullscreen
+          src={iframeUrl}></iframe>
+      </div>
+      <PlayMediaCard
+        cast={result.credits.cast}
+        genres={result.genres}
+        image={result.poster_path}
+        overview={result.overview}
+        rating={result.vote_average}
+        releaseDate={isTV ? result.first_air_date : result.release_date}
+        title={mediaTitle}
+      />
+      <div role='separator' class='h-[1px] w-full bg-white/20 sm:!my-16'></div>
+      <MediaGrid
+        media={media}
+        title='You might also Like'
+        class='!p-0 sm:!p-0 [&_h2]:font-normal'
+        results={result.recommendations.results}
+      />
+    </div>
+  </div>
+</Layout>

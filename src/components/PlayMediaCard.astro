@@ -1,0 +1,94 @@
+---
+import { formatDate, getImagePath } from '@/utils'
+import { Image } from 'astro:assets'
+import type { Cast, Genre } from 'tmdb-ts'
+
+export interface Props {
+  cast: Cast[]
+  genres: Genre[]
+  image: string | undefined
+  overview: string
+  rating: number
+  releaseDate: string
+  title: string
+}
+
+const { cast, genres, image, overview, rating, releaseDate, title } =
+  Astro.props
+---
+
+<div class='flex w-full flex-row gap-6 md:flex-row'>
+  <div
+    class='hidden aspect-[2/3] h-fit w-[20%] flex-shrink-0 overflow-hidden rounded-lg bg-white/10 shadow-lg md:block'
+  >
+    {
+      image && (
+        <Image
+          src={getImagePath(image, 'w300')}
+          width='300'
+          height='450'
+          alt={title}
+          class='w-full object-cover object-center'
+        />
+      )
+    }
+  </div>
+  <div class='flex w-full flex-col gap-2'>
+    <p class='line-clamp-2 text-2xl font-semibold tracking-wide'>
+      {title}
+    </p>
+    <div class='flex flex-shrink-0 flex-wrap items-center gap-2'>
+      {
+        genres.map(genre => (
+          <p class='pointer-events-none flex select-none items-center justify-center rounded-md bg-sky-500/20 px-3 py-[6px] text-center text-sm font-medium text-sky-400'>
+            {genre.name}
+          </p>
+        ))
+      }
+    </div>
+    <div class='rounded-lg bg-white/10 p-2'>
+      <p class='line-clamp-4 text-pretty text-sm text-white/80 lg:text-sm'>
+        {overview}
+      </p>
+    </div>
+    <div class='flex flex-col gap-1 tracking-wide'>
+      <div class='text-sm font-medium'>
+        Date:
+        <span class='font-light tracking-wider'>
+          {formatDate(releaseDate)}
+        </span>
+      </div>
+      <div class='text-sm font-medium'>
+        Rating:
+        <span class='font-light'>{rating.toFixed(1)}</span>
+      </div>
+      <div class='line-clamp-2 text-sm font-medium'>
+        Cast:
+        <span class='font-light'>
+          {cast.length === 0 ? 'n/a' : cast.map(s => s.name).join(', ')}
+        </span>
+      </div>
+      <div class='mt-1 flex max-w-96 gap-2 overflow-x-auto scrollbar-hide'>
+        {
+          cast.map(person => (
+            <p
+              title={person.name}
+              class='relative size-12 flex-shrink-0 overflow-hidden rounded-full bg-white/20'
+            >
+              {person.profile_path && (
+                <img
+                  src={getImagePath(person.profile_path, 'w45')}
+                  width='45'
+                  height='45'
+                  alt={person.name}
+                  class='h-full w-full object-cover object-center'
+                />
+              )}
+              <span class='sr-only'>{person.name}</span>
+            </p>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</div>

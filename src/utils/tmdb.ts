@@ -21,9 +21,13 @@ export function getTVShows() {
 }
 
 export function getTVShow(id: number) {
-  return tmdb.tvShows.details(id)
+  return tmdb.tvShows
+    .details(id, ['credits', 'recommendations', 'similar'])
+    .then(tv => ({ ...tv, media_type: 'tv' as const }))
 }
 
 export function getMovie(id: number) {
-  return tmdb.movies.details(id)
+  return tmdb.movies
+    .details(id, ['credits', 'recommendations', 'similar'])
+    .then(movie => ({ ...movie, media_type: 'movie' as const }))
 }

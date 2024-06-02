@@ -22,6 +22,11 @@ export function getImagePath(imagePath: string, size: ImageSize) {
   return `https://image.tmdb.org/t/p/${size}${imagePath}`
 }
 
+export function getSeasonOrEpisode(s: unknown, d = 1) {
+  const n = Number(s)
+  return Number.isNaN(n) ? d : n !== 0 ? n : d
+}
+
 export function isElementInViewport(
   el: Element | null,
   container: Element | null
