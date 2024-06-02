@@ -16,7 +16,7 @@ const { id, media, image, language, rating, releaseDate, title } = Astro.props
 ---
 
 <a
-  class='swiper-item group relative flex aspect-[2/1] h-fit w-full flex-shrink-0 flex-col gap-2 overflow-hidden rounded-2xl sm:w-80'
+  class='swiper-item xs:w-1/2 group relative flex aspect-[2/1] h-fit w-full flex-shrink-0 flex-col gap-2 overflow-hidden rounded-2xl sm:w-80'
   href={`/play/${media}/${id}/${snakeCase(title)}`}
 >
   <div class='z-0'>

@@ -6,7 +6,7 @@ import { Play, Star } from 'lucide-astro'
 export interface Props {
   media: 'tv' | 'movie'
   id: number | string
-  image: string
+  image: string | undefined
   language: string
   rating: number
   releaseDate: string
@@ -20,14 +20,18 @@ const { id, media, image, language, rating, releaseDate, title } = Astro.props
   class='group relative flex aspect-[2/3] flex-col items-center justify-center overflow-hidden rounded-lg bg-[#35383f] outline-none'
   href={`/play/${media}/${id}/${snakeCase(title)}`}
 >
-  <Image
-    width='300'
-    height='150'
-    alt={title}
-    loading='lazy'
-    src={getImagePath(image, 'w300')}
-    class='h-full w-full object-cover object-center duration-150 group-hover:scale-[1.04] group-focus:scale-[1.04]'
-  />
+  {
+    image && (
+      <Image
+        width='300'
+        height='150'
+        alt={title}
+        loading='lazy'
+        src={getImagePath(image, 'w300')}
+        class='h-full w-full object-cover object-center duration-150 group-hover:scale-[1.04] group-focus:scale-[1.04]'
+      />
+    )
+  }
   <div
     class='absolute right-0 top-0 flex items-center justify-center gap-1 rounded-bl-md bg-black/70 px-[5px] py-1'
   >
@@ -41,7 +45,7 @@ const { id, media, image, language, rating, releaseDate, title } = Astro.props
     <Play width='16' height='16' fill='#000000d5' stroke='#000000d5' />
   </div>
   <div
-    class='absolute inset-0 z-10 flex flex-col justify-end gap-1 rounded-lg bg-gradient-to-t from-[#000000d0] p-3 outline-none ring-inset ring-primary-500 duration-150 group-hover:opacity-100 group-hover:ring-2 group-focus:opacity-100 group-focus:ring-2 sm:opacity-0'
+    class='absolute inset-0 z-10 flex flex-col justify-end gap-1 rounded-lg bg-gradient-to-t from-[#000000d0] p-3 outline-none ring-inset ring-primary-500 duration-150 group-hover:opacity-100 group-hover:ring-2 group-focus:opacity-100 group-focus:ring-2 group-[:not(:has(>img))]:opacity-100 sm:opacity-0'
   >
     <div class='flex items-center justify-center gap-1 text-xs text-[#d8d8d8]'>
       <p>{new Date(releaseDate).getFullYear()}</p>
