@@ -10,14 +10,14 @@ export async function GET(ctx: APIContext) {
     return await ctx.rewrite('/')
   }
 
-  const tvShow =
+  const result =
     media === 'tv'
       ? await getTVShow(mediaIdShoe).catch(() => null)
       : await getMovie(mediaIdShoe).catch(() => null)
 
-  if (tvShow) {
+  if (result) {
     return ctx.redirect(
-      `/play/tv/${tvShow.id}/${snakeCase(tvShow.backdrop_path)}`
+      `/play/tv/${result.id}/${snakeCase(result.media_type === 'tv' ? result.name : result.title)}`
     )
   }
 
