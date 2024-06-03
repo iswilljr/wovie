@@ -1,0 +1,64 @@
+---
+import { getSeasonOrEpisode, snakeCase } from '@/utils'
+import { tmdb, type getTVShow } from '@/utils/tmdb'
+import { Play } from 'lucide-astro'
+import { SelectSeason } from './SelectSeason'
+
+export type Props = Awaited<ReturnType<typeof getTVShow>>
+
+const { id, seasons, name } = Astro.props
+
+const season = getSeasonOrEpisode(Astro.url.searchParams.get('season'))
+const episode = getSeasonOrEpisode(Astro.url.searchParams.get('episode'))
+
+const tvSeasons = seasons.filter(season => season.season_number !== 0)
+const seasonDetails = await tmdb.tvShows.season(id, season)
+
+const iframeUrl = `https://vidsrc.pro/embed/tv/${id}/${season}/${episode}`
+---
+
+<div
+  class='flex w-full flex-col overflow-hidden rounded-2xl bg-white/20 shadow-2xl lg:flex-row'
+>
+  <div
+    class='flex h-[25rem] flex-col overflow-auto bg-black/40 lg:aspect-video lg:h-[unset] lg:w-80'
+  >
+    <div
+      class='flex h-14 w-full items-center justify-between gap-2 overflow-hidden bg-white/5 px-3 py-4'
+    >
+      <p>Episodes</p>
+      <SelectSeason
+        client:idle
+        id={id}
+        seasons={tvSeasons}
+        activeSeason={season}
+        title={snakeCase(name)}
+      />
+    </div>
+    <div class='custom-scrollbars overflow-y-auto'>
+      {
+        seasonDetails.episodes.map(episodeDetails => (
+          <a
+            aria-current={episodeDetails.episode_number === episode}
+            href={`/play/tv/${id}/${snakeCase(name)}?season=${season}&episode=${episodeDetails.episode_number}`}
+            class='group relative line-clamp-1 flex h-12 w-full flex-shrink-0 items-center justify-between gap-1 p-4 text-sm even:bg-white/5 hover:bg-white/10 hover:text-white aria-[current]:!bg-white/20 aria-[current]:!text-sky-400'
+          >
+            <p class='flex gap-2 tracking-wide'>
+              <span class='font-medium'>{episodeDetails.episode_number}.</span>
+              <span class='line-clamp-1 text-start font-normal'>
+                {episodeDetails.name}
+              </span>
+            </p>
+            <span class='hidden shrink-0 items-center justify-center rounded-full bg-sky-400 p-1 group-aria-[current]:flex'>
+              <Play width='10' height='10' fill='black' stroke='black' />
+            </span>
+          </a>
+        ))
+      }
+    </div>
+  </div>
+  <div class='flex-grow bg-white/20'>
+    <iframe class='aspect-video w-full' allowfullscreen src={iframeUrl}
+    ></iframe>
+  </div>
+</div>

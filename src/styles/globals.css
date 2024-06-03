@@ -1,0 +1,105 @@
+:root {
+  --sb-track-color: transparent;
+  --sb-thumb-color: #ffffff6b;
+  --sb-size: 6px;
+  --discover-space: 10rem;
+  --accent: 136, 58, 234;
+  --accent-light: 224, 204, 250;
+  --accent-dark: 49, 10, 101;
+  --accent-gradient: linear-gradient(
+    45deg,
+    rgb(var(--accent)),
+    rgb(var(--accent-light)) 30%,
+    white 60%
+  );
+}
+
+html {
+  font-family: system-ui, sans-serif;
+  background: #000;
+  color: #fff;
+  background-size: 224px;
+  scroll-padding-top: 2rem;
+  scroll-padding-bottom: 2rem;
+  color-scheme: dark;
+}
+
+code {
+  font-family:
+    Menlo,
+    Monaco,
+    Lucida Console,
+    Liberation Mono,
+    DejaVu Sans Mono,
+    Bitstream Vera Sans Mono,
+    Courier New,
+    monospace;
+}
+
+#opacity-layer {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(0, 0, 0, 0.6235294118) 90%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.6235294118) 5%,
+      rgba(255, 255, 255, 0) 30%
+    ),
+    linear-gradient(
+      250deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(0, 0, 0, 0.6862745098) 100%
+    );
+}
+
+.gradient-opacity {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(0, 0, 0, 0.6235294118) 90%
+  );
+}
+
+.swiper {
+  scroll-snap-type: x mandatory;
+}
+
+.swiper-item {
+  scroll-snap-align: start;
+}
+
+.swiper-button {
+  @apply hidden opacity-60 sm:flex;
+}
+
+img {
+  font-style: italic;
+  user-select: none;
+  pointer-events: none;
+}
+
+.custom-scrollbars::-webkit-scrollbar {
+  width: var(--sb-size);
+}
+
+.custom-scrollbars::-webkit-scrollbar-track {
+  background: var(--sb-track-color);
+  border-radius: 12px;
+}
+
+.custom-scrollbars::-webkit-scrollbar-thumb {
+  background: var(--sb-thumb-color);
+  border-radius: 12px;
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  .custom-scrollbars {
+    scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
+  }
+}

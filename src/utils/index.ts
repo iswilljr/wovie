@@ -80,7 +80,6 @@ export function createSwiper(root: Element | null, findLast?: boolean) {
           ? 0
           : activeItemIndex + 1
 
-      console.log({ activeItemIndex, newItemIndex })
       items?.item(newItemIndex).scrollIntoView({
         behavior: 'smooth',
         block: 'nearest',

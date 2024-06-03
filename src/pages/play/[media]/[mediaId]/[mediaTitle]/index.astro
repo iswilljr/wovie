@@ -1,8 +1,9 @@
 ---
 import MediaGrid from '@/components/MediaGrid.astro'
 import PlayMediaCard from '@/components/PlayMediaCard.astro'
+import TVShowPlayer from '@/components/TVShowPlayer.astro'
 import Layout from '@/layouts/Layout.astro'
-import { getImagePath, getSeasonOrEpisode } from '@/utils'
+import { getImagePath } from '@/utils'
 import { getMovie, getTVShow } from '@/utils/tmdb'
 import { Image } from 'astro:assets'
 
@@ -20,11 +21,8 @@ if (!result) {
 }
 
 const isTV = result.media_type === 'tv'
-const season = Astro.url.searchParams.get('season')
-const episode = Astro.url.searchParams.get('episode')
 
-const tvShowPath = `/${getSeasonOrEpisode(season)}/${getSeasonOrEpisode(episode)}`
-const iframeUrl = `https://vidsrc.pro/embed/${media}/${result.id}${isTV ? tvShowPath : ''}`
+const iframeUrl = `https://vidsrc.pro/embed/${media}/${result.id}`
 
 const mediaTitle = isTV ? result.name : result.title
 ---
@@ -40,7 +38,9 @@ const mediaTitle = isTV ? result.name : result.title
       alt={mediaTitle}
       class='fixed inset-0 -z-[10] aspect-video h-screen w-full object-cover blur'
     />
-    <div class='z-20 mx-auto max-w-5xl space-y-4'>
+    <div
+      class:list={['z-20 mx-auto space-y-4', isTV ? 'max-w-7xl' : 'max-w-5xl']}
+    >
       <div class='mx-auto flex w-full justify-between px-3 text-gray-300'>
         <div class='flex w-full items-center gap-2'>
           <a class='shrink-0 hover:underline' href='/'>Home</a>
@@ -57,12 +57,19 @@ const mediaTitle = isTV ? result.name : result.title
           </a>
         </div>
       </div>
-      <div class='aspect-video w-full rounded-2xl bg-white/20 shadow-2xl'>
-        <iframe
-          class='aspect-video w-full rounded-2xl'
-          allowfullscreen
-          src={iframeUrl}></iframe>
-      </div>
+      {
+        isTV ? (
+          <TVShowPlayer {...result} />
+        ) : (
+          <div class='aspect-video w-full flex-grow rounded-2xl bg-white/20 shadow-2xl'>
+            <iframe
+              class='aspect-video w-full rounded-2xl'
+              allowfullscreen
+              src={iframeUrl}
+            />
+          </div>
+        )
+      }
       <PlayMediaCard
         cast={result.credits.cast}
         genres={result.genres}
