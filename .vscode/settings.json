@@ -3,6 +3,7 @@
     "astro",
     "astrojs",
     "lucide",
+    "nanostores",
     "preact",
     "tailwindcss",
     "tmdb",

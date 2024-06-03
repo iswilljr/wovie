@@ -1,5 +1,7 @@
+import { useStore } from '@nanostores/preact'
+import { searchResults } from '@/store/search'
 import { actions } from 'astro:actions'
-import { useCallback, useEffect, useState } from 'preact/hooks'
+import { useCallback, useEffect, useMemo } from 'preact/hooks'
 import { useDebouncedState } from '@/hooks/use-debounced-state'
 import { snakeCase, getImagePath } from '@/utils'
 import type { MultiSearchResult } from 'tmdb-ts'
@@ -48,17 +50,28 @@ function SearchPost(props: MultiSearchResult) {
 }
 
 export function Search({ children }: preact.ComponentProps<'div'>) {
-  const [query, setQuery] = useDebouncedState('')
-  const [results, setResults] = useState<MultiSearchResult[]>([])
+  const [query, setQuery] = useDebouncedState(() => {
+    if (typeof document === 'undefined') return ''
+
+    return (
+      document.querySelector<HTMLInputElement>('#search-query')?.value ?? ''
+    )
+  })
+  const searchResultsMap = useStore(searchResults)
+
+  const results = useMemo(() => {
+    return searchResultsMap[query] ?? []
+  }, [searchResultsMap, query])
 
   const handleSearch = useCallback(async (query: string) => {
+    if (Object.hasOwn(searchResults.get(), query)) return
+
     const results = await actions.search({ query })
-    setResults(results)
+    searchResults.setKey(query, results)
   }, [])
 
   useEffect(() => {
     if (!query) {
-      setResults([])
       return
     }
 
@@ -74,6 +87,7 @@ export function Search({ children }: preact.ComponentProps<'div'>) {
         <input
           type='search'
           name='search'
+          id='search-query'
           autoComplete='off'
           placeholder='Search Anything...'
           onInput={e => setQuery(e.currentTarget.value)}
