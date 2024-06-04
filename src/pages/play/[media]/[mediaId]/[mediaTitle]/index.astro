@@ -10,14 +10,14 @@ import { Image } from 'astro:assets'
 const { media, mediaId } = Astro.params
 const id = +(mediaId ?? 0)
 
-if (media !== 'tv' && media !== 'movie') return Astro.rewrite('/')
+if (media !== 'tv' && media !== 'movie') return Astro.redirect('/')
 
 const result = await (media === 'movie' ? getMovie(id) : getTVShow(id)).catch(
   () => null
 )
 
 if (!result) {
-  return Astro.rewrite('/')
+  return Astro.redirect('/')
 }
 
 const isTV = result.media_type === 'tv'
