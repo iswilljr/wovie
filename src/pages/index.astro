@@ -12,6 +12,11 @@ const [nowPlaying, trending, trendingMovies, trendingTV] = await Promise.all([
   getTrending('movie'),
   getTrending('tv'),
 ])
+
+Astro.response.headers.set(
+  'Cache-Control',
+  'public, s-maxage=60, stale-while-revalidate=30'
+)
 ---
 
 <Layout title='Wovie - Watch Movies & TV Shows Free'>
