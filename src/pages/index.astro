@@ -21,7 +21,6 @@ const [nowPlaying, trending, trendingMovies, trendingTV] = await Promise.all([
       id='trending'
       results={trending.results}
       title="What's Trending Today"
-      media='movie'
     >
       <Flame slot='icon' width='18' height='18' fill='#000' stroke='#000' />
     </MediaList>

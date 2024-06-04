@@ -9,12 +9,11 @@ import type {
 
 export interface Props {
   id: string
-  media: 'tv' | 'movie'
   title: string
   results: Array<TVWithMediaType | MovieWithMediaType | PersonWithMediaType>
 }
 
-const { id, media, results, title } = Astro.props
+const { id, results, title } = Astro.props
 ---
 
 <div id={id} class='flex w-full flex-col gap-6 p-4 sm:px-12'>
@@ -45,7 +44,7 @@ const { id, media, results, title } = Astro.props
         results.map(movie =>
           movie.media_type !== 'person' ? (
             <MediaCard
-              media={media}
+              media={movie.media_type}
               id={movie.id}
               rating={movie.vote_average}
               image={movie.backdrop_path}
