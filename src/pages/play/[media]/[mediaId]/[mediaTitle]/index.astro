@@ -49,17 +49,12 @@ Astro.response.headers.set(
       <div class='mx-auto flex w-full justify-between px-3 text-gray-300'>
         <div class='flex w-full items-center gap-2'>
           <a class='shrink-0 hover:underline' href='/'>Home</a>
-          <span>/</span>
-          <a class='shrink-0 hover:underline' href='/'
-            >{isTV ? 'Show' : 'Movie'}</a
-          >
-          <span>/</span>
-          <a
-            class='!line-clamp-1 shrink-0 text-[#00c1db] underline-offset-2 hover:underline'
-            href='/info/movie/823464'
-          >
+          <span class='pointer-events-none select-none'>/</span>
+          <p class='shrink-0 cursor-default'>{isTV ? 'Show' : 'Movie'}</p>
+          <span class='pointer-events-none select-none'>/</span>
+          <p class='line-clamp-1 shrink-0 cursor-default text-[#00c1db]'>
             {mediaTitle}
-          </a>
+          </p>
         </div>
       </div>
       {
