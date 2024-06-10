@@ -76,10 +76,11 @@ const { cast, genres, image, overview, rating, releaseDate, title } =
               class='relative size-12 flex-shrink-0 overflow-hidden rounded-full bg-white/20'
             >
               {person.profile_path && (
-                <img
+                <Image
                   src={getImagePath(person.profile_path, 'w45')}
                   width='45'
                   height='45'
+                  loading='lazy'
                   alt={person.name}
                   class='h-full w-full object-cover object-center'
                 />
