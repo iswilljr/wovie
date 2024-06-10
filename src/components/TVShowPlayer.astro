@@ -58,7 +58,10 @@ const iframeUrl = `https://vidsrc.pro/embed/tv/${id}/${season}/${episode}`
     </div>
   </div>
   <div class='flex-grow bg-white/20'>
-    <iframe class='aspect-video w-full' allowfullscreen src={iframeUrl}
-    ></iframe>
+    <iframe
+      title={`${name} - S${season}E${episode}`}
+      class='aspect-video w-full'
+      allowfullscreen
+      src={iframeUrl}></iframe>
   </div>
 </div>

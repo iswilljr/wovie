@@ -63,6 +63,7 @@ Astro.response.headers.set(
         ) : (
           <div class='aspect-video w-full flex-grow rounded-2xl bg-white/20 shadow-2xl'>
             <iframe
+              title={mediaTitle}
               class='aspect-video w-full rounded-2xl'
               allowfullscreen
               src={iframeUrl}
