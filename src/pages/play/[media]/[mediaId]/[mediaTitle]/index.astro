@@ -33,7 +33,7 @@ Astro.response.headers.set(
 ---
 
 <Layout title={`Watch ${mediaTitle} | Wovie`}>
-  <div class='min-h-screen p-4 pt-20 sm:p-12 sm:pt-28'>
+  <div class='min-h-svh p-4 pt-20 sm:p-12 sm:pt-28'>
     <div id='opacity-layer' class='pointer-events-none !fixed !inset-0 -z-[1]'>
     </div>
     <Image
@@ -41,7 +41,7 @@ Astro.response.headers.set(
       height='720'
       src={getImagePath(result.backdrop_path, 'w1280')}
       alt={mediaTitle}
-      class='fixed inset-0 -z-[10] aspect-video h-screen w-full object-cover blur'
+      class='fixed inset-0 -z-[10] aspect-video h-svh w-full object-cover blur'
     />
     <div
       class:list={['z-20 mx-auto space-y-4', isTV ? 'max-w-7xl' : 'max-w-5xl']}
@@ -64,7 +64,7 @@ Astro.response.headers.set(
           <div class='aspect-video w-full flex-grow rounded-2xl bg-white/20 shadow-2xl'>
             <iframe
               title={mediaTitle}
-              class='aspect-video w-full rounded-2xl'
+              class='aspect-video w-full rounded-2xl bg-transparent'
               allowfullscreen
               src={iframeUrl}
             />

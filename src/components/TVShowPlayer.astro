@@ -1,6 +1,6 @@
 ---
 import { getSeasonOrEpisode, snakeCase } from '@/utils'
-import { tmdb, type getTVShow } from '@/utils/tmdb'
+import { getSeasonDetails, type getTVShow } from '@/utils/tmdb'
 import { Play } from 'lucide-astro'
 import { SelectSeason } from './SelectSeason'
 
@@ -12,13 +12,13 @@ const season = getSeasonOrEpisode(Astro.url.searchParams.get('season'))
 const episode = getSeasonOrEpisode(Astro.url.searchParams.get('episode'))
 
 const tvSeasons = seasons.filter(season => season.season_number !== 0)
-const seasonDetails = await tmdb.tvShows.season(id, season)
+const seasonDetails = await getSeasonDetails(id, season)
 
 const iframeUrl = `https://vidsrc.pro/embed/tv/${id}/${season}/${episode}`
 ---
 
 <div
-  class='flex w-full flex-col overflow-hidden rounded-2xl bg-white/20 shadow-2xl lg:flex-row'
+  class='flex w-full flex-col-reverse overflow-hidden rounded-2xl bg-white/20 shadow-2xl lg:flex-row'
 >
   <div
     class='flex h-[25rem] flex-col overflow-auto bg-black/40 lg:aspect-video lg:h-[unset] lg:w-80'
@@ -60,7 +60,7 @@ const iframeUrl = `https://vidsrc.pro/embed/tv/${id}/${season}/${episode}`
   <div class='flex-grow bg-white/20'>
     <iframe
       title={`${name} - S${season}E${episode}`}
-      class='aspect-video w-full'
+      class='aspect-video w-full bg-transparent'
       allowfullscreen
       src={iframeUrl}></iframe>
   </div>

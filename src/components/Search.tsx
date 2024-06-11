@@ -133,7 +133,7 @@ export function SearchMobile({ children }: preact.ComponentProps<'div'>) {
         {children}
       </button>
       {open && (
-        <div class='fixed inset-0 h-screen w-full space-y-4 bg-black/80 p-4'>
+        <div class='fixed inset-0 h-svh w-full space-y-4 bg-black/80 p-4'>
           <div className='flex w-full items-center justify-between gap-2'>
             <div className='flex h-8 flex-1 items-center gap-2 rounded-lg bg-white/20 px-2 backdrop-blur'>
               {children}
