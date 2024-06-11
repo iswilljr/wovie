@@ -1,18 +1,22 @@
 import { words } from 'tiny-case'
 import type {
-  BackdropSizes,
-  LogoSizes,
-  PosterSizes,
-  ProfileSizes,
-  StillSizes,
+  BackdropSize,
+  LogoSize,
+  PosterSize,
+  ProfileSize,
+  StillSize,
+  MediaSize,
 } from 'tmdb-ts'
 
+type Size<T extends Record<string, string>> = T[keyof T]
+
 export type ImageSize =
-  | `${LogoSizes}`
-  | `${StillSizes}`
-  | `${PosterSizes}`
-  | `${ProfileSizes}`
-  | `${BackdropSizes}`
+  | Size<typeof MediaSize>
+  | Size<typeof LogoSize>
+  | Size<typeof StillSize>
+  | Size<typeof PosterSize>
+  | Size<typeof ProfileSize>
+  | Size<typeof BackdropSize>
 
 export function snakeCase(str: string) {
   return words(str).join('_')
