@@ -35,3 +35,7 @@ export async function getMovie(id: number) {
 export async function getSeasonDetails(id: number, season: number) {
   return await tmdb.tvShows.season(id, season)
 }
+
+export async function multiSearch(query: string) {
+  return await tmdb.search.multi({ query })
+}
