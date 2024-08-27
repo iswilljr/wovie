@@ -98,7 +98,6 @@ export function Search({ children }: preact.ComponentProps<'div'>) {
       <div className='flex h-8 items-center gap-2 rounded-lg bg-white/20 px-2 backdrop-blur'>
         {children}
         <input
-          autofocus
           type='search'
           id='search-query'
           onInput={handleInput}
