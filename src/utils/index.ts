@@ -18,7 +18,7 @@ export type ImageSize =
   | Size<typeof ProfileSize>
   | Size<typeof BackdropSize>
 
-export function snakeCase(str: string) {
+export function snakeCase(str = '') {
   return words(str).join('_')
 }
 
@@ -49,6 +49,8 @@ export function isElementInViewport(
 }
 
 export function formatDate(date: string) {
+  if (!date) return 'N/A'
+
   return new Intl.DateTimeFormat('en', {
     day: '2-digit',
     month: '2-digit',
