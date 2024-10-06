@@ -19,7 +19,11 @@ Astro.response.headers.set(
 )
 ---
 
-<Layout title='Wovie - Watch Movies & TV Shows Free'>
+<Layout
+  title='Wovie - Watch Movies & TV Shows Free'
+  description='Watch movies and tv shows online'
+  image='https://wovie.vercel.app/og.png'
+>
   <Discover discover={nowPlaying.results} />
   <div class='-my-[--discover-space] sm:pb-8'>
     <MediaList
