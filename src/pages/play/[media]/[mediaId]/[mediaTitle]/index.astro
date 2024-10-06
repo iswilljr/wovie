@@ -38,7 +38,11 @@ Astro.response.headers.set(
 )
 ---
 
-<Layout title={`Watch ${mediaTitle} | Wovie`}>
+<Layout
+  title={`${mediaTitle} | Wovie`}
+  description={`Watch ${mediaTitle} on Wovie. ${result.overview}`}
+  image={getImagePath(result.backdrop_path, 'w1280')}
+>
   <div class='min-h-svh p-4 pt-20 sm:p-12 sm:pt-28'>
     <div id='opacity-layer' class='pointer-events-none !fixed !inset-0 -z-[1]'>
     </div>
