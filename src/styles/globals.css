@@ -86,6 +86,7 @@ img {
 
 .custom-scrollbars::-webkit-scrollbar {
   width: var(--sb-size);
+  height: var(--sb-size);
 }
 
 .custom-scrollbars::-webkit-scrollbar-track {

@@ -1,4 +1,7 @@
 ---
+import SelectSource from './SelectSource.astro'
+import { getSource, getTvUrl } from '@/utils/sources'
+import { getEpisodeUrl } from '@/utils/url'
 import { getSeasonOrEpisode, snakeCase } from '@/utils'
 import { getSeasonDetails, type getTVShow } from '@/utils/tmdb'
 import { Play } from 'lucide-astro'
@@ -14,14 +17,13 @@ const episode = getSeasonOrEpisode(Astro.url.searchParams.get('episode'))
 const tvSeasons = seasons.filter(season => season.season_number !== 0)
 const seasonDetails = await getSeasonDetails(id, season)
 
-const iframeUrl = `https://vidsrc.pro/embed/tv/${id}/${season}/${episode}`
+const currentSource = getSource(Astro.url.searchParams.get('source'))
+const iframeUrl = getTvUrl(currentSource.id, id, season, episode)
 ---
 
-<div
-  class='flex w-full flex-col-reverse overflow-hidden rounded-2xl bg-white/20 shadow-2xl lg:flex-row'
->
+<div class='flex w-full flex-col-reverse gap-2 shadow-2xl lg:flex-row'>
   <div
-    class='flex h-[25rem] flex-col overflow-auto bg-black/40 lg:aspect-video lg:h-[unset] lg:w-80'
+    class='flex h-[25rem] flex-col overflow-auto rounded-2xl bg-white/10 lg:aspect-video lg:h-[unset] lg:w-80'
   >
     <div
       class='flex h-14 w-full items-center justify-between gap-2 overflow-hidden bg-white/5 px-3 py-4'
@@ -33,6 +35,7 @@ const iframeUrl = `https://vidsrc.pro/embed/tv/${id}/${season}/${episode}`
         seasons={tvSeasons}
         activeSeason={season}
         title={snakeCase(name)}
+        sourceId={currentSource.id}
       />
     </div>
     <div class='custom-scrollbars overflow-y-auto'>
@@ -40,7 +43,13 @@ const iframeUrl = `https://vidsrc.pro/embed/tv/${id}/${season}/${episode}`
         seasonDetails.episodes.map(episodeDetails => (
           <a
             aria-current={episodeDetails.episode_number === episode}
-            href={`/play/tv/${id}/${snakeCase(name)}?season=${season}&episode=${episodeDetails.episode_number}`}
+            href={getEpisodeUrl(
+              id,
+              name,
+              season,
+              episodeDetails.episode_number,
+              currentSource.id
+            )}
             class='group relative line-clamp-1 flex h-12 w-full flex-shrink-0 items-center justify-between gap-1 p-4 text-sm even:bg-white/5 hover:bg-white/10 hover:text-white aria-[current]:!bg-white/20 aria-[current]:!text-sky-400'
           >
             <p class='flex gap-2 tracking-wide'>
@@ -57,11 +66,14 @@ const iframeUrl = `https://vidsrc.pro/embed/tv/${id}/${season}/${episode}`
       }
     </div>
   </div>
-  <div class='flex-grow bg-white/20'>
-    <iframe
-      title={`${name} - S${season}E${episode}`}
-      class='aspect-video w-full bg-transparent'
-      allowfullscreen
-      src={iframeUrl}></iframe>
+  <div class='flex flex-grow flex-col gap-2'>
+    <div class='rounded-2xl bg-white/10'>
+      <iframe
+        title={`${name} - S${season}E${episode}`}
+        class='aspect-video w-full rounded-2xl bg-transparent'
+        allowfullscreen
+        src={iframeUrl}></iframe>
+    </div>
+    <SelectSource />
   </div>
 </div>

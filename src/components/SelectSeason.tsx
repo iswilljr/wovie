@@ -1,4 +1,5 @@
 import { getSeasonOrEpisode } from '@/utils'
+import { getSeasonUrl } from '@/utils/url'
 import { navigate } from 'astro:transitions/client'
 import { useCallback } from 'preact/hooks'
 import type { Season } from 'tmdb-ts'
@@ -7,6 +8,7 @@ interface SelectSeasonProps {
   id: number
   title: string
   seasons: Season[]
+  sourceId: string
   activeSeason: number
 }
 
@@ -14,6 +16,7 @@ export function SelectSeason({
   id,
   title,
   seasons,
+  sourceId,
   activeSeason,
 }: SelectSeasonProps) {
   const handleChange = useCallback<
@@ -24,7 +27,7 @@ export function SelectSeason({
 
       if (newSeason === activeSeason) return
 
-      void navigate(`/play/tv/${id}/${title}?season=${newSeason}`)
+      void navigate(getSeasonUrl(id, title, newSeason, sourceId))
     },
     [id, title, activeSeason]
   )
