@@ -1,9 +1,11 @@
 ---
 import MediaGrid from '@/components/MediaGrid.astro'
 import PlayMediaCard from '@/components/PlayMediaCard.astro'
+import SelectSource from '@/components/SelectSource.astro'
 import TVShowPlayer from '@/components/TVShowPlayer.astro'
 import Layout from '@/layouts/Layout.astro'
-import { getImagePath } from '@/utils'
+import { getImagePath, getSeasonOrEpisode } from '@/utils'
+import { getMovieUrl, getSource } from '@/utils/sources'
 import { getMovie, getTVShow } from '@/utils/tmdb'
 import { Image } from 'astro:assets'
 
@@ -22,9 +24,13 @@ if (!result) {
 
 const isTV = result.media_type === 'tv'
 
-const iframeUrl = `https://vidsrc.pro/embed/${media}/${result.id}`
+const currentSource = getSource(Astro.url.searchParams.get('source'))
+const iframeUrl = getMovieUrl(currentSource.id, id)
 
-const mediaTitle = isTV ? result.name : result.title
+const season = getSeasonOrEpisode(Astro.url.searchParams.get('season'))
+const episode = getSeasonOrEpisode(Astro.url.searchParams.get('episode'))
+
+const mediaTitle = isTV ? `${result.name} S${season}E${episode}` : result.title
 
 Astro.response.headers.set(
   'Cache-Control',
@@ -52,7 +58,7 @@ Astro.response.headers.set(
           <span class='pointer-events-none select-none'>/</span>
           <p class='shrink-0 cursor-default'>{isTV ? 'Show' : 'Movie'}</p>
           <span class='pointer-events-none select-none'>/</span>
-          <p class='line-clamp-1 shrink-0 cursor-default text-[#00c1db]'>
+          <p class='line-clamp-1 cursor-default text-[#00c1db]'>
             {mediaTitle}
           </p>
         </div>
@@ -61,7 +67,7 @@ Astro.response.headers.set(
         isTV ? (
           <TVShowPlayer {...result} />
         ) : (
-          <div class='aspect-video w-full flex-grow rounded-2xl bg-white/20 shadow-2xl'>
+          <div class='aspect-video w-full flex-grow rounded-2xl bg-white/10 shadow-2xl'>
             <iframe
               title={mediaTitle}
               class='aspect-video w-full rounded-2xl bg-transparent'
@@ -80,6 +86,7 @@ Astro.response.headers.set(
         releaseDate={isTV ? result.first_air_date : result.release_date}
         title={mediaTitle}
       />
+      {!isTV && <SelectSource />}
       <div role='separator' class='h-[1px] w-full bg-white/20 sm:!my-16'></div>
       <MediaGrid
         media={media}
