@@ -104,3 +104,42 @@ img {
     scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
   }
 }
+
+.loading-wrapper {
+  --size: 24px;
+  --color: rgba(255, 255, 255, 0.3);
+  height: var(--size);
+  width: var(--size);
+}
+
+.spinner {
+  --total-bars: 12;
+  --angle: calc(360deg / var(--total-bars));
+  position: relative;
+  top: 50%;
+  left: 50%;
+  height: var(--size);
+  width: var(--size);
+}
+
+.loading-bar {
+  animation: spin 1.2s linear infinite;
+  background: var(--color);
+  border-radius: 6px;
+  height: 8%;
+  left: -10%;
+  position: absolute;
+  top: -3.9%;
+  width: 24%;
+  transform: rotate(calc(var(--angle) * var(--i))) translate(146%);
+  animation-delay: calc(-1.2s + (var(--i) * 0.1s));
+}
+
+@keyframes spin {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}

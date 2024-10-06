@@ -9,6 +9,7 @@ import type { MultiSearchResult } from 'tmdb-ts'
 
 function useSearchResults({ id = '' }) {
   const searchResultsMap = useStore(searchResults)
+  const [isLoading, setIsLoading] = useState(false)
 
   const [query, setQuery] = useDebouncedState(() => {
     if (typeof document === 'undefined') return ''
@@ -26,8 +27,12 @@ function useSearchResults({ id = '' }) {
   const handleSearch = useCallback(async (query: string) => {
     if (Object.hasOwn(searchResults.get(), query)) return
 
-    const results = await actions.search({ query })
-    searchResults.setKey(query, results)
+    setIsLoading(true)
+
+    const results = await actions.search({ query }).catch(() => null)
+
+    searchResults.setKey(query, results ?? [])
+    setIsLoading(false)
   }, [])
 
   useEffect(() => {
@@ -41,6 +46,7 @@ function useSearchResults({ id = '' }) {
   return {
     query,
     results,
+    isLoading,
     handleSearch,
     handleInput,
   }
@@ -49,6 +55,23 @@ function useSearchResults({ id = '' }) {
 interface SearchPostProps {
   result: MultiSearchResult
   onClick?: () => void
+}
+
+function Loader() {
+  return (
+    <div className='flex items-center justify-center gap-2 py-3 text-gray-500'>
+      <div class='loading-wrapper'>
+        <div class='spinner'>
+          {Array(12)
+            .fill(0)
+            .map((_, i) => (
+              <div class='loading-bar' style={`--i: ${i}`} />
+            ))}
+        </div>
+      </div>
+      <p>Loading...</p>
+    </div>
+  )
 }
 
 function SearchPost({ result, onClick }: SearchPostProps) {
@@ -99,7 +122,7 @@ function SearchPost({ result, onClick }: SearchPostProps) {
 
 export function Search({ children }: preact.ComponentProps<'div'>) {
   const ref = useRef<HTMLDivElement>(null)
-  const { handleInput, results } = useSearchResults({
+  const { query, handleInput, results, isLoading } = useSearchResults({
     id: '#search-query',
   })
   const [isFocused, setIsFocused] = useState(false)
@@ -125,10 +148,14 @@ export function Search({ children }: preact.ComponentProps<'div'>) {
           className='w-56 bg-transparent text-xs font-normal leading-8 tracking-wide text-white/90 outline-none'
         />
       </div>
-      {results.length > 0 && (
+      {query.length > 0 && (
         <div
           className={`custom-scrollbars absolute left-0 top-full max-h-72 w-full flex-col gap-2 overflow-y-auto rounded-lg bg-black/90 p-2 ${isFocused ? 'flex' : 'hidden'}`}
         >
+          {isLoading && <Loader />}
+          {!isLoading && results.length === 0 && (
+            <p class='py-3 text-center text-gray-500'>No results found!</p>
+          )}
           {results.map(result => (
             <SearchPost key={result.id} result={result} onClick={handleBlur} />
           ))}
@@ -140,7 +167,7 @@ export function Search({ children }: preact.ComponentProps<'div'>) {
 
 export function SearchMobile({ children }: preact.ComponentProps<'div'>) {
   const [open, setOpen] = useState(false)
-  const { query, handleInput, results } = useSearchResults({
+  const { query, handleInput, results, isLoading } = useSearchResults({
     id: '#mobile-query',
   })
 
@@ -200,13 +227,21 @@ export function SearchMobile({ children }: preact.ComponentProps<'div'>) {
               </svg>
             </button>
           </div>
-          {results.length > 0 && (
-            <div className='custom-scrollbars flex max-h-[calc(100%-3rem)] w-full flex-col gap-2 overflow-y-auto'>
-              {results.map(result => (
-                <SearchPost key={result.id} result={result} />
-              ))}
-            </div>
-          )}
+          <div className='custom-scrollbars flex h-full max-h-[calc(100%-3rem)] w-full flex-col gap-2 overflow-y-auto'>
+            {results.map(result => (
+              <SearchPost key={result.id} result={result} />
+            ))}
+            {isLoading && (
+              <div class='flex h-full flex-col items-center justify-center'>
+                <Loader />
+              </div>
+            )}
+            {!isLoading && query.length > 0 && results.length === 0 && (
+              <div className='flex h-full flex-col items-center justify-center'>
+                <p class='py-3 text-center text-gray-500'>No results found!</p>
+              </div>
+            )}
+          </div>
         </div>
       )}
     </div>
