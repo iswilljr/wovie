@@ -37,6 +37,12 @@ export const SOURCES: Source[] = [
     movieUrl: 'https://vidsrc.cc/v2/embed/movie/{id}',
     tvUrl: 'https://vidsrc.cc/v2/embed/tv/{id}/{season}/{episode}',
   },
+  {
+    id: 'moviesapi.club',
+    name: 'Movies Api club',
+    movieUrl: 'https://moviesapi.club/movie/{id}',
+    tvUrl: 'https://moviesapi.club/tv/{id}-{season}-{episode}',
+  },
 ]
 
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
