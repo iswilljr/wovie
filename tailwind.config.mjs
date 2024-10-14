@@ -11,7 +11,7 @@ export default {
         xs: '450px',
       },
       colors: {
-        primary: colors.indigo,
+        primary: colors.blue,
       },
     },
   },
