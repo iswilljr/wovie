@@ -4,8 +4,11 @@ import { TMDB, type TrendingMediaType } from 'tmdb-ts'
 const apiKey = z.string().parse(import.meta.env.TMDB_KEY)
 const tmdb = new TMDB(apiKey)
 
-export async function getTrending<T extends TrendingMediaType>(type: T) {
-  return await tmdb.trending.trending(type, 'week', { page: 1 })
+export async function getTrending<T extends TrendingMediaType>(
+  type: T,
+  { page = 1 } = {}
+) {
+  return await tmdb.trending.trending(type, 'week', { page })
 }
 
 export async function getMovies() {

@@ -1,77 +1,15 @@
-import { useStore } from '@nanostores/preact'
-import { searchResults } from '@/store/search'
-import { actions } from 'astro:actions'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'preact/hooks'
-import { useDebouncedState } from '@/hooks/use-debounced-state'
+import { useCallback, useEffect, useRef, useState } from 'preact/hooks'
 import { useOnClickOutside } from '@/hooks/use-on-click-outside'
+import { useSearchResults } from '@/hooks/use-search'
 import { snakeCase, getImagePath } from '@/utils'
+import { Loader } from './Loader'
 import type { MultiSearchResult } from 'tmdb-ts'
 
-function useSearchResults({ id = '' }) {
-  const searchResultsMap = useStore(searchResults)
-  const [isLoading, setIsLoading] = useState(false)
-
-  const [query, setQuery] = useDebouncedState(() => {
-    if (typeof document === 'undefined') return ''
-    return document.querySelector<HTMLInputElement>(id)?.value ?? ''
-  })
-
-  const results = useMemo(() => {
-    return searchResultsMap[query] ?? []
-  }, [searchResultsMap, query])
-
-  const handleInput = useCallback<
-    preact.JSX.InputEventHandler<HTMLInputElement>
-  >(e => setQuery(e.currentTarget.value), [])
-
-  const handleSearch = useCallback(async (query: string) => {
-    if (Object.hasOwn(searchResults.get(), query)) return
-
-    setIsLoading(true)
-
-    const results = await actions.search({ query }).catch(() => null)
-
-    searchResults.setKey(query, results ?? [])
-    setIsLoading(false)
-  }, [])
-
-  useEffect(() => {
-    if (!query) {
-      return
-    }
-
-    handleSearch(query).catch(() => null)
-  }, [query, handleSearch])
-
-  return {
-    query,
-    results,
-    isLoading,
-    handleSearch,
-    handleInput,
-  }
-}
+const LIMIT = 3
 
 interface SearchPostProps {
   result: MultiSearchResult
   onClick?: () => void
-}
-
-function Loader() {
-  return (
-    <div className='flex items-center justify-center gap-2 py-3 text-gray-500'>
-      <div class='loading-wrapper'>
-        <div class='spinner'>
-          {Array(12)
-            .fill(0)
-            .map((_, i) => (
-              <div class='loading-bar' style={`--i: ${i}`} />
-            ))}
-        </div>
-      </div>
-      <p>Loading...</p>
-    </div>
-  )
 }
 
 function SearchPost({ result, onClick }: SearchPostProps) {
@@ -105,10 +43,10 @@ function SearchPost({ result, onClick }: SearchPostProps) {
         )}
       </div>
       <div className='flex h-full flex-grow flex-col gap-2 p-2'>
-        <p className='line-clamp-1 text-sm font-normal !leading-tight text-white/90'>
+        <p className='line-clamp-1 text-sm font-semibold !leading-tight text-white/90'>
           {title}
         </p>
-        <p className='flex gap-[5px] text-[.7rem] font-light !leading-none text-[#00c1db] 2xl:text-xs'>
+        <p className='flex gap-[5px] text-[.7rem] font-medium !leading-none text-primary-400 2xl:text-xs'>
           <span className=''>{isMovie ? 'Movie' : 'TV'}</span>
           <span>•</span>
           <span>HD</span>
@@ -137,7 +75,10 @@ export function Search({ children }: preact.ComponentProps<'div'>) {
       ref={ref}
       className='group relative hidden flex-col items-center gap-3 sm:flex md:gap-4'
     >
-      <div className='flex h-8 items-center gap-2 rounded-lg bg-white/20 px-2 backdrop-blur'>
+      <div
+        style={{ viewTransitionName: 'search' }}
+        className='flex h-8 items-center gap-2 rounded-lg bg-white/20 px-2 backdrop-blur'
+      >
         {children}
         <input
           type='search'
@@ -156,9 +97,20 @@ export function Search({ children }: preact.ComponentProps<'div'>) {
           {!isLoading && results.length === 0 && (
             <p class='py-3 text-center text-gray-500'>No results found!</p>
           )}
-          {results.map(result => (
+          {results.slice(0, LIMIT).map(result => (
             <SearchPost key={result.id} result={result} onClick={handleBlur} />
           ))}
+          {results.length > LIMIT && (
+            <div className='flex h-full flex-col items-center justify-end'>
+              <a
+                href={`/explore?q=${query}`}
+                onClick={handleBlur}
+                class='w-full rounded-lg px-4 py-1 text-center text-white'
+              >
+                View {results.length - LIMIT} more results
+              </a>
+            </div>
+          )}
         </div>
       )}
     </div>
