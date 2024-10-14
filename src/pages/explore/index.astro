@@ -1,0 +1,46 @@
+---
+import { Image } from 'astro:assets'
+import Layout from '@/layouts/Layout.astro'
+import { ExplorePage } from '@/components/Explore'
+import { Search as SearchIcon } from 'lucide-astro'
+import { getNowPlaying } from '@/utils/tmdb'
+import { getImagePath } from '@/utils'
+
+const defaultQuery = Astro.url.searchParams.get('q') ?? ''
+
+const trendingResults = await getNowPlaying()
+const trendingMovies = trendingResults.results.sort(
+  (a, b) => b.vote_average - a.vote_average
+)
+---
+
+<Layout
+  title='Wovie - Watch Movies & TV Shows Free'
+  description='Discover new movies and tv shows'
+  image='https://wovie.vercel.app/og.png'
+>
+  <div class='min-h-svh p-4 pt-20 sm:p-12 sm:pt-20'>
+    <div id='opacity-layer' class='pointer-events-none !fixed !inset-0 -z-[1]'>
+    </div>
+    {
+      trendingMovies[0] && (
+        <Image
+          width='1280'
+          height='720'
+          src={getImagePath(trendingMovies[0].backdrop_path, 'w300')}
+          alt={trendingMovies[0].title}
+          class='fixed inset-0 -z-[10] aspect-video h-svh w-full object-cover blur'
+        />
+      )
+    }
+    <ExplorePage client:idle query={defaultQuery}>
+      <SearchIcon width='24' height='24' stroke='#9c9c9c' />
+    </ExplorePage>
+  </div>
+</Layout>
+
+<style is:global>
+  :root {
+    --discover-space: 1rem;
+  }
+</style>

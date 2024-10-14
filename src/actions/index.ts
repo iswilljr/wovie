@@ -1,12 +1,29 @@
-import { multiSearch } from '@/utils/tmdb'
+import { getTrending, multiSearch } from '@/utils/tmdb'
 import { defineAction, z } from 'astro:actions'
 
 export const server = {
   search: defineAction({
     input: z.object({ query: z.string().min(1) }),
     handler: async ({ query }) => {
-      const data = await multiSearch(query)
-      return data.results
+      try {
+        const data = await multiSearch(query)
+        return data.results
+      } catch (e) {
+        return []
+      }
+    },
+  }),
+  recommended: defineAction({
+    handler: async () => {
+      try {
+        const [trending, moreTrending] = await Promise.all([
+          getTrending('all', { page: 1 }),
+          getTrending('all', { page: 2 }),
+        ])
+        return [...trending.results, ...moreTrending.results]
+      } catch (e) {
+        return []
+      }
     },
   }),
 }

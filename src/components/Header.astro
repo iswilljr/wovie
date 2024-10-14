@@ -1,6 +1,8 @@
 ---
 import { Search, SearchMobile } from './Search'
-import { Search as SearchIcon } from 'lucide-astro'
+import { Search as SearchIcon, Telescope as PopcornIcon } from 'lucide-astro'
+
+const pathname = Astro.url.pathname
 ---
 
 <header class='absolute inset-0 z-[99] h-16 w-full'>
@@ -15,11 +17,24 @@ import { Search as SearchIcon } from 'lucide-astro'
         Wovie
       </a>
     </h1>
-    <Search client:idle transition:persist>
-      <SearchIcon width='16' height='16' stroke='#9c9c9c' />
-    </Search>
-    <SearchMobile client:idle transition:persist>
-      <SearchIcon width='16' height='16' stroke='#9c9c9c' />
-    </SearchMobile>
+    <div class='flex items-center gap-2'>
+      {
+        pathname !== '/explore' && (
+          <Search client:idle transition:persist>
+            <SearchIcon width='16' height='16' stroke='#9c9c9c' />
+          </Search>
+        )
+      }
+      <SearchMobile client:idle transition:persist>
+        <SearchIcon width='16' height='16' stroke='#9c9c9c' />
+      </SearchMobile>
+      <a
+        href='/explore'
+        class='hidden size-7 items-center justify-center rounded bg-primary-500 sm:flex'
+      >
+        <PopcornIcon width='16' height='16' stroke='#000' />
+        <span class='sr-only'>Explore</span>
+      </a>
+    </div>
   </div>
 </header>
