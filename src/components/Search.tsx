@@ -140,6 +140,7 @@ export function SearchMobile({ children }: preact.ComponentProps<'div'>) {
     <div className='sm:hidden'>
       <button
         onClick={handleClick}
+        aria-label='Search'
         className='flex size-8 items-center justify-center rounded-lg bg-white/20 sm:hidden'
       >
         {children}

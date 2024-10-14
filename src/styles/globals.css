@@ -22,6 +22,7 @@ html {
   scroll-padding-top: 2rem;
   scroll-padding-bottom: 2rem;
   color-scheme: dark;
+  scroll-behavior: smooth;
 }
 
 code {

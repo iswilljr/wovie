@@ -31,6 +31,7 @@ const season = getSeasonOrEpisode(Astro.url.searchParams.get('season'))
 const episode = getSeasonOrEpisode(Astro.url.searchParams.get('episode'))
 
 const mediaTitle = isTV ? `${result.name} S${season}E${episode}` : result.title
+const mediaCardTitle = isTV ? result.name : result.title
 
 Astro.response.headers.set(
   'Cache-Control',
@@ -49,7 +50,7 @@ Astro.response.headers.set(
     <Image
       width='1280'
       height='720'
-      src={getImagePath(result.backdrop_path, 'w1280')}
+      src={getImagePath(result.backdrop_path, 'w300')}
       alt={mediaTitle}
       class='fixed inset-0 -z-[10] aspect-video h-svh w-full object-cover blur'
     />
@@ -62,8 +63,8 @@ Astro.response.headers.set(
           <span class='pointer-events-none select-none'>/</span>
           <p class='shrink-0 cursor-default'>{isTV ? 'Show' : 'Movie'}</p>
           <span class='pointer-events-none select-none'>/</span>
-          <p class='line-clamp-1 cursor-default text-[#00c1db]'>
-            {mediaTitle}
+          <p class='line-clamp-1 cursor-default text-primary-400'>
+            {mediaCardTitle}
           </p>
         </div>
       </div>
@@ -88,7 +89,7 @@ Astro.response.headers.set(
         overview={result.overview}
         rating={result.vote_average}
         releaseDate={isTV ? result.first_air_date : result.release_date}
-        title={mediaTitle}
+        title={mediaCardTitle}
       />
       {!isTV && <SelectSource />}
       <div role='separator' class='h-[1px] w-full bg-white/20 sm:!my-16'></div>

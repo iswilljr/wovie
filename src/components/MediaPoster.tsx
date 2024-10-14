@@ -64,6 +64,7 @@ export function MediaPoster(props: Props) {
       </div>
       <div
         role='button'
+        aria-label='Play Now'
         class='absolute z-20 flex items-center justify-center rounded-full bg-primary-500 p-[.6rem] opacity-0 duration-150 hover:brightness-90 group-hover:opacity-100 group-focus:opacity-100'
       >
         <Play width='16' height='16' fill='#000000d5' stroke='#000000d5' />
