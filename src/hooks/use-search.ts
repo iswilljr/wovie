@@ -9,14 +9,17 @@ import type {
   TVWithMediaType,
 } from 'tmdb-ts'
 
+type ResultsData = MultiSearchResult[] | null
+
 export function useSearchResults({
   id = '',
   initialQuery = '',
   isExplorePage = false,
+  trending = null as ResultsData,
+  initialResults = null as ResultsData,
 }) {
   const searchResultsMap = useStore(searchResults)
-  const [isLoading, setIsLoading] = useState(isExplorePage)
-  const [trending, setTrending] = useState<MultiSearchResult[] | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
 
   const [query, setQuery] = useDebouncedState(
     () => {
@@ -34,13 +37,17 @@ export function useSearchResults({
   )
 
   const results = useMemo(() => {
-    let results = searchResultsMap[query] ?? []
+    let _results = searchResultsMap[query] ?? []
 
-    if (isExplorePage && !query) {
-      results = trending ?? []
+    if (initialQuery === query && initialResults) {
+      _results = initialResults
     }
 
-    const filteredResults = results.filter(
+    if (isExplorePage && !query) {
+      _results = trending ?? []
+    }
+
+    const filteredResults = _results.filter(
       result => result.media_type === 'movie' || result.media_type === 'tv'
     )
 
@@ -66,25 +73,13 @@ export function useSearchResults({
     setIsLoading(false)
   }, [])
 
-  const handleExplorePage = useCallback(async () => {
-    setIsLoading(true)
-    const results = await actions.recommended({}).catch(() => null)
-    setTrending(results)
-    setIsLoading(false)
-  }, [])
-
   useEffect(() => {
-    if (!query) {
+    if (initialQuery === query || !query) {
       return
     }
 
     handleSearch(query).catch(() => null)
   }, [query, handleSearch])
-
-  useEffect(() => {
-    if (!isExplorePage) return
-    handleExplorePage().catch(() => {})
-  }, [isExplorePage])
 
   return {
     query,

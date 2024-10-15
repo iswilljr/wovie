@@ -3,15 +3,20 @@ import { Image } from 'astro:assets'
 import Layout from '@/layouts/Layout.astro'
 import { ExplorePage } from '@/components/Explore'
 import { Search as SearchIcon } from 'lucide-astro'
-import { getNowPlaying } from '@/utils/tmdb'
+import { getTrending, multiSearch } from '@/utils/tmdb'
 import { getImagePath } from '@/utils'
+import type { MovieWithMediaType } from 'tmdb-ts'
 
-const defaultQuery = Astro.url.searchParams.get('q') ?? ''
+const query = Astro.url.searchParams.get('q') ?? ''
 
-const trendingResults = await getNowPlaying()
-const trendingMovies = trendingResults.results.sort(
-  (a, b) => b.vote_average - a.vote_average
-)
+const searchData = query ? await multiSearch(query) : null
+
+const trendingResults = await getTrending('all')
+const trendingMovies = trendingResults.results
+  .filter((movie): movie is MovieWithMediaType => movie.media_type === 'movie')
+  .sort((a, b) => b.vote_average - a.vote_average)
+
+const data = trendingMovies[0]
 ---
 
 <Layout
@@ -23,17 +28,22 @@ const trendingMovies = trendingResults.results.sort(
     <div id='opacity-layer' class='pointer-events-none !fixed !inset-0 -z-[1]'>
     </div>
     {
-      trendingMovies[0] && (
+      data && (
         <Image
           width='1280'
           height='720'
-          src={getImagePath(trendingMovies[0].backdrop_path, 'w300')}
-          alt={trendingMovies[0].title}
+          src={getImagePath(data.backdrop_path, 'w300')}
+          alt={data.title}
           class='fixed inset-0 -z-[10] aspect-video h-svh w-full object-cover blur'
         />
       )
     }
-    <ExplorePage client:idle query={defaultQuery}>
+    <ExplorePage
+      client:idle
+      query={query}
+      trending={trendingResults.results}
+      searchData={searchData?.results}
+    >
       <SearchIcon width='24' height='24' stroke='#9c9c9c' />
     </ExplorePage>
   </div>
