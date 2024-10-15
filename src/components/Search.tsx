@@ -105,7 +105,7 @@ export function Search({ children }: preact.ComponentProps<'div'>) {
               <a
                 href={`/explore?q=${query}`}
                 onClick={handleBlur}
-                class='w-full rounded-lg px-4 py-1 text-center text-white'
+                class='w-full rounded-lg px-4 py-1 text-center text-sm text-white'
               >
                 View {results.length - LIMIT} more results
               </a>

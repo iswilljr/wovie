@@ -2,14 +2,23 @@ import { useRef } from 'preact/hooks'
 import { MediaPoster } from './MediaPoster.tsx'
 import { useSearchResults } from '@/hooks/use-search'
 import { MediaPostsLoader } from './Loader.tsx'
+import type { MultiSearchResult } from 'tmdb-ts'
 
 export function ExplorePage({
   children,
   query: initialQuery,
-}: preact.ComponentProps<'div'> & { query: string }) {
+  searchData,
+  trending,
+}: preact.ComponentProps<'div'> & {
+  query: string
+  searchData: MultiSearchResult[] | null | undefined
+  trending: MultiSearchResult[] | null | undefined
+}) {
   const ref = useRef<HTMLDivElement>(null)
   const { handleInput, results, isLoading } = useSearchResults({
+    trending,
     initialQuery,
+    initialResults: searchData,
     isExplorePage: true,
     id: '#search-query',
   })
@@ -21,14 +30,17 @@ export function ExplorePage({
         style={{ viewTransitionName: 'search' }}
       >
         {children}
-        <input
-          type='search'
-          id='search-query'
-          onInput={handleInput}
-          defaultValue={initialQuery}
-          placeholder='Search Anything...'
-          className='w-full bg-transparent text-lg font-normal leading-8 tracking-wide text-white/90 outline-none'
-        />
+        <form className='w-full'>
+          <input
+            name='q'
+            type='search'
+            id='search-query'
+            onInput={handleInput}
+            defaultValue={initialQuery}
+            placeholder='Search Anything...'
+            className='w-full bg-transparent text-lg font-normal leading-8 tracking-wide text-white/90 outline-none'
+          />
+        </form>
       </div>
       <div className='w-full'>
         {isLoading && <MediaPostsLoader />}

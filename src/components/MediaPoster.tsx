@@ -71,7 +71,7 @@ export function MediaPoster(props: Props) {
       </div>
       <div class='absolute inset-0 z-10 flex flex-col justify-end gap-1 rounded-lg bg-gradient-to-t from-[#000000d0] p-3 outline-none ring-inset ring-primary-500 duration-150 group-hover:opacity-100 group-hover:ring-2 group-focus:opacity-100 group-focus:ring-2 group-[:not(:has(>img))]:opacity-100 sm:opacity-0'>
         <div class='flex items-center justify-center gap-1 text-xs text-[#d8d8d8]'>
-          <p>{new Date(releaseDate).getFullYear()}</p>
+          <p>{new Date(releaseDate).getFullYear() || 'N/A'}</p>
           <span>•</span>
           <p class='uppercase'>{language}</p>
           <span>•</span>
