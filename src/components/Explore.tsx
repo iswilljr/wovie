@@ -1,4 +1,4 @@
-import { useRef } from 'preact/hooks'
+import { useRef } from 'react'
 import { MediaPoster } from './MediaPoster.tsx'
 import { useSearchResults } from '@/hooks/use-search'
 import { MediaPostsLoader } from './Loader.tsx'
@@ -9,7 +9,7 @@ export function ExplorePage({
   query: initialQuery,
   searchData,
   trending,
-}: preact.ComponentProps<'div'> & {
+}: React.ComponentProps<'div'> & {
   query: string
   searchData: MultiSearchResult[] | null | undefined
   trending: MultiSearchResult[] | null | undefined
@@ -35,7 +35,7 @@ export function ExplorePage({
             name='q'
             type='search'
             id='search-query'
-            onInput={handleInput}
+            onChange={handleInput}
             defaultValue={initialQuery}
             placeholder='Search Anything...'
             className='w-full bg-transparent text-lg font-normal leading-8 tracking-wide text-white/90 outline-none'

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'preact/hooks'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useOnClickOutside } from '@/hooks/use-on-click-outside'
 import { useSearchResults } from '@/hooks/use-search'
 import { snakeCase, getImagePath } from '@/utils'
@@ -58,7 +58,7 @@ function SearchPost({ result, onClick }: SearchPostProps) {
   )
 }
 
-export function Search({ children }: preact.ComponentProps<'div'>) {
+export function Search({ children }: React.ComponentProps<'div'>) {
   const ref = useRef<HTMLDivElement>(null)
   const { query, handleInput, results, isLoading } = useSearchResults({
     id: '#search-query',
@@ -84,7 +84,7 @@ export function Search({ children }: preact.ComponentProps<'div'>) {
           type='search'
           id='search-query'
           onFocus={handleFocus}
-          onInput={handleInput}
+          onChange={handleInput}
           placeholder='Search Anything...'
           className='w-56 bg-transparent text-xs font-normal leading-8 tracking-wide text-white/90 outline-none'
         />
@@ -95,7 +95,7 @@ export function Search({ children }: preact.ComponentProps<'div'>) {
         >
           {isLoading && <Loader />}
           {!isLoading && results.length === 0 && (
-            <p class='py-3 text-center text-gray-500'>No results found!</p>
+            <p className='py-3 text-center text-gray-500'>No results found!</p>
           )}
           {results.slice(0, LIMIT).map(result => (
             <SearchPost key={result.id} result={result} onClick={handleBlur} />
@@ -105,7 +105,7 @@ export function Search({ children }: preact.ComponentProps<'div'>) {
               <a
                 href={`/explore?q=${query}`}
                 onClick={handleBlur}
-                class='w-full rounded-lg px-4 py-1 text-center text-sm text-white'
+                className='w-full rounded-lg px-4 py-1 text-center text-sm text-white'
               >
                 View {results.length - LIMIT} more results
               </a>
@@ -117,7 +117,7 @@ export function Search({ children }: preact.ComponentProps<'div'>) {
   )
 }
 
-export function SearchMobile({ children }: preact.ComponentProps<'div'>) {
+export function SearchMobile({ children }: React.ComponentProps<'div'>) {
   const [open, setOpen] = useState(false)
   const { query, handleInput, results, isLoading } = useSearchResults({
     id: '#mobile-query',
@@ -146,12 +146,12 @@ export function SearchMobile({ children }: preact.ComponentProps<'div'>) {
         {children}
       </button>
       {open && (
-        <div class='fixed inset-0 h-svh w-full space-y-4 bg-black/80 p-4'>
+        <div className='fixed inset-0 h-svh w-full space-y-4 bg-black/80 p-4'>
           <div className='flex w-full items-center justify-between gap-2'>
             <div className='flex h-8 flex-1 items-center gap-2 rounded-lg bg-white/20 px-2 backdrop-blur'>
               {children}
               <input
-                autofocus
+                autoFocus
                 type='text'
                 id='mobile-query'
                 defaultValue={query}
@@ -185,13 +185,15 @@ export function SearchMobile({ children }: preact.ComponentProps<'div'>) {
               <SearchPost key={result.id} result={result} />
             ))}
             {isLoading && (
-              <div class='flex h-full flex-col items-center justify-center'>
+              <div className='flex h-full flex-col items-center justify-center'>
                 <Loader />
               </div>
             )}
             {!isLoading && query.length > 0 && results.length === 0 && (
               <div className='flex h-full flex-col items-center justify-center'>
-                <p class='py-3 text-center text-gray-500'>No results found!</p>
+                <p className='py-3 text-center text-gray-500'>
+                  No results found!
+                </p>
               </div>
             )}
           </div>

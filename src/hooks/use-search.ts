@@ -1,6 +1,6 @@
 import { actions } from 'astro:actions'
-import { useStore } from '@nanostores/preact'
-import { useCallback, useEffect, useMemo, useState } from 'preact/hooks'
+import { useStore } from '@nanostores/react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { searchResults } from '@/store/search'
 import { useDebouncedState } from './use-debounced-state'
 import type {
@@ -56,11 +56,12 @@ export function useSearchResults({
     >
   }, [trending, searchResultsMap, query, isExplorePage])
 
-  const handleInput = useCallback<
-    preact.JSX.InputEventHandler<HTMLInputElement>
-  >(e => {
-    setQuery(e.currentTarget.value)
-  }, [])
+  const handleInput = useCallback<React.ChangeEventHandler<HTMLInputElement>>(
+    e => {
+      setQuery(e.currentTarget.value)
+    },
+    []
+  )
 
   const handleSearch = useCallback(async (query: string) => {
     if (Object.hasOwn(searchResults.get(), query)) return
@@ -69,7 +70,7 @@ export function useSearchResults({
 
     const results = await actions.search({ query }).catch(() => null)
 
-    searchResults.setKey(query, results ?? [])
+    searchResults.setKey(query, results?.data ?? [])
     setIsLoading(false)
   }, [])
 

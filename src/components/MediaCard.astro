@@ -23,7 +23,7 @@ const { id, media, image, language, rating, releaseDate, title } = Astro.props
     <Image
       width='780'
       height='440'
-      loading='eager'
+      loading='lazy'
       alt={title}
       src={getImagePath(image, 'w780')}
       class='duration-160 h-full w-full object-cover object-center group-hover:scale-[1.03] group-focus:scale-[1.03]'

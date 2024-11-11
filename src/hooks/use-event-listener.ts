@@ -1,7 +1,6 @@
 // Adapted from https://usehooks-ts.com/react-hook/use-event-listener
 
-import type { RefObject } from 'preact'
-import { useEffect, useRef } from 'preact/hooks'
+import { useEffect, useRef, type RefObject } from 'react'
 
 export function useEventListener<
   KW extends keyof WindowEventMap,

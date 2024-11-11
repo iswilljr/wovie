@@ -1,6 +1,6 @@
 // Adapted from https://usehooks-ts.com/react-hook/use-on-click-outside
 
-import type { RefObject } from 'preact'
+import type { RefObject } from 'react'
 import { useEventListener } from './use-event-listener'
 
 type EventType =
