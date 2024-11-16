@@ -2,11 +2,16 @@
   "cSpell.words": [
     "astro",
     "astrojs",
+    "kysely",
+    "libsql",
     "lucide",
     "nanostores",
     "preact",
+    "sqlite",
     "tailwindcss",
     "tmdb",
+    "turso",
+    "vidsrc",
     "wovie"
   ],
   "template-string-converter.validLanguages": [
@@ -16,5 +21,6 @@
     "typescriptreact",
     "javascriptreact",
     "astro"
-  ]
+  ],
+  "cSpell.language": "en,es-ES"
 }

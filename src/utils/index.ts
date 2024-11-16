@@ -1,4 +1,6 @@
 import { words } from 'tiny-case'
+import { twMerge } from 'tailwind-merge'
+import { clsx, type ClassValue } from 'clsx'
 import type {
   BackdropSize,
   LogoSize,
@@ -17,6 +19,10 @@ export type ImageSize =
   | Size<typeof PosterSize>
   | Size<typeof ProfileSize>
   | Size<typeof BackdropSize>
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs))
+}
 
 export function snakeCase(str = '') {
   return words(str).join('_')
