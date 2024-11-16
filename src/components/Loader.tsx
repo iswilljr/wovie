@@ -6,7 +6,11 @@ export function Loader() {
           {Array(12)
             .fill(0)
             .map((_, i) => (
-              <div className='loading-bar' style={{ '--i': `${i}` } as any} />
+              <div
+                key={i}
+                className='loading-bar'
+                style={{ '--i': `${i}` } as any}
+              />
             ))}
         </div>
       </div>

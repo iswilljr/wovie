@@ -13,7 +13,10 @@ export default {
       colors: {
         primary: colors.blue,
       },
+      transitionTimingFunction: {
+        'jump-in': 'cubic-bezier(0.6, -0.28, 0.735, 0.045)',
+      },
     },
   },
-  plugins: [scrollbarHide],
+  plugins: [scrollbarHide, require('tailwindcss-animate')],
 }
