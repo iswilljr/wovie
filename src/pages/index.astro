@@ -1,17 +1,20 @@
 ---
-import { Clapperboard, Flame, Tv } from 'lucide-astro'
+import { Clapperboard, Flame, Popcorn, Tv } from 'lucide-astro'
 import { getNowPlaying, getTrending } from '@/utils/tmdb'
 import Layout from '@/layouts/Layout.astro'
 import Discover from '@/components/Media/Discover.astro'
 import MediaList from '@/components/Media/MediaList.astro'
 import MediaGrid from '@/components/Media/MediaGrid.astro'
+import { getWatching } from '@/utils/watching'
 
-const [nowPlaying, trending, trendingMovies, trendingTV] = await Promise.all([
-  getNowPlaying(),
-  getTrending('all'),
-  getTrending('movie'),
-  getTrending('tv'),
-])
+const [nowPlaying, trending, trendingMovies, trendingTV, watching] =
+  await Promise.all([
+    getNowPlaying(),
+    getTrending('all'),
+    getTrending('movie'),
+    getTrending('tv'),
+    getWatching({ headers: Astro.request.headers }),
+  ])
 
 Astro.response.headers.set(
   'Cache-Control',
@@ -33,6 +36,14 @@ Astro.response.headers.set(
     >
       <Flame slot='icon' width='18' height='18' fill='#000' stroke='#000' />
     </MediaList>
+    {
+      watching.length > 0 && (
+        <MediaList id='trending' results={watching} title='Keep Watching'>
+          <Popcorn slot='icon' width='18' height='18' stroke='#000' />
+        </MediaList>
+      )
+    }
+
     <MediaGrid results={trendingMovies.results} title='Movies' media='movie'>
       <Clapperboard slot='icon' width='18' height='18' stroke='#000' />
     </MediaGrid>

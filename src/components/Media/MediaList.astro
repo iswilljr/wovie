@@ -10,7 +10,11 @@ import type {
 export interface Props {
   id: string
   title: string
-  results: Array<TVWithMediaType | MovieWithMediaType | PersonWithMediaType>
+  results: Array<
+    (TVWithMediaType | MovieWithMediaType | PersonWithMediaType) & {
+      watching?: any
+    }
+  >
 }
 
 const { id, results, title } = Astro.props
@@ -55,6 +59,7 @@ const { id, results, title } = Astro.props
                   : movie.first_air_date
               }
               title={movie.media_type === 'movie' ? movie.title : movie.name}
+              watching={movie.watching}
             />
           ) : null
         )

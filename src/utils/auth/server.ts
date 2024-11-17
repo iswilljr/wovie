@@ -1,6 +1,7 @@
 import { betterAuth } from 'better-auth'
 import { anonymous } from 'better-auth/plugins'
 import { LibsqlDialect } from '@libsql/kysely-libsql'
+import { linkWatching } from '../watching'
 
 const dialect = new LibsqlDialect({
   url: import.meta.env.TURSO_DATABASE_URL ?? '',
@@ -17,8 +18,8 @@ export const auth = betterAuth({
   },
   plugins: [
     anonymous({
-      async onLinkAccount(_data) {
-        // TODO: Implement linking
+      async onLinkAccount({ anonymousUser, newUser }) {
+        await linkWatching({ anonymousUser, newUser })
       },
     }),
   ],

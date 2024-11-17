@@ -1,6 +1,8 @@
 ---
 import { Image } from 'astro:assets'
-import { formatDate, snakeCase, getImagePath } from '@/utils'
+import { formatDate, getImagePath } from '@/utils'
+import { getTvOrMovieUrl } from '@/utils/url'
+import { Progress } from '@/components/ui/progress'
 
 export interface Props {
   media: 'tv' | 'movie'
@@ -10,24 +12,56 @@ export interface Props {
   rating: number
   releaseDate: string
   title: string
+
+  watching?: {
+    runtime: number
+    watchedTime: number
+    episode: number
+    season: number
+    sourceId: string
+    updatedAt: Date
+  }
 }
 
-const { id, media, image, language, rating, releaseDate, title } = Astro.props
+const { id, media, image, language, rating, releaseDate, title, watching } =
+  Astro.props
+
+const isWatching = watching != null
+
+const mediaTitle =
+  media === 'tv' && isWatching
+    ? `${title} - S${watching.season}E${watching.episode}`
+    : title
+
+const percentageWatched = isWatching
+  ? Math.round((watching.watchedTime / watching.runtime) * 100)
+  : 0
 ---
 
 <a
   class='swiper-item group relative flex aspect-[2/1] h-fit w-full flex-shrink-0 flex-col gap-2 overflow-hidden rounded-2xl xs:w-8/12 sm:w-80'
-  href={`/play/${media}/${id}/${snakeCase(title)}`}
+  href={getTvOrMovieUrl(
+    media,
+    id,
+    title,
+    watching?.season,
+    watching?.episode,
+    watching?.sourceId
+  )}
 >
   <div class='z-0'>
-    <Image
-      width='780'
-      height='440'
-      loading='lazy'
-      alt={title}
-      src={getImagePath(image, 'w780')}
-      class='duration-160 h-full w-full object-cover object-center group-hover:scale-[1.03] group-focus:scale-[1.03]'
-    />
+    {
+      image && (
+        <Image
+          width='780'
+          height='440'
+          loading='lazy'
+          alt={title}
+          src={getImagePath(image, 'w780')}
+          class='h-full w-full object-cover object-center duration-150 group-hover:scale-[1.03] group-focus:scale-[1.03]'
+        />
+      )
+    }
   </div>
   <div
     class='gradient-opacity absolute inset-0 flex h-full w-full flex-col justify-end gap-1 rounded-2xl p-3 ring-inset ring-primary-500 duration-150 group-hover:ring-2 group-focus:ring-2 md:gap-2'
@@ -35,7 +69,7 @@ const { id, media, image, language, rating, releaseDate, title } = Astro.props
     <p
       class='line-clamp-2 text-sm font-bold uppercase !leading-none tracking-wide text-white sm:text-base'
     >
-      {title}
+      {mediaTitle}
     </p>
     <div
       class='flex flex-wrap gap-1 text-xs font-normal !leading-tight tracking-wider text-primary-400'
@@ -47,4 +81,11 @@ const { id, media, image, language, rating, releaseDate, title } = Astro.props
       <p class='uppercase'>{language}</p>
     </div>
   </div>
+  {
+    percentageWatched > 0 && (
+      <div class='absolute bottom-0 left-0 w-full duration-300 group-hover:opacity-20'>
+        <Progress className='h-1' value={percentageWatched} />
+      </div>
+    )
+  }
 </a>

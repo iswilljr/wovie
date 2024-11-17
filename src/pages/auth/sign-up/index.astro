@@ -1,0 +1,22 @@
+---
+import { AuthContent } from '@/components/Auth/Auth'
+import Layout from '@/layouts/Layout.astro'
+---
+
+<Layout
+  title='Sign Up to Wovie - Watch Movies & TV Shows Free'
+  description='Sign Up to Wovie - Watch Movies & TV Shows Free'
+  image='https://wovie.vercel.app/og.png'
+>
+  <div
+    class='z-10 h-screen max-h-screen overflow-hidden rounded-lg bg-zinc-950 first:[&>*>*]:col-span-4 last:[&>*>*]:col-span-2 [&>*]:w-full [&>*]:!grid-cols-6'
+  >
+    <AuthContent initialTab='sign-up' />
+  </div>
+</Layout>
+
+<style is:global>
+  :root {
+    --discover-space: 1rem;
+  }
+</style>
