@@ -1,7 +1,7 @@
 import { useRef } from 'react'
-import { MediaPoster } from './MediaPoster.tsx'
+import { MediaPoster } from '@/components/Media/MediaPoster.tsx'
 import { useSearchResults } from '@/hooks/use-search'
-import { MediaPostsLoader } from './Loader.tsx'
+import { MediaPostsLoader } from '@/components/Loader.tsx'
 import type { MultiSearchResult } from 'tmdb-ts'
 
 export function ExplorePage({

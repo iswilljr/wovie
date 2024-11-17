@@ -2,9 +2,9 @@
 import { Clapperboard, Flame, Tv } from 'lucide-astro'
 import { getNowPlaying, getTrending } from '@/utils/tmdb'
 import Layout from '@/layouts/Layout.astro'
-import Discover from '@/components/Discover.astro'
-import MediaList from '@/components/MediaList.astro'
-import MediaGrid from '@/components/MediaGrid.astro'
+import Discover from '@/components/Media/Discover.astro'
+import MediaList from '@/components/Media/MediaList.astro'
+import MediaGrid from '@/components/Media/MediaGrid.astro'
 
 const [nowPlaying, trending, trendingMovies, trendingTV] = await Promise.all([
   getNowPlaying(),

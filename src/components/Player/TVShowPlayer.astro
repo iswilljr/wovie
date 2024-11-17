@@ -5,7 +5,7 @@ import { getEpisodeUrl } from '@/utils/url'
 import { getSeasonOrEpisode, snakeCase } from '@/utils'
 import { getSeasonDetails, type getTVShow } from '@/utils/tmdb'
 import { Play } from 'lucide-astro'
-import { SelectSeason } from './SelectSeason'
+import { SelectSeason } from '@/components/Player/SelectSeason'
 
 export type Props = Awaited<ReturnType<typeof getTVShow>>
 
