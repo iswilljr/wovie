@@ -108,7 +108,7 @@ img {
 
 .loading-wrapper {
   --size: 24px;
-  --color: rgba(255, 255, 255, 0.3);
+  --color: rgba(255, 255, 255, 0.8);
   height: var(--size);
   width: var(--size);
 }

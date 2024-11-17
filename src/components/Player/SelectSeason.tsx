@@ -1,5 +1,5 @@
 import { getSeasonOrEpisode } from '@/utils'
-import { getSeasonUrl } from '@/utils/url'
+import { getEpisodeUrl } from '@/utils/url'
 import { navigate } from 'astro:transitions/client'
 import { useCallback } from 'react'
 import type { Season } from 'tmdb-ts'
@@ -25,7 +25,7 @@ export function SelectSeason({
 
       if (newSeason === activeSeason) return
 
-      void navigate(getSeasonUrl(id, title, newSeason, sourceId))
+      void navigate(getEpisodeUrl(id, title, newSeason, 1, sourceId))
     },
     [id, title, activeSeason]
   )
@@ -35,12 +35,13 @@ export function SelectSeason({
       id='select-season'
       name='select-season'
       onChange={handleChange}
+      defaultValue={activeSeason}
       className='flex items-center rounded-md border border-white/70 bg-black/50 px-2 py-1 text-sm text-white'
     >
       {seasons.map(seasonDetails => (
         <option
+          key={seasonDetails.season_number}
           value={seasonDetails.season_number}
-          selected={seasonDetails.season_number === activeSeason}
           className='text-sm'
         >
           {seasonDetails.name}

@@ -1,19 +1,27 @@
+import { cn } from '@/utils'
+
+export function Spinner({ className }: { className?: string }) {
+  return (
+    <div className={cn('loading-wrapper', className)}>
+      <div className='spinner'>
+        {Array(12)
+          .fill(0)
+          .map((_, i) => (
+            <div
+              key={i}
+              className='loading-bar'
+              style={{ '--i': `${i}` } as any}
+            />
+          ))}
+      </div>
+    </div>
+  )
+}
+
 export function Loader() {
   return (
     <div className='flex items-center justify-center gap-2 py-3 text-gray-500'>
-      <div className='loading-wrapper'>
-        <div className='spinner'>
-          {Array(12)
-            .fill(0)
-            .map((_, i) => (
-              <div
-                key={i}
-                className='loading-bar'
-                style={{ '--i': `${i}` } as any}
-              />
-            ))}
-        </div>
-      </div>
+      <Spinner />
       <p>Loading...</p>
     </div>
   )

@@ -50,6 +50,7 @@ export function ExplorePage({
         <div className='relative z-10 grid w-full grid-cols-[repeat(auto-fill,minmax(150px,1fr))] flex-wrap gap-4'>
           {results.map(result => (
             <MediaPoster
+              key={result.id}
               media={result.media_type}
               id={result.id}
               rating={result.vote_average}

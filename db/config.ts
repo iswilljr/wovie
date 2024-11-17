@@ -46,16 +46,27 @@ const Verification = defineTable({
   },
 })
 
-const KeepWatching = defineTable({
+const Watching = defineTable({
   columns: {
-    id: column.text({ primaryKey: true }),
+    id: column.number({ primaryKey: true }),
+    runtime: column.number(),
+    watchedTime: column.number(),
+    episode: column.number(),
     mediaId: column.number(),
     mediaType: column.text(),
-    mediaData: column.json(),
+    season: column.number(),
+    sourceId: column.text(),
+    details: column.json(),
     createdAt: column.date({ default: NOW }),
     updatedAt: column.date({ default: NOW }),
     userId: column.text({ references: () => User.columns.id }),
   },
+  indexes: [
+    {
+      on: ['userId', 'mediaId', 'mediaType'],
+      unique: true,
+    },
+  ],
 })
 
 export default defineDb({
@@ -64,6 +75,6 @@ export default defineDb({
     Session,
     Account,
     Verification,
-    KeepWatching,
+    Watching,
   },
 })
