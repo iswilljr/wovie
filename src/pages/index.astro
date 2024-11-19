@@ -54,11 +54,21 @@ Astro.response.headers.set(
 </Layout>
 
 <script is:inline data-astro-rerun>
+  function findLastIndex(arr, callback) {
+    // Polyfill for findLastIndex
+    for (var i = arr.length - 1; i >= 0; i--) {
+      if (callback(arr[i], i, arr)) {
+        return i
+      }
+    }
+    return -1
+  }
+
   function isElementInViewport(el, container) {
     if (!el || !container) return false
 
-    const rect = el.getBoundingClientRect()
-    const containerRect = container.getBoundingClientRect()
+    var rect = el.getBoundingClientRect()
+    var containerRect = container.getBoundingClientRect()
 
     return (
       rect.top >= containerRect.top &&
@@ -71,24 +81,30 @@ Astro.response.headers.set(
   function createSwiper(root, findLast) {
     if (!root) return
 
-    const swiper = root.querySelector('.swiper')
-    const buttons = root.querySelectorAll('.swiper-button')
-    const items = swiper?.querySelectorAll('.swiper-item')
-    const elements = [...(items?.values() ?? [])]
-    const lastIndex = elements.length - 1
+    var swiper = root.querySelector('.swiper')
+    var buttons = Array.prototype.slice.call(
+      root.querySelectorAll('.swiper-button')
+    )
+    var items = swiper.querySelectorAll('.swiper-item')
+    var elements = Array.prototype.slice.call(items)
+    var lastIndex = elements.length - 1
 
-    buttons?.forEach(el => {
-      const isLeftButton = el.classList.contains('swiper-left')
+    buttons.forEach(function (el) {
+      var isLeftButton = el.classList.contains('swiper-left')
 
-      el.addEventListener('click', () => {
-        const activeItemIndex =
+      el.addEventListener('click', function () {
+        var activeItemIndex =
           isLeftButton || !findLast
-            ? elements.findIndex(el => isElementInViewport(el, swiper))
-            : elements.findLastIndex(el => isElementInViewport(el, swiper))
+            ? elements.findIndex(function (el) {
+                return isElementInViewport(el, swiper)
+              })
+            : findLastIndex(elements, function (el) {
+                return isElementInViewport(el, swiper)
+              })
 
         if (activeItemIndex === -1) return
 
-        const newItemIndex = isLeftButton
+        var newItemIndex = isLeftButton
           ? activeItemIndex === 0
             ? lastIndex
             : activeItemIndex - 1
@@ -96,7 +112,7 @@ Astro.response.headers.set(
             ? 0
             : activeItemIndex + 1
 
-        items?.item(newItemIndex).scrollIntoView({
+        items[newItemIndex].scrollIntoView({
           behavior: 'smooth',
           block: 'nearest',
           inline: 'center',
