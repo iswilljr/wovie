@@ -38,7 +38,7 @@ Astro.response.headers.set(
     </MediaList>
     {
       watching.length > 0 && (
-        <MediaList id='trending' results={watching} title='Keep Watching'>
+        <MediaList id='watching' results={watching} title='Continue Watching'>
           <Popcorn slot='icon' width='18' height='18' stroke='#000' />
         </MediaList>
       )
@@ -53,10 +53,63 @@ Astro.response.headers.set(
   </div>
 </Layout>
 
-<script>
-  import { createSwiper } from '@/utils'
+<script is:inline data-astro-rerun>
+  function isElementInViewport(el, container) {
+    if (!el || !container) return false
 
-  const tvTrending = document.querySelector('#trending')
+    const rect = el.getBoundingClientRect()
+    const containerRect = container.getBoundingClientRect()
+
+    return (
+      rect.top >= containerRect.top &&
+      rect.left >= containerRect.left &&
+      rect.bottom <= containerRect.bottom &&
+      rect.right <= containerRect.right
+    )
+  }
+
+  function createSwiper(root, findLast) {
+    if (!root) return
+
+    const swiper = root.querySelector('.swiper')
+    const buttons = root.querySelectorAll('.swiper-button')
+    const items = swiper?.querySelectorAll('.swiper-item')
+    const elements = [...(items?.values() ?? [])]
+    const lastIndex = elements.length - 1
+
+    buttons?.forEach(el => {
+      const isLeftButton = el.classList.contains('swiper-left')
+
+      el.addEventListener('click', () => {
+        const activeItemIndex =
+          isLeftButton || !findLast
+            ? elements.findIndex(el => isElementInViewport(el, swiper))
+            : elements.findLastIndex(el => isElementInViewport(el, swiper))
+
+        if (activeItemIndex === -1) return
+
+        const newItemIndex = isLeftButton
+          ? activeItemIndex === 0
+            ? lastIndex
+            : activeItemIndex - 1
+          : activeItemIndex === lastIndex
+            ? 0
+            : activeItemIndex + 1
+
+        items?.item(newItemIndex).scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest',
+          inline: 'center',
+        })
+      })
+    })
+  }
+
+  var discover = document.querySelector('#discover')
+  var tvTrending = document.querySelector('#trending')
+  var watching = document.querySelector('#watching')
 
   createSwiper(tvTrending, true)
+  createSwiper(watching, true)
+  createSwiper(discover)
 </script>

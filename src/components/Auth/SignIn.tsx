@@ -12,13 +12,7 @@ const schema = z.object({
   password: z.string().min(8),
 })
 
-export function SignInForm({
-  onSignUp,
-  isHtmlPage = false,
-}: {
-  onSignUp: () => void
-  isHtmlPage?: boolean
-}) {
+export function SignInForm({ onSignUp }: { onSignUp: () => void }) {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -48,8 +42,6 @@ export function SignInForm({
       setError('Something went wrong, please try again.')
     }
   }
-
-  const Link = isHtmlPage ? 'a' : 'button'
 
   return (
     <div className='flex min-h-full flex-col justify-center'>
@@ -110,14 +102,12 @@ export function SignInForm({
           )}
         >
           Don't have an account yet?{' '}
-          <Link
-            {...(isHtmlPage
-              ? { href: '/auth/sign-up' }
-              : { onClick: onSignUp })}
+          <button
+            onClick={onSignUp}
             className='font-semibold text-primary-600 hover:text-primary-500'
           >
             Sign up
-          </Link>
+          </button>
         </p>
       </div>
     </div>

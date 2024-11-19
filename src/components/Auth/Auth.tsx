@@ -6,10 +6,8 @@ import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 
 export function AuthContent({
   initialTab = 'sign-in',
-  isHtmlPage = false,
 }: {
   initialTab?: 'sign-in' | 'sign-up'
-  isHtmlPage?: boolean
 }) {
   const [currentTab, setCurrentTab] = useState(initialTab)
 
@@ -31,12 +29,8 @@ export function AuthContent({
       </div>
 
       <div className='relative h-full w-full px-8 py-16'>
-        {currentTab === 'sign-in' && (
-          <SignInForm onSignUp={onSignUp} isHtmlPage={isHtmlPage} />
-        )}
-        {currentTab === 'sign-up' && (
-          <SignUpForm onSignIn={onSignIn} isHtmlPage={isHtmlPage} />
-        )}
+        {currentTab === 'sign-in' && <SignInForm onSignUp={onSignUp} />}
+        {currentTab === 'sign-up' && <SignUpForm onSignIn={onSignIn} />}
       </div>
     </div>
   )

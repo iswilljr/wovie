@@ -134,11 +134,13 @@ Astro.response.headers.set(
 
 <script is:inline data-astro-rerun define:vars={{ mediaDetails }}>
   function handler() {
-    var xhr = new XMLHttpRequest()
-    xhr.open('POST', '/api/watching', true)
-    xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8')
-    xhr.onreadystatechange = function () {}
-    xhr.send(JSON.stringify(mediaDetails))
+    fetch('/api/watching', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      body: JSON.stringify(mediaDetails),
+    })
   }
 
   window.clear =
@@ -151,7 +153,7 @@ Astro.response.headers.set(
     window.clear()
   }
 
-  window.watchingTimeout = setInterval(handler, 1000 * 3)
+  window.watchingTimeout = setInterval(handler, 1000 * 1)
   document.removeEventListener('astro:after-swap', window.clear)
   document.addEventListener('astro:after-swap', window.clear)
 </script>
