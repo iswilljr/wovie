@@ -3,6 +3,7 @@
 /** @type {import("eslint").ESLint.ConfigData["rules"]} */
 const disabledTypescriptEslintRules = {
   '@typescript-eslint/explicit-function-return-type': 'off',
+  '@typescript-eslint/no-non-null-assertion': 'off',
   '@typescript-eslint/no-confusing-void-expression': 'off',
   '@typescript-eslint/strict-boolean-expressions': 'off',
   '@typescript-eslint/promise-function-async': 'off',

@@ -1,7 +1,7 @@
-import { useRef } from 'preact/hooks'
-import { MediaPoster } from './MediaPoster.tsx'
+import { useRef } from 'react'
+import { MediaPoster } from '@/components/Media/MediaPoster.tsx'
 import { useSearchResults } from '@/hooks/use-search'
-import { MediaPostsLoader } from './Loader.tsx'
+import { MediaPostsLoader } from '@/components/Loader.tsx'
 import type { MultiSearchResult } from 'tmdb-ts'
 
 export function ExplorePage({
@@ -9,7 +9,7 @@ export function ExplorePage({
   query: initialQuery,
   searchData,
   trending,
-}: preact.ComponentProps<'div'> & {
+}: React.ComponentProps<'div'> & {
   query: string
   searchData: MultiSearchResult[] | null | undefined
   trending: MultiSearchResult[] | null | undefined
@@ -35,7 +35,7 @@ export function ExplorePage({
             name='q'
             type='search'
             id='search-query'
-            onInput={handleInput}
+            onChange={handleInput}
             defaultValue={initialQuery}
             placeholder='Search Anything...'
             className='w-full bg-transparent text-lg font-normal leading-8 tracking-wide text-white/90 outline-none'
@@ -50,6 +50,7 @@ export function ExplorePage({
         <div className='relative z-10 grid w-full grid-cols-[repeat(auto-fill,minmax(150px,1fr))] flex-wrap gap-4'>
           {results.map(result => (
             <MediaPoster
+              key={result.id}
               media={result.media_type}
               id={result.id}
               rating={result.vote_average}

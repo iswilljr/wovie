@@ -1,5 +1,6 @@
 ---
-import { Search, SearchMobile } from './Search'
+import { NavUser } from '@/components/Auth/NavUser'
+import { Search, SearchMobile } from '@/components/Search'
 import { Search as SearchIcon, Telescope as PopcornIcon } from 'lucide-astro'
 
 const pathname = Astro.url.pathname
@@ -35,6 +36,7 @@ const pathname = Astro.url.pathname
         <PopcornIcon width='16' height='16' stroke='#000' />
         <span class='sr-only'>Explore</span>
       </a>
+      <NavUser client:idle />
     </div>
   </div>
 </header>

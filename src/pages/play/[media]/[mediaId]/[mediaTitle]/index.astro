@@ -1,12 +1,12 @@
 ---
-import MediaGrid from '@/components/MediaGrid.astro'
-import PlayMediaCard from '@/components/PlayMediaCard.astro'
-import SelectSource from '@/components/SelectSource.astro'
-import TVShowPlayer from '@/components/TVShowPlayer.astro'
+import MediaGrid from '@/components/Media/MediaGrid.astro'
+import PlayMediaCard from '@/components/Media/PlayMediaCard.astro'
+import SelectSource from '@/components/Player/SelectSource.astro'
+import TVShowPlayer from '@/components/Player/TVShowPlayer.astro'
 import Layout from '@/layouts/Layout.astro'
 import { getImagePath, getSeasonOrEpisode } from '@/utils'
 import { getMovieUrl, getSource } from '@/utils/sources'
-import { getMovie, getTVShow } from '@/utils/tmdb'
+import { getMovie, getSeasonDetails, getTVShow } from '@/utils/tmdb'
 import { Image } from 'astro:assets'
 
 const { media, mediaId } = Astro.params
@@ -14,9 +14,28 @@ const id = +(mediaId ?? 0)
 
 if (media !== 'tv' && media !== 'movie') return Astro.redirect('/')
 
-const result = await (media === 'movie' ? getMovie(id) : getTVShow(id)).catch(
-  () => null
-)
+const season = getSeasonOrEpisode(Astro.url.searchParams.get('season'))
+const episode = getSeasonOrEpisode(Astro.url.searchParams.get('episode'))
+
+let result:
+  | Awaited<ReturnType<typeof getMovie>>
+  | Awaited<ReturnType<typeof getTVShow>>
+  | null = null
+
+let seasonDetails: Awaited<ReturnType<typeof getSeasonDetails>> | null = null
+
+if (media === 'movie') {
+  result = await getMovie(id).catch(() => null)
+}
+
+if (media === 'tv') {
+  const [tvShow, tvShowSeason] = await Promise.all([
+    getTVShow(id).catch(() => null),
+    getSeasonDetails(id, season).catch(() => null),
+  ])
+  result = tvShow
+  seasonDetails = tvShowSeason
+}
 
 if (!result) {
   return Astro.redirect('/')
@@ -27,11 +46,19 @@ const isTV = result.media_type === 'tv'
 const currentSource = getSource(Astro.url.searchParams.get('source'))
 const iframeUrl = getMovieUrl(currentSource.id, id)
 
-const season = getSeasonOrEpisode(Astro.url.searchParams.get('season'))
-const episode = getSeasonOrEpisode(Astro.url.searchParams.get('episode'))
+const mediaTitle =
+  result.media_type === 'tv'
+    ? `${result.name} S${season}E${episode}`
+    : result.title
+const mediaCardTitle = result.media_type === 'tv' ? result.name : result.title
 
-const mediaTitle = isTV ? `${result.name} S${season}E${episode}` : result.title
-const mediaCardTitle = isTV ? result.name : result.title
+const mediaDetails = {
+  season,
+  episode,
+  mediaType: result.media_type,
+  mediaId: result.id,
+  sourceId: currentSource.id,
+}
 
 Astro.response.headers.set(
   'Cache-Control',
@@ -69,8 +96,8 @@ Astro.response.headers.set(
         </div>
       </div>
       {
-        isTV ? (
-          <TVShowPlayer {...result} />
+        result.media_type === 'tv' ? (
+          <TVShowPlayer result={result} seasonDetails={seasonDetails!} />
         ) : (
           <div class='aspect-video w-full flex-grow rounded-2xl bg-white/10 shadow-2xl'>
             <iframe
@@ -88,7 +115,9 @@ Astro.response.headers.set(
         image={result.poster_path}
         overview={result.overview}
         rating={result.vote_average}
-        releaseDate={isTV ? result.first_air_date : result.release_date}
+        releaseDate={result.media_type === 'tv'
+          ? result.first_air_date
+          : result.release_date}
         title={mediaCardTitle}
       />
       {!isTV && <SelectSource />}
@@ -102,3 +131,29 @@ Astro.response.headers.set(
     </div>
   </div>
 </Layout>
+
+<script is:inline data-astro-rerun define:vars={{ mediaDetails }}>
+  function handler() {
+    fetch('/api/watching', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      body: JSON.stringify(mediaDetails),
+    })
+  }
+
+  window.clear =
+    window.clear ||
+    function clear() {
+      clearInterval(window.watchingTimeout)
+    }
+
+  if (window.watchingTimeout) {
+    window.clear()
+  }
+
+  window.watchingTimeout = setInterval(handler, 1000 * 1)
+  document.removeEventListener('astro:after-swap', window.clear)
+  document.addEventListener('astro:after-swap', window.clear)
+</script>

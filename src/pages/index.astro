@@ -1,17 +1,20 @@
 ---
-import { Clapperboard, Flame, Tv } from 'lucide-astro'
+import { Clapperboard, Flame, Popcorn, Tv } from 'lucide-astro'
 import { getNowPlaying, getTrending } from '@/utils/tmdb'
 import Layout from '@/layouts/Layout.astro'
-import Discover from '@/components/Discover.astro'
-import MediaList from '@/components/MediaList.astro'
-import MediaGrid from '@/components/MediaGrid.astro'
+import Discover from '@/components/Media/Discover.astro'
+import MediaList from '@/components/Media/MediaList.astro'
+import MediaGrid from '@/components/Media/MediaGrid.astro'
+import { getWatching } from '@/utils/watching'
 
-const [nowPlaying, trending, trendingMovies, trendingTV] = await Promise.all([
-  getNowPlaying(),
-  getTrending('all'),
-  getTrending('movie'),
-  getTrending('tv'),
-])
+const [nowPlaying, trending, trendingMovies, trendingTV, watching] =
+  await Promise.all([
+    getNowPlaying(),
+    getTrending('all'),
+    getTrending('movie'),
+    getTrending('tv'),
+    getWatching({ headers: Astro.request.headers }),
+  ])
 
 Astro.response.headers.set(
   'Cache-Control',
@@ -33,6 +36,14 @@ Astro.response.headers.set(
     >
       <Flame slot='icon' width='18' height='18' fill='#000' stroke='#000' />
     </MediaList>
+    {
+      watching.length > 0 && (
+        <MediaList id='watching' results={watching} title='Continue Watching'>
+          <Popcorn slot='icon' width='18' height='18' stroke='#000' />
+        </MediaList>
+      )
+    }
+
     <MediaGrid results={trendingMovies.results} title='Movies' media='movie'>
       <Clapperboard slot='icon' width='18' height='18' stroke='#000' />
     </MediaGrid>
@@ -42,10 +53,79 @@ Astro.response.headers.set(
   </div>
 </Layout>
 
-<script>
-  import { createSwiper } from '@/utils'
+<script is:inline data-astro-rerun>
+  function findLastIndex(arr, callback) {
+    // Polyfill for findLastIndex
+    for (var i = arr.length - 1; i >= 0; i--) {
+      if (callback(arr[i], i, arr)) {
+        return i
+      }
+    }
+    return -1
+  }
 
-  const tvTrending = document.querySelector('#trending')
+  function isElementInViewport(el, container) {
+    if (!el || !container) return false
+
+    var rect = el.getBoundingClientRect()
+    var containerRect = container.getBoundingClientRect()
+
+    return (
+      rect.top >= containerRect.top &&
+      rect.left >= containerRect.left &&
+      rect.bottom <= containerRect.bottom &&
+      rect.right <= containerRect.right
+    )
+  }
+
+  function createSwiper(root, findLast) {
+    if (!root) return
+
+    var swiper = root.querySelector('.swiper')
+    var buttons = Array.prototype.slice.call(
+      root.querySelectorAll('.swiper-button')
+    )
+    var items = swiper.querySelectorAll('.swiper-item')
+    var elements = Array.prototype.slice.call(items)
+    var lastIndex = elements.length - 1
+
+    buttons.forEach(function (el) {
+      var isLeftButton = el.classList.contains('swiper-left')
+
+      el.addEventListener('click', function () {
+        var activeItemIndex =
+          isLeftButton || !findLast
+            ? elements.findIndex(function (el) {
+                return isElementInViewport(el, swiper)
+              })
+            : findLastIndex(elements, function (el) {
+                return isElementInViewport(el, swiper)
+              })
+
+        if (activeItemIndex === -1) return
+
+        var newItemIndex = isLeftButton
+          ? activeItemIndex === 0
+            ? lastIndex
+            : activeItemIndex - 1
+          : activeItemIndex === lastIndex
+            ? 0
+            : activeItemIndex + 1
+
+        items[newItemIndex].scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest',
+          inline: 'center',
+        })
+      })
+    })
+  }
+
+  var discover = document.querySelector('#discover')
+  var tvTrending = document.querySelector('#trending')
+  var watching = document.querySelector('#watching')
 
   createSwiper(tvTrending, true)
+  createSwiper(watching, true)
+  createSwiper(discover)
 </script>

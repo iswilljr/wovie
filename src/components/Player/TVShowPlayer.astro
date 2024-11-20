@@ -3,19 +3,22 @@ import SelectSource from './SelectSource.astro'
 import { getSource, getTvUrl } from '@/utils/sources'
 import { getEpisodeUrl } from '@/utils/url'
 import { getSeasonOrEpisode, snakeCase } from '@/utils'
-import { getSeasonDetails, type getTVShow } from '@/utils/tmdb'
 import { Play } from 'lucide-astro'
-import { SelectSeason } from './SelectSeason'
+import { SelectSeason } from '@/components/Player/SelectSeason'
+import type { getSeasonDetails, getTVShow } from '@/utils/tmdb'
 
-export type Props = Awaited<ReturnType<typeof getTVShow>>
+export interface Props {
+  result: Awaited<ReturnType<typeof getTVShow>>
+  seasonDetails: Awaited<ReturnType<typeof getSeasonDetails>>
+}
 
-const { id, seasons, name } = Astro.props
+const { seasonDetails } = Astro.props
+const { id, seasons, name } = Astro.props.result
 
 const season = getSeasonOrEpisode(Astro.url.searchParams.get('season'))
 const episode = getSeasonOrEpisode(Astro.url.searchParams.get('episode'))
 
 const tvSeasons = seasons.filter(season => season.season_number !== 0)
-const seasonDetails = await getSeasonDetails(id, season)
 
 const currentSource = getSource(Astro.url.searchParams.get('source'))
 const iframeUrl = getTvUrl(currentSource.id, id, season, episode)
