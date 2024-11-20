@@ -153,7 +153,7 @@ Astro.response.headers.set(
     window.clear()
   }
 
-  window.watchingTimeout = setInterval(handler, 1000 * 1)
+  window.watchingTimeout = setInterval(handler, 1000 * 60)
   document.removeEventListener('astro:after-swap', window.clear)
   document.addEventListener('astro:after-swap', window.clear)
 </script>
