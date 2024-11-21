@@ -4,8 +4,8 @@ import { LibsqlDialect } from '@libsql/kysely-libsql'
 import { linkWatching } from '../watching'
 
 const dialect = new LibsqlDialect({
-  url: import.meta.env.TURSO_DATABASE_URL ?? '',
-  authToken: import.meta.env.TURSO_AUTH_TOKEN ?? '',
+  url: import.meta.env.ASTRO_DB_REMOTE_URL ?? '',
+  authToken: import.meta.env.ASTRO_DB_APP_TOKEN ?? '',
 })
 
 export const auth = betterAuth({
