@@ -1,4 +1,4 @@
-import { db, desc, eq, Watching } from 'astro:db'
+import { db, desc, and, eq, Watching } from 'astro:db'
 import { auth } from './auth/server'
 import type { MovieWithMediaType, TVWithMediaType } from 'tmdb-ts'
 import type { Session, User } from 'better-auth'
@@ -91,4 +91,26 @@ export async function linkWatching({
   })
 
   await Promise.allSettled([...insertPromises, ...deletePromises])
+}
+
+export async function deleteItemFromWatching({
+  headers,
+  id,
+}: {
+  headers: Headers
+  id: string | number
+}) {
+  const session = await auth.api.getSession({
+    headers,
+  })
+
+  if (!session) {
+    throw new Error('Not authenticated')
+  }
+
+  await db
+    .delete(Watching)
+    .where(and(eq(Watching.userId, session.user.id), eq(Watching.mediaId, +id)))
+
+  console.log('Deleted watching')
 }

@@ -1,4 +1,5 @@
 import { getTrending, multiSearch } from '@/utils/tmdb'
+import { deleteItemFromWatching } from '@/utils/watching'
 import { defineAction } from 'astro:actions'
 import { z } from 'astro:schema'
 
@@ -24,6 +25,20 @@ export const server = {
         return [...trending.results, ...moreTrending.results]
       } catch (e) {
         return []
+      }
+    },
+  }),
+  deleteItemFromWatching: defineAction({
+    input: z.object({ id: z.number().or(z.string()) }),
+    handler: async ({ id }, context) => {
+      try {
+        await deleteItemFromWatching({
+          headers: context.request.headers,
+          id,
+        })
+        return true
+      } catch (e) {
+        return false
       }
     },
   }),
