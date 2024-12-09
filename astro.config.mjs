@@ -18,4 +18,7 @@ export default defineConfig({
       }),
     ],
   },
+  experimental: {
+    serverIslands: true,
+  },
 })

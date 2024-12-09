@@ -1,0 +1,33 @@
+---
+import { getWatching } from '@/utils/watching'
+import MediaCard from '@/components/Media/MediaCard.astro'
+
+const watching = await getWatching({
+  headers: Astro.request.headers,
+})
+---
+
+{
+  watching.map(data => (
+    <MediaCard
+      media={data.media_type}
+      id={data.id}
+      rating={data.vote_average}
+      image={data.backdrop_path}
+      language={data.original_language}
+      releaseDate={
+        data.media_type === 'movie' ? data.release_date : data.first_air_date
+      }
+      title={data.media_type === 'movie' ? data.title : data.name}
+      watching={data.watching}
+    />
+  ))
+}
+
+<script is:inline data-astro-rerun define:vars={{ total: watching.length }}>
+  window.total = total
+  window.watching = document.querySelector('#watching')
+  if (!window.total) {
+    window.watching.remove()
+  }
+</script>
