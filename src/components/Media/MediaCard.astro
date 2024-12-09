@@ -3,6 +3,7 @@ import { Image } from 'astro:assets'
 import { formatDate, getImagePath } from '@/utils'
 import { getTvOrMovieUrl } from '@/utils/url'
 import { Progress } from '@/components/ui/progress'
+import { DeleteWatchingButton } from './DeleteWatchingButton'
 
 export interface Props {
   media: 'tv' | 'movie'
@@ -38,54 +39,66 @@ const percentageWatched = isWatching
   : 0
 ---
 
-<a
+<div
+  data-watching-id={isWatching ? id : undefined}
   class='swiper-item group relative flex aspect-[2/1] h-fit w-full flex-shrink-0 flex-col gap-2 overflow-hidden rounded-2xl xs:w-8/12 sm:w-80'
-  href={getTvOrMovieUrl(
-    media,
-    id,
-    title,
-    watching?.season,
-    watching?.episode,
-    watching?.sourceId
-  )}
 >
-  <div class='z-0'>
+  <a
+    class=''
+    href={getTvOrMovieUrl(
+      media,
+      id,
+      title,
+      watching?.season,
+      watching?.episode,
+      watching?.sourceId
+    )}
+  >
+    <div class='z-0'>
+      {
+        image && (
+          <Image
+            width='780'
+            height='440'
+            loading='lazy'
+            alt={title}
+            src={getImagePath(image, 'w780')}
+            class='h-full w-full object-cover object-center duration-150 group-hover:scale-[1.03] group-focus:scale-[1.03]'
+          />
+        )
+      }
+    </div>
+    <div
+      class='gradient-opacity absolute inset-0 flex h-full w-full flex-col justify-end gap-1 rounded-2xl p-3 ring-inset ring-primary-500 duration-150 group-hover:ring-2 group-focus:ring-2 md:gap-2'
+    >
+      <p
+        class='line-clamp-2 text-sm font-bold uppercase !leading-none tracking-wide text-white sm:text-base'
+      >
+        {mediaTitle}
+      </p>
+      <div
+        class='flex flex-wrap gap-1 text-xs font-normal !leading-tight tracking-wider text-primary-400'
+      >
+        <p>Rating: {rating.toFixed(1)}</p>
+        <span>•</span>
+        <p>{formatDate(releaseDate)}</p>
+        <span>•</span>
+        <p class='uppercase'>{language}</p>
+      </div>
+    </div>
     {
-      image && (
-        <Image
-          width='780'
-          height='440'
-          loading='lazy'
-          alt={title}
-          src={getImagePath(image, 'w780')}
-          class='h-full w-full object-cover object-center duration-150 group-hover:scale-[1.03] group-focus:scale-[1.03]'
-        />
+      percentageWatched > 0 && (
+        <div class='absolute bottom-0 left-0 w-full duration-300 group-hover:opacity-20'>
+          <Progress className='h-1' value={percentageWatched} />
+        </div>
       )
     }
-  </div>
-  <div
-    class='gradient-opacity absolute inset-0 flex h-full w-full flex-col justify-end gap-1 rounded-2xl p-3 ring-inset ring-primary-500 duration-150 group-hover:ring-2 group-focus:ring-2 md:gap-2'
-  >
-    <p
-      class='line-clamp-2 text-sm font-bold uppercase !leading-none tracking-wide text-white sm:text-base'
-    >
-      {mediaTitle}
-    </p>
-    <div
-      class='flex flex-wrap gap-1 text-xs font-normal !leading-tight tracking-wider text-primary-400'
-    >
-      <p>Rating: {rating.toFixed(1)}</p>
-      <span>•</span>
-      <p>{formatDate(releaseDate)}</p>
-      <span>•</span>
-      <p class='uppercase'>{language}</p>
-    </div>
-  </div>
+  </a>
   {
-    percentageWatched > 0 && (
-      <div class='absolute bottom-0 left-0 w-full duration-300 group-hover:opacity-20'>
-        <Progress className='h-1' value={percentageWatched} />
+    isWatching && (
+      <div class='absolute right-2 top-2 opacity-0 group-hover:opacity-100 group-focus:opacity-100'>
+        <DeleteWatchingButton client:idle id={id} mediaTitle={mediaTitle} />
       </div>
     )
   }
-</a>
+</div>
