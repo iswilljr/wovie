@@ -28,7 +28,7 @@ export function Loader() {
 }
 
 export function MediaPostsLoader() {
-  const loaders = [...new Array(32).keys()]
+  const loaders = [...new Array(20).keys()]
 
   return (
     <div className='relative z-10 grid w-full grid-cols-[repeat(auto-fill,minmax(150px,1fr))] flex-wrap gap-4'>
@@ -40,5 +40,20 @@ export function MediaPostsLoader() {
         ></div>
       ))}
     </div>
+  )
+}
+
+export function MediaCardLoader() {
+  const loaders = [...new Array(20).keys()]
+
+  return (
+    <>
+      {loaders.map((_, i) => (
+        <div
+          key={i}
+          className='group relative flex aspect-[2/1] h-fit w-full flex-shrink-0 animate-pulse flex-col gap-2 overflow-hidden rounded-2xl bg-white/20 xs:w-8/12 sm:w-80'
+        />
+      ))}
+    </>
   )
 }

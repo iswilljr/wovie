@@ -1,0 +1,26 @@
+---
+import { getTrending } from '@/utils/tmdb'
+import MediaCard from '@/components/Media/MediaCard.astro'
+
+const trending = await getTrending('all')
+---
+
+{
+  trending.results.map(movie =>
+    movie.media_type !== 'person' ? (
+      <MediaCard
+        media={movie.media_type}
+        id={movie.id}
+        rating={movie.vote_average}
+        image={movie.backdrop_path}
+        language={movie.original_language}
+        releaseDate={
+          movie.media_type === 'movie'
+            ? movie.release_date
+            : movie.first_air_date
+        }
+        title={movie.media_type === 'movie' ? movie.title : movie.name}
+      />
+    ) : null
+  )
+}

@@ -1,5 +1,6 @@
 ---
 import MediaGrid from '@/components/Media/MediaGrid.astro'
+import MediaPosterGrid from '@/components/Media/MediaPosterGrid.astro'
 import PlayMediaCard from '@/components/Media/PlayMediaCard.astro'
 import SelectSource from '@/components/Player/SelectSource.astro'
 import TVShowPlayer from '@/components/Player/TVShowPlayer.astro'
@@ -123,11 +124,14 @@ Astro.response.headers.set(
       {!isTV && <SelectSource />}
       <div role='separator' class='h-[1px] w-full bg-white/20 sm:!my-16'></div>
       <MediaGrid
-        media={media}
         title='You might also Like'
         class='!p-0 sm:!p-0 [&_h2]:font-normal'
-        results={result.recommendations.results}
-      />
+      >
+        <MediaPosterGrid
+          media={media}
+          results={result.recommendations.results}
+        />
+      </MediaGrid>
     </div>
   </div>
 </Layout>

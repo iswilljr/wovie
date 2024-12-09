@@ -1,15 +1,10 @@
 ---
-import { MediaPoster } from './MediaPoster'
-import type { Movie, Recommendation, TV } from 'tmdb-ts'
-
 export interface Props {
-  media: 'tv' | 'movie'
   title: string
-  results: Array<Movie | TV | Recommendation>
   class?: string
 }
 
-const { media, results, title, class: className } = Astro.props
+const { title, class: className } = Astro.props
 
 const showIcon = Astro.slots.has('icon')
 ---
@@ -27,23 +22,5 @@ const showIcon = Astro.slots.has('icon')
       {title}
     </h2>
   </div>
-  <div
-    class='relative z-10 grid w-full grid-cols-[repeat(auto-fill,minmax(150px,1fr))] flex-wrap gap-4'
-  >
-    {
-      results.map(movie => (
-        <MediaPoster
-          media={media}
-          id={movie.id}
-          rating={movie.vote_average}
-          image={movie.poster_path}
-          language={movie.original_language}
-          releaseDate={
-            'release_date' in movie ? movie.release_date : movie.first_air_date
-          }
-          title={'title' in movie ? movie.title : movie.name}
-        />
-      ))
-    }
-  </div>
+  <slot />
 </div>

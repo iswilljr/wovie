@@ -1,20 +1,17 @@
 ---
 import { Clapperboard, Flame, Popcorn, Tv } from 'lucide-astro'
-import { getNowPlaying, getTrending } from '@/utils/tmdb'
+import { getNowPlaying } from '@/utils/tmdb'
 import Layout from '@/layouts/Layout.astro'
 import Discover from '@/components/Media/Discover.astro'
 import MediaList from '@/components/Media/MediaList.astro'
 import MediaGrid from '@/components/Media/MediaGrid.astro'
-import { getWatching } from '@/utils/watching'
+import Watching from '@/components/Home/Watching.astro'
+import Movies from '@/components/Home/Movies.astro'
+import TVShows from '@/components/Home/TVShows.astro'
+import { MediaCardLoader, MediaPostsLoader } from '@/components/Loader'
+import Trending from '@/components/Home/Trending.astro'
 
-const [nowPlaying, trending, trendingMovies, trendingTV, watching] =
-  await Promise.all([
-    getNowPlaying(),
-    getTrending('all'),
-    getTrending('movie'),
-    getTrending('tv'),
-    getWatching({ headers: Astro.request.headers }),
-  ])
+const [nowPlaying] = await Promise.all([getNowPlaying()])
 
 Astro.response.headers.set(
   'Cache-Control',
@@ -29,26 +26,30 @@ Astro.response.headers.set(
 >
   <Discover discover={nowPlaying.results} />
   <div class='-my-[--discover-space] sm:pb-8'>
-    <MediaList
-      id='trending'
-      results={trending.results}
-      title="What's Trending Today"
-    >
+    <MediaList id='trending' title="What's Trending Today">
       <Flame slot='icon' width='18' height='18' fill='#000' stroke='#000' />
+      <Trending server:defer>
+        <MediaCardLoader slot='fallback' />
+      </Trending>
     </MediaList>
-    {
-      watching.length > 0 && (
-        <MediaList id='watching' results={watching} title='Continue Watching'>
-          <Popcorn slot='icon' width='18' height='18' stroke='#000' />
-        </MediaList>
-      )
-    }
+    <MediaList id='watching' title='Continue Watching'>
+      <Popcorn slot='icon' width='18' height='18' stroke='#000' />
+      <Watching server:defer>
+        <MediaCardLoader slot='fallback' />
+      </Watching>
+    </MediaList>
 
-    <MediaGrid results={trendingMovies.results} title='Movies' media='movie'>
+    <MediaGrid title='Movies'>
       <Clapperboard slot='icon' width='18' height='18' stroke='#000' />
+      <Movies server:defer>
+        <MediaPostsLoader slot='fallback' />
+      </Movies>
     </MediaGrid>
-    <MediaGrid results={trendingTV.results} title='TV Shows' media='tv'>
+    <MediaGrid title='TV Shows'>
       <Tv slot='icon' width='18' height='18' stroke='#000' />
+      <TVShows server:defer>
+        <MediaPostsLoader slot='fallback' />
+      </TVShows>
     </MediaGrid>
   </div>
 </Layout>
@@ -78,21 +79,22 @@ Astro.response.headers.set(
     )
   }
 
-  function createSwiper(root, findLast) {
+  createSwiper = function createSwiper(root, findLast) {
     if (!root) return
 
     var swiper = root.querySelector('.swiper')
     var buttons = Array.prototype.slice.call(
       root.querySelectorAll('.swiper-button')
     )
-    var items = swiper.querySelectorAll('.swiper-item')
-    var elements = Array.prototype.slice.call(items)
-    var lastIndex = elements.length - 1
 
     buttons.forEach(function (el) {
       var isLeftButton = el.classList.contains('swiper-left')
 
       el.addEventListener('click', function () {
+        var items = swiper.querySelectorAll('.swiper-item')
+        var elements = Array.prototype.slice.call(items)
+        var lastIndex = elements.length - 1
+
         var activeItemIndex =
           isLeftButton || !findLast
             ? elements.findIndex(function (el) {
@@ -117,6 +119,7 @@ Astro.response.headers.set(
           block: 'nearest',
           inline: 'center',
         })
+        console.log('Scrolled')
       })
     })
   }

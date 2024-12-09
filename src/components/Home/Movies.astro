@@ -1,0 +1,8 @@
+---
+import { getTrending } from '@/utils/tmdb'
+import MediaPosterGrid from '@/components/Media/MediaPosterGrid.astro'
+
+const movies = await getTrending('movie')
+---
+
+<MediaPosterGrid media='movie' results={movies.results} />

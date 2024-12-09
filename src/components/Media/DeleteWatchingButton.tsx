@@ -14,8 +14,15 @@ export function DeleteWatchingButton({
     const element = document.querySelector<HTMLElement>(
       `[data-watching-id="${id}"]`
     )
+    const watching = document.querySelector<HTMLElement>('#watching')
+    const swiper = watching?.querySelector<HTMLElement>('.swiper')
     if (element) {
       element.remove()
+    }
+
+    const totalSwiperChildren = swiper?.children.length
+    if (totalSwiperChildren === 1) {
+      watching?.remove()
     }
 
     await actions.deleteItemFromWatching({ id })
@@ -25,6 +32,7 @@ export function DeleteWatchingButton({
     <Button
       size='icon'
       onClick={handleClick}
+      title={`Delete ${mediaTitle} from watching`}
       className='pointer-events-auto flex items-center justify-center gap-2 rounded-lg bg-opacity-20 px-4 py-1 text-sm text-white dark:bg-primary-500/70'
     >
       <XIcon />

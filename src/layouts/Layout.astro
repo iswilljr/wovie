@@ -1,7 +1,7 @@
 ---
 import Footer from '@/components/Home/Footer.astro'
 import Header from '@/components/Home/Header.astro'
-import { ViewTransitions } from 'astro:transitions'
+import { ClientRouter } from 'astro:transitions'
 import '@/styles/globals.css'
 
 interface Props {
@@ -22,7 +22,7 @@ const { title, description, image } = Astro.props
     <meta name='viewport' content='width=device-width' />
     <link rel='icon' type='image/png' href='/favicon.png' />
     <title>{title}</title>
-    <ViewTransitions />
+    <ClientRouter />
     <!-- open graph -->
     <meta property='og:image' content={image} />
     <meta property='og:image:width' content='1280' />
