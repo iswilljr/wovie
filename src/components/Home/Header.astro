@@ -2,8 +2,10 @@
 import { NavUser } from '@/components/Auth/NavUser'
 import { Search, SearchMobile } from '@/components/Search'
 import { Search as SearchIcon, Telescope as PopcornIcon } from 'lucide-astro'
+import { isbot } from 'isbot'
 
 const pathname = Astro.url.pathname
+const isBot = isbot(Astro.request.headers.get('user-agent')) || false
 ---
 
 <header class='absolute inset-0 z-[99] h-16 w-full'>
@@ -36,7 +38,7 @@ const pathname = Astro.url.pathname
         <PopcornIcon width='16' height='16' stroke='#000' />
         <span class='sr-only'>Explore</span>
       </a>
-      <NavUser client:idle />
+      <NavUser client:idle isBot={isBot} />
     </div>
   </div>
 </header>

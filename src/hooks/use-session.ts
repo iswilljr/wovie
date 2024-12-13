@@ -24,10 +24,15 @@ async function updateSession() {
   $userSession.set(newUserSession)
 }
 
-export function useSession() {
+export function useSession({ isBot = false } = {}) {
   const userSession = useStore($userSession)
 
   useEffect(() => {
+    if (isBot) {
+      $userSession.set({ session: null, user: null, status: 'unauthenticated' })
+      return
+    }
+
     if ($userSession.get().status !== 'initial') {
       return
     }

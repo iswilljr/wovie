@@ -32,6 +32,7 @@
     "better-auth": "0.8.2-beta.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "isbot": "5.1.17",
     "lucide-astro": "0.456.0",
     "lucide-react": "^0.456.0",
     "nanostores": "^0.11.3",
