@@ -1,6 +1,6 @@
 {
     "name": "Wovie",
-    "short_name": "MHX",
+    "short_name": "Wovie",
     "description": "Watch Movies and Tv shows!",
     "start_url": "/",
     "display": "standalone",
