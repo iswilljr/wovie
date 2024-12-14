@@ -7,8 +7,7 @@
     "start": "astro dev",
     "build": "astro check && astro build --remote",
     "preview": "astro preview",
-    "astro": "astro",
-    "prepare": "astro db push --remote"
+    "astro": "astro"
   },
   "dependencies": {
     "@astrojs/check": "0.9.4",
