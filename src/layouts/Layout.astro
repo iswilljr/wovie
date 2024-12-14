@@ -21,7 +21,6 @@ const { title, description, image } = Astro.props
     <meta name='description' content={description} />
     <meta name='viewport' content='width=device-width' />
     <link rel='icon' type='image/png' href='/favicon.png' />
-    <link rel="manifest" href="/manifest.json" />
     <title>{title}</title>
     <ViewTransitions />
     <!-- open graph -->
@@ -36,6 +35,9 @@ const { title, description, image } = Astro.props
     <meta name='twitter:title' content={title} />
     <meta name='twitter:description' content={description} />
     <meta name='twitter:image' content={image} />
+    <!-- PWA -->
+    <script is:inline src='/registerSW.js'></script>
+    <link rel='manifest' href='/manifest.webmanifest' />
   </head>
   <body>
     <Header />
