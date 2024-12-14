@@ -14,8 +14,15 @@ export function DeleteWatchingButton({
     const element = document.querySelector<HTMLElement>(
       `[data-watching-id="${id}"]`
     )
+    const watching = document.querySelector<HTMLElement>('#watching')
+    const swiper = watching?.querySelector<HTMLElement>('.swiper')
     if (element) {
       element.remove()
+    }
+
+    const totalSwiperChildren = swiper?.children.length
+    if (totalSwiperChildren === 0) {
+      watching?.remove()
     }
 
     await actions.deleteItemFromWatching({ id })
