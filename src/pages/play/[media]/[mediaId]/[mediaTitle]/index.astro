@@ -1,11 +1,11 @@
 ---
-import MediaGrid from '@/components/Media/MediaGrid.astro'
+import { MediaGrid } from '@/components/Media/MediaGrid'
 import PlayMediaCard from '@/components/Media/PlayMediaCard.astro'
-import SelectSource from '@/components/Player/SelectSource.astro'
-import TVShowPlayer from '@/components/Player/TVShowPlayer.astro'
+import { TVShowPlayer } from '@/components/Player/TVShowPlayer'
+import { MoviePlayer } from '@/components/Player/MoviePlayer'
 import Layout from '@/layouts/Layout.astro'
 import { getImagePath, getSeasonOrEpisode } from '@/utils'
-import { getMovieUrl, getSource } from '@/utils/sources'
+import { getSource } from '@/utils/sources'
 import { getMovie, getSeasonDetails, getTVShow } from '@/utils/tmdb'
 import { Image } from 'astro:assets'
 
@@ -44,7 +44,6 @@ if (!result) {
 const isTV = result.media_type === 'tv'
 
 const currentSource = getSource(Astro.url.searchParams.get('source'))
-const iframeUrl = getMovieUrl(currentSource.id, id)
 
 const mediaTitle =
   result.media_type === 'tv'
@@ -53,8 +52,6 @@ const mediaTitle =
 const mediaCardTitle = result.media_type === 'tv' ? result.name : result.title
 
 const mediaDetails = {
-  season,
-  episode,
   mediaType: result.media_type,
   mediaId: result.id,
   sourceId: currentSource.id,
@@ -97,16 +94,26 @@ Astro.response.headers.set(
       </div>
       {
         result.media_type === 'tv' ? (
-          <TVShowPlayer result={result} seasonDetails={seasonDetails!} />
+          <TVShowPlayer
+            client:idle
+            id={result.id}
+            name={result.name}
+            initialSeason={season}
+            initialEpisode={episode}
+            seasonDetails={seasonDetails!}
+            initialUrl={Astro.url.toString()}
+            initialSourceId={currentSource.id}
+            seasons={result.seasons.filter(
+              season => season.season_number !== 0
+            )}
+          />
         ) : (
-          <div class='aspect-video w-full flex-grow rounded-2xl bg-white/10 shadow-2xl'>
-            <iframe
-              title={mediaTitle}
-              class='aspect-video w-full rounded-2xl bg-transparent'
-              allowfullscreen
-              src={iframeUrl}
-            />
-          </div>
+          <MoviePlayer
+            title={mediaTitle}
+            initialSource={currentSource.id}
+            id={result.id}
+            client:idle
+          />
         )
       }
       <PlayMediaCard
@@ -120,20 +127,26 @@ Astro.response.headers.set(
           : result.release_date}
         title={mediaCardTitle}
       />
-      {!isTV && <SelectSource />}
       <div role='separator' class='h-[1px] w-full bg-white/20 sm:!my-16'></div>
-      <MediaGrid
-        media={media}
-        title='You might also Like'
-        class='!p-0 sm:!p-0 [&_h2]:font-normal'
-        results={result.recommendations.results}
-      />
+      {
+        result.recommendations.results.length > 0 && (
+          <MediaGrid
+            media={media}
+            title='You might also Like'
+            class='!p-0 sm:!p-0 [&_h2]:font-normal'
+            results={result.recommendations.results}
+          />
+        )
+      }
     </div>
   </div>
 </Layout>
 
 <script is:inline data-astro-rerun define:vars={{ mediaDetails }}>
   function handler() {
+    let search = new URLSearchParams(window.location.search)
+    mediaDetails.season = Number(search.get('season')) || 1
+    mediaDetails.episode = Number(search.get('episode')) || 1
     fetch('/api/watching', {
       method: 'POST',
       headers: {
@@ -153,7 +166,7 @@ Astro.response.headers.set(
     window.clear()
   }
 
-  window.watchingTimeout = setInterval(handler, 1000 * 60)
+  window.watchingTimeout = setInterval(handler, 1000 * 3)
   document.removeEventListener('astro:after-swap', window.clear)
   document.addEventListener('astro:after-swap', window.clear)
 </script>

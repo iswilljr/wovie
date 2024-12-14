@@ -20,6 +20,21 @@ export type ImageSize =
   | Size<typeof ProfileSize>
   | Size<typeof BackdropSize>
 
+export const swrDefaultOptions = {
+  revalidateOnFocus: false,
+  revalidateOnReconnect: false,
+  refreshInterval: 0,
+  dedupingInterval: 0,
+  focusThrottleInterval: 0,
+  errorRetryInterval: 0,
+  errorRetryCount: 0,
+  refreshWhenHidden: false,
+  refreshWhenOffline: false,
+  refreshWhenOnline: false,
+  refreshWhenVisible: false,
+  revalidateIfStale: false,
+}
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }

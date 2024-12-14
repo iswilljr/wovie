@@ -27,7 +27,7 @@ export function SelectSeason({
 
       void navigate(getEpisodeUrl(id, title, newSeason, 1, sourceId))
     },
-    [id, title, activeSeason]
+    [id, title, activeSeason, sourceId]
   )
 
   return (
