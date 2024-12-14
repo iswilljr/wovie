@@ -1,5 +1,5 @@
 ---
-import MediaGrid from '@/components/Media/MediaGrid.astro'
+import { MediaGrid } from '@/components/Media/MediaGrid'
 import PlayMediaCard from '@/components/Media/PlayMediaCard.astro'
 import SelectSource from '@/components/Player/SelectSource.astro'
 import TVShowPlayer from '@/components/Player/TVShowPlayer.astro'
@@ -99,13 +99,16 @@ Astro.response.headers.set(
         result.media_type === 'tv' ? (
           <TVShowPlayer result={result} seasonDetails={seasonDetails!} />
         ) : (
-          <div class='aspect-video w-full flex-grow rounded-2xl bg-white/10 shadow-2xl'>
-            <iframe
-              title={mediaTitle}
-              class='aspect-video w-full rounded-2xl bg-transparent'
-              allowfullscreen
-              src={iframeUrl}
-            />
+          <div class='space-y-4'>
+            <div class='aspect-video w-full flex-grow rounded-2xl bg-white/10 shadow-2xl'>
+              <iframe
+                title={mediaTitle}
+                class='aspect-video w-full rounded-2xl bg-transparent'
+                allowfullscreen
+                src={iframeUrl}
+              />
+            </div>
+            <SelectSource />
           </div>
         )
       }
@@ -120,20 +123,26 @@ Astro.response.headers.set(
           : result.release_date}
         title={mediaCardTitle}
       />
-      {!isTV && <SelectSource />}
       <div role='separator' class='h-[1px] w-full bg-white/20 sm:!my-16'></div>
-      <MediaGrid
-        media={media}
-        title='You might also Like'
-        class='!p-0 sm:!p-0 [&_h2]:font-normal'
-        results={result.recommendations.results}
-      />
+      {
+        result.recommendations.results.length > 0 && (
+          <MediaGrid
+            media={media}
+            title='You might also Like'
+            class='!p-0 sm:!p-0 [&_h2]:font-normal'
+            results={result.recommendations.results}
+          />
+        )
+      }
     </div>
   </div>
 </Layout>
 
 <script is:inline data-astro-rerun define:vars={{ mediaDetails }}>
   function handler() {
+    let search = new URLSearchParams(window.location.search)
+    mediaDetails.season = Number(search.get('season')) || 1
+    mediaDetails.episode = Number(search.get('episode')) || 1
     fetch('/api/watching', {
       method: 'POST',
       headers: {

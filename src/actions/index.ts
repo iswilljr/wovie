@@ -1,5 +1,5 @@
 import { getTrending, multiSearch } from '@/utils/tmdb'
-import { deleteItemFromWatching } from '@/utils/watching'
+import { deleteItemFromWatching, getWatching } from '@/utils/watching'
 import { defineAction } from 'astro:actions'
 import { z } from 'astro:schema'
 
@@ -39,6 +39,27 @@ export const server = {
         return true
       } catch (e) {
         return false
+      }
+    },
+  }),
+  trending: defineAction({
+    input: z.object({ type: z.enum(['all', 'movie', 'tv']) }),
+    handler: async ({ type }) => {
+      try {
+        const trending = await getTrending(type)
+        return trending
+      } catch (e) {
+        return null
+      }
+    },
+  }),
+  watching: defineAction({
+    handler: async (_, context) => {
+      try {
+        const watching = await getWatching({ headers: context.request.headers })
+        return watching
+      } catch (e) {
+        return null
       }
     },
   }),
