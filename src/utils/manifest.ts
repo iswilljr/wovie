@@ -6,8 +6,8 @@ export const manifest: Partial<ManifestOptions> = {
   description: 'Watch Movies and Tv shows!',
   start_url: '/',
   display: 'standalone',
-  background_color: '#2f68c5',
-  theme_color: '#2f68c5',
+  background_color: '#3b82f6',
+  theme_color: '#3b82f6',
   icons: [
     {
       src: '/favicon.png',
