@@ -11,7 +11,7 @@ export const manifest: Partial<ManifestOptions> = {
   icons: [
     {
       src: '/favicon.png',
-      sizes: '48x48',
+      sizes: '512x512',
       type: 'image/png',
     },
   ],
