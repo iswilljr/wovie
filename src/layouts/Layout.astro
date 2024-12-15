@@ -35,6 +35,9 @@ const { title, description, image } = Astro.props
     <meta name='twitter:title' content={title} />
     <meta name='twitter:description' content={description} />
     <meta name='twitter:image' content={image} />
+    <!-- PWA -->
+    <script is:inline src='/registerSW.js'></script>
+    <link rel='manifest' href='/manifest.webmanifest' />
   </head>
   <body>
     <Header />
