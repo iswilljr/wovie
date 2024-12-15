@@ -21,6 +21,11 @@ const Session = defineTable({
     userAgent: column.text({ optional: true }),
     userId: column.text({ references: () => User.columns.id }),
   },
+  indexes: [
+    {
+      on: ['userId'],
+    },
+  ],
 })
 
 const Account = defineTable({
@@ -35,6 +40,11 @@ const Account = defineTable({
     expiresAt: column.date({ optional: true }),
     password: column.text({ optional: true }),
   },
+  indexes: [
+    {
+      on: ['userId'],
+    },
+  ],
 })
 
 const Verification = defineTable({
@@ -65,6 +75,9 @@ const Watching = defineTable({
     {
       on: ['userId', 'mediaId', 'mediaType'],
       unique: true,
+    },
+    {
+      on: ['userId'],
     },
   ],
 })
