@@ -5,12 +5,20 @@ export interface Source {
   tvUrl: string
 }
 
+const vidLinkParams = '?primaryColor=3b82f6&poster=true&autoplay=false'
+
 export const SOURCES: Source[] = [
   {
     id: 'vidsrc.pro',
     name: 'VidSrc.pro',
     movieUrl: 'https://vidsrc.pro/embed/movie/{id}',
     tvUrl: 'https://vidsrc.pro/embed/tv/{id}/{season}/{episode}',
+  },
+  {
+    id: 'vidlink.pro',
+    name: 'Vid Link',
+    movieUrl: `https://vidlink.pro/movie/{id}${vidLinkParams}`,
+    tvUrl: `https://vidlink.pro/tv/{id}/{season}/{episode}${vidLinkParams}`,
   },
   {
     id: 'superembed',
@@ -42,6 +50,12 @@ export const SOURCES: Source[] = [
     name: 'Movies Api club',
     movieUrl: 'https://moviesapi.club/movie/{id}',
     tvUrl: 'https://moviesapi.club/tv/{id}-{season}-{episode}',
+  },
+  {
+    id: 'vidsrc.vip',
+    name: 'VidSrc.vip',
+    tvUrl: 'https://vidsrc.vip/embed/tv/{id}/{season}/{episode}',
+    movieUrl: 'https://vidsrc.vip/embed/movie/{id}',
   },
 ]
 

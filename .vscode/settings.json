@@ -2,6 +2,7 @@
   "cSpell.words": [
     "astro",
     "astrojs",
+    "isbot",
     "kysely",
     "libsql",
     "lucide",
@@ -11,6 +12,7 @@
     "tailwindcss",
     "tmdb",
     "turso",
+    "vidlink",
     "vidsrc",
     "wovie"
   ],
