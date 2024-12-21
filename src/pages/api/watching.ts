@@ -7,6 +7,8 @@ import { z } from 'astro:schema'
 type WatchingData = typeof Watching.$inferSelect
 type InputData = z.infer<typeof InputDataSchema>
 
+const WATCHING_TIME_IN_MINUTES = 5
+
 const InputDataSchema = z.object({
   episode: z.number(),
   mediaId: z.number(),
@@ -91,7 +93,9 @@ async function getWatchingDetails(
 
   let details = watching?.details
   let runtime = watching?.runtime ?? 0
-  let watchedTime = isNew ? 1 : watching.watchedTime + 1
+  let watchedTime = isNew
+    ? WATCHING_TIME_IN_MINUTES
+    : watching.watchedTime + WATCHING_TIME_IN_MINUTES
 
   if (isMovie && isNew) {
     details = await getMovie(input.mediaId)
