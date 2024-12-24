@@ -58,7 +58,7 @@ const canGoToNextSeason = isLastEpisode && !isLastSeason
               episodeDetails.episode_number,
               currentSource.id
             )}
-            class='group relative line-clamp-1 flex h-12 w-full flex-shrink-0 items-center justify-between gap-1 p-4 text-sm even:bg-white/5 hover:bg-white/10 hover:text-white aria-[current]:!bg-white/20 aria-[current]:!text-primary-400'
+            class='group relative line-clamp-1 flex h-12 w-full flex-shrink-0 items-center justify-between gap-1 p-4 text-sm even:bg-white/5 hover:bg-white/10 hover:text-white aria-[current=true]:!bg-white/20 aria-[current=true]:!text-primary-400'
           >
             <p class='flex gap-2 tracking-wide'>
               <span class='font-medium'>{episodeDetails.episode_number}.</span>
@@ -66,7 +66,7 @@ const canGoToNextSeason = isLastEpisode && !isLastSeason
                 {episodeDetails.name}
               </span>
             </p>
-            <span class='hidden shrink-0 items-center justify-center rounded-full bg-primary-400 p-1 group-aria-[current]:flex'>
+            <span class='hidden shrink-0 items-center justify-center rounded-full bg-primary-400 p-1 group-aria-[current=true]:flex'>
               <Play width='10' height='10' fill='black' stroke='black' />
             </span>
           </a>
