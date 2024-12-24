@@ -2,6 +2,7 @@ import { defineConfig } from 'astro/config'
 import tailwind from '@astrojs/tailwind'
 import react from '@astrojs/react'
 import vercel from '@astrojs/vercel'
+import cloudflare from '@astrojs/cloudflare'
 import db from '@astrojs/db'
 import legacy from '@vitejs/plugin-legacy'
 import sitemap from '@astrojs/sitemap'
@@ -14,11 +15,14 @@ const SITE_URL =
   import.meta.env.BETTER_AUTH_URL ||
   'https://wovie.vercel.app'
 
+const cloudflareAdapterEnabled =
+  process.env.CLOUDFLARE_ADAPTER_ENABLED === 'true'
+
 // https://astro.build/config
 export default defineConfig({
   output: 'server',
   site: SITE_URL,
-  adapter: vercel(),
+  adapter: cloudflareAdapterEnabled ? cloudflare() : vercel(),
   integrations: [tailwind(), db(), react(), sitemap(), compress()],
   vite: {
     plugins: [
