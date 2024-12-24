@@ -6,7 +6,6 @@ import cloudflare from '@astrojs/cloudflare'
 import db from '@astrojs/db'
 import legacy from '@vitejs/plugin-legacy'
 import sitemap from '@astrojs/sitemap'
-import compress from 'astro-compress'
 import { VitePWA } from 'vite-plugin-pwa'
 import { manifest } from './src/utils/manifest'
 
@@ -23,7 +22,7 @@ export default defineConfig({
   output: 'server',
   site: SITE_URL,
   adapter: cloudflareAdapterEnabled ? cloudflare() : vercel(),
-  integrations: [tailwind(), db(), react(), sitemap(), compress()],
+  integrations: [tailwind(), db(), react(), sitemap()],
   vite: {
     plugins: [
       legacy({
