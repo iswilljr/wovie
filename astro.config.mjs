@@ -1,4 +1,4 @@
-import { defineConfig } from 'astro/config'
+import { defineConfig, envField } from 'astro/config'
 import tailwind from '@astrojs/tailwind'
 import react from '@astrojs/react'
 import vercel from '@astrojs/vercel'
@@ -10,8 +10,8 @@ import { VitePWA } from 'vite-plugin-pwa'
 import { manifest } from './src/utils/manifest'
 
 const SITE_URL =
-  import.meta.env.SITE_URL ||
-  import.meta.env.BETTER_AUTH_URL ||
+  process.env.SITE_URL ??
+  process.env.BETTER_AUTH_URL ??
   'https://wovie.vercel.app'
 
 const cloudflareAdapterEnabled =
@@ -23,6 +23,41 @@ export default defineConfig({
   site: SITE_URL,
   adapter: cloudflareAdapterEnabled ? cloudflare() : vercel(),
   integrations: [tailwind(), db(), react(), sitemap()],
+  env: {
+    schema: {
+      TMDB_KEY: envField.string({
+        context: 'server',
+        access: 'secret',
+        optional: false,
+      }),
+      BETTER_AUTH_URL: envField.string({
+        context: 'server',
+        access: 'secret',
+        optional: false,
+        url: true,
+      }),
+      BETTER_AUTH_TRUSTED_ORIGINS: envField.string({
+        context: 'server',
+        access: 'secret',
+        optional: false,
+      }),
+      BETTER_AUTH_SECRET: envField.string({
+        context: 'server',
+        access: 'secret',
+        optional: false,
+      }),
+      ASTRO_DB_REMOTE_URL: envField.string({
+        context: 'server',
+        access: 'secret',
+        optional: false,
+      }),
+      ASTRO_DB_APP_TOKEN: envField.string({
+        context: 'server',
+        access: 'secret',
+        optional: false,
+      }),
+    },
+  },
   vite: {
     plugins: [
       legacy({
