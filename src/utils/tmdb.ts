@@ -1,8 +1,7 @@
-import { z } from 'astro/zod'
 import { TMDB, type TrendingMediaType } from 'tmdb-ts'
+import { TMDB_KEY } from 'astro:env/server'
 
-const apiKey = z.string().parse(import.meta.env.TMDB_KEY)
-const tmdb = new TMDB(apiKey)
+const tmdb = new TMDB(TMDB_KEY)
 
 export async function getTrending<T extends TrendingMediaType>(
   type: T,
