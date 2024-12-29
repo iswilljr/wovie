@@ -15,12 +15,6 @@ export const SOURCES: Source[] = [
     tvUrl: 'https://vidsrc.pro/embed/tv/{id}/{season}/{episode}',
   },
   {
-    id: 'vidlink.pro',
-    name: 'Vid Link',
-    movieUrl: `https://vidlink.pro/movie/{id}${vidLinkParams}`,
-    tvUrl: `https://vidlink.pro/tv/{id}/{season}/{episode}${vidLinkParams}`,
-  },
-  {
     id: 'superembed',
     name: 'Super Embed',
     movieUrl: 'https://multiembed.mov/?tmdb=1&video_id={id}',
@@ -50,6 +44,12 @@ export const SOURCES: Source[] = [
     name: 'Movies Api club',
     movieUrl: 'https://moviesapi.club/movie/{id}',
     tvUrl: 'https://moviesapi.club/tv/{id}-{season}-{episode}',
+  },
+  {
+    id: 'vidlink.pro',
+    name: 'Vid Link',
+    movieUrl: `https://vidlink.pro/movie/{id}${vidLinkParams}`,
+    tvUrl: `https://vidlink.pro/tv/{id}/{season}/{episode}${vidLinkParams}`,
   },
   {
     id: 'vidsrc.vip',
