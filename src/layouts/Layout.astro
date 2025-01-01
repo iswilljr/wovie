@@ -18,7 +18,13 @@ const { title, description, image, noIndex = false } = Astro.props
 <html lang='en' class='dark'>
   <head>
     <meta charset='UTF-8' />
-    <meta name='robots' content='index, follow' />
+    {
+      noIndex ? (
+        <meta name='robots' content='noindex, nofollow' />
+      ) : (
+        <meta name='robots' content='index, nofollow' />
+      )
+    }
     <meta name='description' content={description} />
     <meta name='viewport' content='width=device-width' />
     <link rel='icon' type='image/png' href='/favicon.png' />
@@ -39,8 +45,6 @@ const { title, description, image, noIndex = false } = Astro.props
     <!-- PWA -->
     <script is:inline src='/registerSW.js'></script>
     <link rel='manifest' href='/manifest.webmanifest' />
-    <!-- Robots -->
-    {noIndex && <meta name='robots' content='noindex, nofollow' />}
   </head>
   <body>
     <Header />
