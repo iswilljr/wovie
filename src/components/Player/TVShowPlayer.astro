@@ -16,15 +16,27 @@ const { seasonDetails } = Astro.props
 const { id, seasons, name } = Astro.props.result
 
 const season = getSeasonOrEpisode(Astro.url.searchParams.get('season'))
-const episode = getSeasonOrEpisode(Astro.url.searchParams.get('episode'))
+let episode = getSeasonOrEpisode(Astro.url.searchParams.get('episode'))
+
+const episodeDetails = seasonDetails.episodes.find(
+  details => details.episode_number === episode
+)
+
+if (!episodeDetails) {
+  episode = seasonDetails.episodes[0]?.episode_number ?? 1
+}
+
+const firstEpisode = seasonDetails.episodes[0]?.episode_number ?? 1
+const lastEpisode =
+  seasonDetails.episodes[seasonDetails.episodes.length - 1]?.episode_number ?? 1
 
 const tvSeasons = seasons.filter(season => season.season_number !== 0)
 
 const currentSource = getSource(Astro.url.searchParams.get('source'))
 const iframeUrl = getTvUrl(currentSource.id, id, season, episode)
 
-const isFirstEpisode = episode <= 1
-const isLastEpisode = episode >= seasonDetails.episodes.length
+const isFirstEpisode = episode <= firstEpisode
+const isLastEpisode = episode >= lastEpisode
 const isLastSeason = season >= tvSeasons.length
 const canGoToNextSeason = isLastEpisode && !isLastSeason
 ---
