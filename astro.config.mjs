@@ -17,6 +17,7 @@ const SITE_URL =
 // https://astro.build/config
 export default defineConfig({
   output: 'server',
+  prefetch: false,
   site: SITE_URL,
   adapter: vercel(),
   integrations: [tailwind(), db(), react(), sitemap(), compress()],
