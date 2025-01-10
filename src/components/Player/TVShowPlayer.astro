@@ -1,5 +1,5 @@
 ---
-import SelectSource from './SelectSource.astro'
+import SelectSource from './SelectSource'
 import { getSource, getTvUrl } from '@/utils/sources'
 import { getEpisodeUrl } from '@/utils/url'
 import { getSeasonOrEpisode, snakeCase } from '@/utils'
@@ -132,6 +132,10 @@ const canGoToNextSeason = isLastEpisode && !isLastSeason
         )
       }
     </div>
-    <SelectSource />
+    <SelectSource
+      client:idle
+      currentURL={Astro.url.toString()}
+      currentSourceId={currentSource.id}
+    />
   </div>
 </div>

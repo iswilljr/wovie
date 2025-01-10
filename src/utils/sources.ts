@@ -3,6 +3,7 @@ export interface Source {
   name: string
   movieUrl: string
   tvUrl: string
+  rank: number
 }
 
 const vidLinkParams = '?primaryColor=3b82f6&poster=true&autoplay=false'
@@ -13,51 +14,79 @@ export const SOURCES: Source[] = [
     name: 'VidSrc.pro',
     movieUrl: 'https://vidsrc.pro/embed/movie/{id}',
     tvUrl: 'https://vidsrc.pro/embed/tv/{id}/{season}/{episode}',
+    rank: 36,
   },
   {
     id: 'superembed',
     name: 'Super Embed',
     movieUrl: 'https://multiembed.mov/?tmdb=1&video_id={id}',
-    tvUrl:
-      'https://multiembed.mov/?tmdb=1&video_id={id}&s={season}&e={episode}',
+    tvUrl: `https://multiembed.mov/?tmdb=1&video_id={id}&s={season}&e={episode}`,
+    rank: 8,
   },
   {
     id: 'vidsrc.dev',
     name: 'Vid Binge',
     movieUrl: 'https://vidsrc.dev/embed/movie/{id}',
     tvUrl: 'https://vidsrc.dev/embed/tv/{id}/{season}/{episode}',
+    rank: 6,
   },
   {
     id: 'vidsrc.to',
     name: 'VidSrc.to',
     movieUrl: 'https://vidsrc.to/embed/movie/{id}',
     tvUrl: 'https://vidsrc.to/embed/tv/{id}/{season}/{episode}',
+    rank: 11,
   },
   {
     id: 'vidsrc.cc',
     name: 'VidSrc.cc',
     movieUrl: 'https://vidsrc.cc/v2/embed/movie/{id}',
     tvUrl: 'https://vidsrc.cc/v2/embed/tv/{id}/{season}/{episode}',
+    rank: 10,
   },
   {
     id: 'moviesapi.club',
-    name: 'Movies Api club',
+    name: 'Movies Club',
     movieUrl: 'https://moviesapi.club/movie/{id}',
     tvUrl: 'https://moviesapi.club/tv/{id}-{season}-{episode}',
+    rank: 13,
   },
   {
     id: 'vidlink.pro',
     name: 'Vid Link',
     movieUrl: `https://vidlink.pro/movie/{id}${vidLinkParams}`,
     tvUrl: `https://vidlink.pro/tv/{id}/{season}/{episode}${vidLinkParams}`,
+    rank: 11,
   },
   {
     id: 'vidsrc.vip',
     name: 'VidSrc.vip',
     tvUrl: 'https://vidsrc.vip/embed/tv/{id}/{season}/{episode}',
     movieUrl: 'https://vidsrc.vip/embed/movie/{id}',
+    rank: 4,
   },
-]
+  {
+    id: 'rivestream',
+    name: 'Rive Stream',
+    tvUrl: `https://rivestream.live/embed?type=tv&id={id}&season={season}&episode={episode}`,
+    movieUrl: 'https://rivestream.live/embed?type=movie&id={id}',
+    rank: 0,
+  },
+  {
+    id: '111movies',
+    name: '111 Movies',
+    tvUrl: 'https://111movies.com/tv/{id}/{season}/{episode}',
+    movieUrl: 'https://111movies.com/movie/{id}',
+    rank: 0,
+  },
+  {
+    id: 'spencerdevs',
+    name: 'Spencer',
+    tvUrl: 'https://embed.spencerdevs.xyz/api/embed/tv2/?id={id}&s={id}&e={id}',
+    movieUrl: 'https://embed.spencerdevs.xyz/api/embed/movie2/?id={id}',
+    rank: 0,
+  },
+].sort((a, b) => b.rank - a.rank)
 
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 export const DEFAULT_SOURCE = SOURCES[0]!
