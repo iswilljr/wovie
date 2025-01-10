@@ -1,7 +1,7 @@
 ---
 import { MediaGrid } from '@/components/Media/MediaGrid'
 import PlayMediaCard from '@/components/Media/PlayMediaCard.astro'
-import SelectSource from '@/components/Player/SelectSource.astro'
+import SelectSource from '@/components/Player/SelectSource'
 import TVShowPlayer from '@/components/Player/TVShowPlayer.astro'
 import Layout from '@/layouts/Layout.astro'
 import { getImagePath, getSeasonOrEpisode } from '@/utils'
@@ -109,7 +109,11 @@ Astro.response.headers.set(
                 src={iframeUrl}
               />
             </div>
-            <SelectSource />
+            <SelectSource
+              client:idle
+              currentURL={Astro.url.toString()}
+              currentSourceId={currentSource.id}
+            />
           </div>
         )
       }
