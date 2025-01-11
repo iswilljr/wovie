@@ -19,7 +19,7 @@ export const server = {
     handler: async () => {
       try {
         const [trending, moreTrending] = await Promise.all([
-          getTrending('all', { page: 1 }),
+          getTrending('all'),
           getTrending('all', { page: 2 }),
         ])
         return [...trending.results, ...moreTrending.results]
@@ -43,11 +43,18 @@ export const server = {
     },
   }),
   trending: defineAction({
-    input: z.object({ type: z.enum(['all', 'movie', 'tv']) }),
-    handler: async ({ type }) => {
+    handler: async () => {
       try {
-        const trending = await getTrending(type)
-        return trending
+        const [all, movies, tvShows] = await Promise.all([
+          getTrending('all'),
+          getTrending('movie'),
+          getTrending('tv'),
+        ])
+        return {
+          all: all.results,
+          movies: movies.results,
+          tvShows: tvShows.results,
+        }
       } catch (e) {
         return null
       }

@@ -6,8 +6,8 @@ import { swrDefaultOptions } from '@/utils'
 
 export function TVShows() {
   const { data: trendingTvShows } = useSWR(
-    'tv',
-    () => actions.trending({ type: 'tv' }),
+    'trending',
+    () => actions.trending(),
     swrDefaultOptions
   )
 
@@ -15,7 +15,7 @@ export function TVShows() {
     <MediaGrid
       media='tv'
       title='TV Shows'
-      results={(trendingTvShows?.data?.results as any) ?? []}
+      results={(trendingTvShows?.data?.tvShows as any) ?? []}
       icon={<TvIcon width='18' height='18' stroke='#000' />}
     />
   )
