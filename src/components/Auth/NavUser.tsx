@@ -14,7 +14,7 @@ async function handleLogout() {
   window.location.reload()
 }
 
-export function NavUser({ isBot = false }) {
+export function NavUser({ isBot = false }: { isBot?: boolean }) {
   const { user, isLoading, isAuthenticated } = useSession({ isBot })
 
   if (isLoading || !isAuthenticated) {

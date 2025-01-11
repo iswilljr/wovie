@@ -36,6 +36,7 @@ export function MediaGrid({
         <div className='relative z-10 grid w-full grid-cols-[repeat(auto-fill,minmax(150px,1fr))] flex-wrap gap-4'>
           {results.map(movie => (
             <MediaPoster
+              key={movie.id}
               media={media}
               id={movie.id}
               rating={movie.vote_average}

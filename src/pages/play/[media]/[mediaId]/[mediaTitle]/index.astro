@@ -1,9 +1,9 @@
 ---
 import { MediaGrid } from '@/components/Media/MediaGrid'
 import PlayMediaCard from '@/components/Media/PlayMediaCard.astro'
-import SelectSource from '@/components/Player/SelectSource'
-import TVShowPlayer from '@/components/Player/TVShowPlayer.astro'
 import Layout from '@/layouts/Layout.astro'
+import { SelectSource } from '@/components/Player/SelectSource'
+import { TVShowPlayer } from '@/components/Player/TVShowPlayer'
 import { getImagePath, getSeasonOrEpisode } from '@/utils'
 import { getMovieUrl, getSource } from '@/utils/sources'
 import { getMovie, getSeasonDetails, getTVShow } from '@/utils/tmdb'
@@ -98,22 +98,33 @@ Astro.response.headers.set(
       </div>
       {
         result.media_type === 'tv' ? (
-          <TVShowPlayer result={result} seasonDetails={seasonDetails!} />
+          <TVShowPlayer
+            client:idle
+            season={season}
+            result={result}
+            episode={episode}
+            seasonDetails={seasonDetails!}
+            currentSourceId={currentSource.id}
+          />
         ) : (
           <div class='space-y-4'>
             <div class='aspect-video w-full flex-grow rounded-2xl bg-white/10 shadow-2xl'>
               <iframe
+                id='player-video'
                 title={mediaTitle}
                 class='aspect-video w-full rounded-2xl bg-transparent'
                 allowfullscreen
                 src={iframeUrl}
               />
             </div>
-            <SelectSource
-              client:idle
-              currentURL={Astro.url.toString()}
-              currentSourceId={currentSource.id}
-            />
+            <div>
+              <SelectSource
+                client:idle
+                mediaType='movie'
+                mediaId={result.id}
+                currentSourceId={currentSource.id}
+              />
+            </div>
           </div>
         )
       }
@@ -148,6 +159,7 @@ Astro.response.headers.set(
     let search = new URLSearchParams(window.location.search)
     mediaDetails.season = Number(search.get('season')) || 1
     mediaDetails.episode = Number(search.get('episode')) || 1
+    mediaDetails.sourceId = search.get('source')
     fetch('/api/watching', {
       method: 'POST',
       headers: {

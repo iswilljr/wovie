@@ -8,6 +8,7 @@ const disabledTypescriptEslintRules = {
   '@typescript-eslint/strict-boolean-expressions': 'off',
   '@typescript-eslint/promise-function-async': 'off',
   '@typescript-eslint/no-misused-promises': 'off',
+  'react/react-in-jsx-scope': 'off',
 }
 
 /** @type {import("eslint").ESLint.ConfigData} */
@@ -43,6 +44,23 @@ const eslintConfig = {
       parserOptions: {
         parser: '@typescript-eslint/parser',
         extraFileExtensions: ['.astro'],
+      },
+      rules: {
+        ...disabledTypescriptEslintRules,
+      },
+    },
+    {
+      files: ['*.{js,jsx,ts,tsx}'],
+      extends: [
+        'standard-with-typescript',
+        'plugin:react/recommended',
+        'plugin:react-hooks/recommended',
+        'plugin:prettier/recommended',
+      ],
+      settings: {
+        react: {
+          version: 'detect',
+        },
       },
       rules: {
         ...disabledTypescriptEslintRules,

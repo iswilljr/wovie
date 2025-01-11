@@ -1,4 +1,4 @@
-import { cn } from '@/utils'
+import { cn, getSeasonOrEpisode } from '@/utils'
 import {
   Popover,
   PopoverContent,
@@ -8,21 +8,27 @@ import {
   getSource,
   getSourceIcon,
   getUrlWithSource,
+  getMovieUrl,
+  getTvUrl,
   SOURCES,
   type Source,
 } from '@/utils/sources'
 import { ChevronDownIcon, InfoIcon } from 'lucide-react'
+import { useCallback, useEffect, useState } from 'react'
 
 interface SelectSourceProps {
-  currentURL: string
+  mediaId: number
+  mediaType: 'tv' | 'movie'
   currentSourceId: string
 }
 
-export default function SelectSource({
+export function SelectSource({
   currentSourceId,
-  currentURL,
+  mediaId,
+  mediaType,
 }: SelectSourceProps) {
-  const currentSource = getSource(currentSourceId)
+  const [open, setOpen] = useState(false)
+  const [currentSource, setCurrentSource] = useState(getSource(currentSourceId))
 
   const currentSourceIndex = SOURCES.findIndex(
     source => source.id === currentSource.id
@@ -39,23 +45,48 @@ export default function SelectSource({
     source => !isCurrentSourceRest || source.id !== currentSource.id
   )
 
+  useEffect(() => {
+    const playerVideo = document.querySelector('#player-video')
+
+    if (!playerVideo) return
+
+    const container = playerVideo.parentElement
+    const olsSrc = playerVideo.getAttribute('src')
+    const searchParams = new URL(window.location.href).searchParams
+
+    const season = getSeasonOrEpisode(searchParams.get('season'))
+    const episode = getSeasonOrEpisode(searchParams.get('episode'))
+
+    const newSrc =
+      mediaType === 'tv'
+        ? getTvUrl(currentSource.id, mediaId, season, episode)
+        : getMovieUrl(currentSource.id, mediaId)
+
+    if (olsSrc === newSrc || !container) return
+
+    playerVideo.remove()
+    playerVideo.setAttribute('src', newSrc)
+    container?.append(playerVideo)
+  }, [currentSource, mediaId, mediaType])
+
   return (
     <div className='w-full rounded-2xl bg-white/10 p-2'>
       <div className='flex items-center !gap-2 p-1'>
         <span className='text-lg font-medium tracking-wide sm:text-xl'>
-          {' '}
-          Sources{' '}
+          Sources
         </span>
       </div>
       <div className='custom-scrollbars flex w-full flex-nowrap gap-2 overflow-x-scroll p-2 md:flex-wrap'>
         {firstSources.map(source => (
           <SourceItem
+            key={source.id}
             source={source}
-            currentURL={currentURL}
+            onOpenChange={setOpen}
             currentSourceId={currentSource.id}
+            setCurrentSource={setCurrentSource}
           />
         ))}
-        <Popover>
+        <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
             <button className='relative flex shrink-0 cursor-pointer items-center gap-2 rounded-lg bg-black/60 p-2 text-sm leading-tight tracking-wide text-white ring-primary-500 hover:ring-1'>
               <span className='text-sm'>More</span>
@@ -66,9 +97,11 @@ export default function SelectSource({
             <div className='custom-scrollbars flex w-full flex-col flex-wrap gap-2 overflow-x-scroll p-2'>
               {restSources.map(source => (
                 <SourceItem
+                  key={source.id}
                   source={source}
-                  currentURL={currentURL}
+                  onOpenChange={setOpen}
                   currentSourceId={currentSource.id}
+                  setCurrentSource={setCurrentSource}
                 />
               ))}
             </div>
@@ -88,22 +121,31 @@ export default function SelectSource({
 
 function SourceItem({
   source,
-  currentURL,
   currentSourceId,
-  className,
+  onOpenChange,
+  setCurrentSource,
 }: {
   source: Source
-  currentURL: string
   currentSourceId: string
-  className?: string
+  onOpenChange: (open: boolean) => void
+  setCurrentSource: (source: Source) => void
 }) {
+  const handleClick = useCallback(() => {
+    onOpenChange(false)
+    setCurrentSource(source)
+    window.history.replaceState(
+      {},
+      '',
+      getUrlWithSource(window.location.href, source.id)
+    )
+  }, [onOpenChange, setCurrentSource, source])
+
   return (
-    <a
-      href={getUrlWithSource(currentURL, source.id)}
+    <button
+      onClick={handleClick}
       className={cn([
         'relative flex shrink-0 cursor-pointer items-center gap-2 rounded-lg bg-black/60 p-2 text-sm leading-tight tracking-wide text-white ring-primary-500 hover:ring-1',
         source.id === currentSourceId && 'bg-primary-700/20 ring-1',
-        className,
       ])}
     >
       <span>
@@ -117,6 +159,6 @@ function SourceItem({
         />
       </span>
       <span className='text-sm'>{source.name}</span>
-    </a>
+    </button>
   )
 }
