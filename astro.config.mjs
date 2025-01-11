@@ -5,7 +5,6 @@ import vercel from '@astrojs/vercel'
 import db from '@astrojs/db'
 import legacy from '@vitejs/plugin-legacy'
 import sitemap from '@astrojs/sitemap'
-import compress from 'astro-compress'
 import { VitePWA } from 'vite-plugin-pwa'
 import { manifest } from './src/utils/manifest'
 
@@ -20,7 +19,7 @@ export default defineConfig({
   prefetch: false,
   site: SITE_URL,
   adapter: vercel(),
-  integrations: [tailwind(), db(), react(), sitemap(), compress()],
+  integrations: [tailwind(), db(), react(), sitemap()],
   vite: {
     plugins: [
       legacy({
