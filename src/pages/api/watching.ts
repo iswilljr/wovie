@@ -1,4 +1,5 @@
 import { auth } from '@/utils/auth/server'
+import { getSource } from '@/utils/sources'
 import { getMovie, getSeasonDetails, getTVShow } from '@/utils/tmdb'
 import type { APIRoute } from 'astro'
 import { db, Watching, NOW, and, eq } from 'astro:db'
@@ -14,7 +15,7 @@ const InputDataSchema = z.object({
   mediaId: z.number(),
   mediaType: z.enum(['movie', 'tv']),
   season: z.number(),
-  sourceId: z.string(),
+  sourceId: z.string().nullish(),
 })
 
 export const POST: APIRoute = async ({ request }) => {
@@ -35,6 +36,8 @@ export const POST: APIRoute = async ({ request }) => {
       watching
     )
 
+    const source = getSource(input.sourceId)
+
     if (watching != null) {
       await db
         .update(Watching)
@@ -45,7 +48,7 @@ export const POST: APIRoute = async ({ request }) => {
           updatedAt: NOW,
           season: input.season,
           episode: input.episode,
-          sourceId: input.sourceId,
+          sourceId: source.id,
         })
         .where(eq(Watching.id, watching.id))
 
@@ -57,6 +60,7 @@ export const POST: APIRoute = async ({ request }) => {
       runtime,
       details,
       watchedTime,
+      sourceId: source.id,
       userId: session.user.id,
     })
 

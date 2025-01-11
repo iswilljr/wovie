@@ -101,7 +101,7 @@ export function SignInForm({ onSignUp }: { onSignUp: () => void }) {
             error && 'mt-2'
           )}
         >
-          Don't have an account yet?{' '}
+          Don&apos;t have an account yet?{' '}
           <button
             onClick={onSignUp}
             className='font-semibold text-primary-600 hover:text-primary-500'
