@@ -2,10 +2,7 @@
 import { getNowPlaying } from '@/utils/tmdb'
 import Layout from '@/layouts/Layout.astro'
 import Discover from '@/components/Media/Discover.astro'
-import { Trending } from '@/components/Content/Trending'
-import { Movies } from '@/components/Content/Movies'
-import { TVShows } from '@/components/Content/TVShows'
-import { Watching } from '@/components/Content/Watching'
+import { Content } from '@/components/Home/Content'
 
 const nowPlaying = await getNowPlaying()
 
@@ -21,12 +18,7 @@ Astro.response.headers.set(
   image='https://wovie.vercel.app/og.png'
 >
   <Discover discover={nowPlaying.results} />
-  <div class='-my-[--discover-space] sm:pb-8'>
-    <Trending client:load />
-    <Watching client:load />
-    <Movies client:load />
-    <TVShows client:load />
-  </div>
+  <Content client:idle />
 </Layout>
 
 <script is:inline data-astro-rerun>
