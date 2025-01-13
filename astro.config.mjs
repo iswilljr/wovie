@@ -11,7 +11,7 @@ import { manifest } from './src/utils/manifest';
 const SITE_URL =
   import.meta.env.SITE_URL ||
   import.meta.env.BETTER_AUTH_URL ||
-  'https://wovie.vercel.app';
+  'https://bitcine2.onrender.com';
 
 export default defineConfig({
   output: 'server',
