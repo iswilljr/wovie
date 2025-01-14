@@ -182,7 +182,11 @@ export function SearchMobile({ children }: React.ComponentProps<'div'>) {
           </div>
           <div className='custom-scrollbars flex h-full max-h-[calc(100%-3rem)] w-full flex-col gap-2 overflow-y-auto'>
             {results.map(result => (
-              <SearchPost key={result.id} result={result} />
+              <SearchPost
+                key={result.id}
+                result={result}
+                onClick={handleClick}
+              />
             ))}
             {isLoading && (
               <div className='flex h-full flex-col items-center justify-center'>
