@@ -34,7 +34,7 @@ To get your TMDB_KEY:
 
 ### Turso Database URL and Auth Token
 
-To get your `TURSO_DATABASE_URL` and `TURSO_AUTH_TOKEN`:
+To get your `ASTRO_DB_APP_TOKEN` and `ASTRO_DB_REMOTE_URL`:
 
 - Visit [Turso](https://turso.tech/) and create an account if you don’t have one.
 - After logging in, create a new database by following the instructions in the dashboard.
