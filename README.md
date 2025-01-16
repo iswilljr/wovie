@@ -21,16 +21,16 @@ You have to also make an `.env` file to configure your environment. [See guide t
 
 ## How to get env variables
 
-### The Movie Database (TMDB) API Key
+### The Movie Database (TMDB) API Read Access Token
 
-To get your TMDB_KEY:
+To get your `TMDB_KEY`:
 
 - Go to [TMDB's website](https://www.themoviedb.org/).
 - Sign up for an account if you don’t have one already.
 - Once logged in, navigate to your account settings by clicking on your profile icon in the top-right corner.
 - In the settings menu, select API (or go directly to TMDB API Settings).
 - Click Create to generate a new API key. You might need to fill out a form describing your use case.
-- Once approved, copy your API Key (v3 auth) into the TMDB_KEY variable.
+- Once approved, copy your `API Read Access Token` into the `TMDB_KEY` variable.
 
 ### Turso Database URL and Auth Token
 
