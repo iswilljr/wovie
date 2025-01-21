@@ -57,7 +57,7 @@ export function NextPrevButtons({
       {!isFirstEpisode && (
         <button
           onClick={() => handleEpisodeClick(episode - 1)}
-          className='flex items-center justify-center gap-1 rounded-2xl bg-black/50 px-4 py-2 text-lg text-white'
+          className='flex items-center justify-center gap-1 rounded-2xl bg-black/50 px-4 py-2 text-lg text-white active:scale-95'
         >
           <SkipBackIcon className='size-5 text-white' />
           Prev
@@ -66,7 +66,7 @@ export function NextPrevButtons({
       {!isLastEpisode && (
         <button
           onClick={() => handleEpisodeClick(episode + 1)}
-          className='flex items-center justify-center gap-1 rounded-2xl bg-black/50 px-4 py-2 text-lg text-white'
+          className='flex items-center justify-center gap-1 rounded-2xl bg-black/50 px-4 py-2 text-lg text-white active:scale-95'
         >
           Next
           <SkipForwardIcon className='size-5 text-white' />
@@ -75,7 +75,7 @@ export function NextPrevButtons({
       {isLastEpisode && !isLastSeason && (
         <button
           onClick={handleNextSeason}
-          className='flex items-center justify-center gap-1 rounded-2xl bg-black/50 px-4 py-2 text-lg text-white'
+          className='flex items-center justify-center gap-1 rounded-2xl bg-black/50 px-4 py-2 text-lg text-white active:scale-95'
         >
           Next Season
           <SkipForwardIcon className='size-5 text-white' />
