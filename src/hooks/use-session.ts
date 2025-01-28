@@ -8,12 +8,7 @@ async function updateSession() {
 
   const session = await client.getSession({})
 
-  let { data } = session
-
-  if (!data) {
-    const anonymousSession = await client.signIn.anonymous({})
-    data = anonymousSession.data
-  }
+  const { data } = session
 
   const newUserSession = {
     user: data?.user,
@@ -42,7 +37,9 @@ export function useSession({ isBot = false } = {}) {
 
   const isLoading = ['initial', 'loading'].includes(userSession.status)
   const isAuthenticated =
-    userSession.status === 'authenticated' && !userSession.user.isAnonymous
+    userSession.status === 'authenticated' &&
+    userSession.session != null &&
+    !userSession.user.isAnonymous
 
   return {
     ...userSession,

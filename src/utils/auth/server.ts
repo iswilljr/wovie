@@ -17,6 +17,7 @@ export const auth = betterAuth({
     type: 'sqlite',
   },
   plugins: [
+    // @ts-expect-error bad types
     anonymous({
       async onLinkAccount({ anonymousUser, newUser }) {
         await linkWatching({ anonymousUser, newUser })
@@ -24,11 +25,3 @@ export const auth = betterAuth({
     }),
   ],
 })
-
-export const getSession = async (ctx: { headers: Headers }) => {
-  const session = await auth.api.getSession(ctx)
-  if (!session) {
-    return await auth.api.signInAnonymous(ctx)
-  }
-  return session
-}
