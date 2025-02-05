@@ -63,8 +63,8 @@ importers:
         specifier: 5.1.10
         version: 5.1.10(@types/node@16.18.11)(jiti@2.4.2)(lightningcss@1.27.0)(rollup@2.79.2)(terser@5.36.0)(typescript@5.7.3)(yaml@2.6.0)
       better-auth:
-        specifier: 1.1.14
-        version: 1.1.14
+        specifier: 1.1.16
+        version: 1.1.16
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -2268,8 +2268,8 @@ packages:
   base-64@1.0.0:
     resolution: {integrity: sha512-kwDPIFCGx0NZHog36dj+tHiwP4QMzsZ3AgMViUBKI0+V5n4U0ufTCUMhnQ04diaRI8EX/QcPfql7zlhZ7j4zgg==}
 
-  better-auth@1.1.14:
-    resolution: {integrity: sha512-DnGHPxRLIQFGyqvPPXbudiD3sI+04BU0hiNnnoQaXg//JZSxdfBs/YbNx3ccVWz6aFt/XL6WtrxXDyUPCC1qrQ==}
+  better-auth@1.1.16:
+    resolution: {integrity: sha512-Xc5pxafKZw4QVU8WYfkV2z4Hd8KCXXbphrgOpe2gA/EfanysLBhE1G/F7cEi5e0bW2pGR+vw6gf0ARHA7VFihg==}
 
   better-call@0.3.3:
     resolution: {integrity: sha512-N4lDVm0NGmFfDJ0XMQ4O83Zm/3dPlvIQdxvwvgSLSkjFX5PM4GUYSVAuxNzXN27QZMHDkrJTWUqxBrm4tPC3eA==}
@@ -8477,7 +8477,7 @@ snapshots:
 
   base-64@1.0.0: {}
 
-  better-auth@1.1.14:
+  better-auth@1.1.16:
     dependencies:
       '@better-auth/utils': 0.2.3
       '@better-fetch/fetch': 1.1.12
