@@ -71,7 +71,7 @@ export function MediaPoster(props: Props) {
       >
         <Play width='16' height='16' fill='#000000d5' stroke='#000000d5' />
       </div>
-      <div className='absolute inset-0 z-10 flex flex-col justify-end gap-1 rounded-lg bg-gradient-to-t from-[#000000d0] p-3 outline-none ring-inset ring-primary-500 duration-150 group-hover:opacity-100 group-hover:ring-2 group-focus:opacity-100 group-focus:ring-2 group-[:not(:has(>img))]:opacity-100 sm:opacity-0'>
+      <div className='absolute inset-0 z-10 flex flex-col justify-end gap-1 rounded-lg bg-gradient-to-t from-[#000000d0] p-3 outline-none ring-inset ring-primary-500 duration-150 group-hover:opacity-100 group-hover:ring-2 group-focus:opacity-100 group-focus:ring-2 group-[:not(:has(>img))]:opacity-100'>
         <div className='flex items-center justify-center gap-1 text-xs text-[#d8d8d8]'>
           <p>{new Date(releaseDate).getFullYear() || 'N/A'}</p>
           <span>•</span>
