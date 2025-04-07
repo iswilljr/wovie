@@ -7,7 +7,7 @@ export async function GET(ctx: APIContext) {
   const mediaIdShoe = +(mediaId ?? 0)
 
   if (media !== 'tv' && media !== 'movie') {
-    return ctx.redirect('/')
+    return await ctx.rewrite('/404')
   }
 
   const result =
@@ -21,5 +21,5 @@ export async function GET(ctx: APIContext) {
     )
   }
 
-  return ctx.redirect('/')
+  return await ctx.rewrite('/404')
 }

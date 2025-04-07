@@ -1,5 +1,6 @@
 import { z } from 'astro/zod'
 import { TMDB, type TrendingMediaType } from 'tmdb-ts'
+import { getSafeContent, getSafeId } from './blockers.ts'
 
 const apiKey = z.string().parse(import.meta.env.TMDB_KEY)
 const tmdb = new TMDB(apiKey)
@@ -24,15 +25,25 @@ export async function getTVShows() {
 }
 
 export async function getTVShow(id: number) {
-  return await tmdb.tvShows
-    .details(id, ['credits', 'recommendations', 'similar'])
-    .then(tv => ({ ...tv, media_type: 'tv' as const }))
+  const mediaID = getSafeId(id)
+  const tv = await tmdb.tvShows.details(mediaID, [
+    'credits',
+    'recommendations',
+    'similar',
+  ])
+  const tvData = getSafeContent(tv)
+  return { ...tvData, media_type: 'tv' as const }
 }
 
 export async function getMovie(id: number) {
-  return await tmdb.movies
-    .details(id, ['credits', 'recommendations', 'similar'])
-    .then(movie => ({ ...movie, media_type: 'movie' as const }))
+  const mediaId = getSafeId(id)
+  const movie = await tmdb.movies.details(mediaId, [
+    'credits',
+    'recommendations',
+    'similar',
+  ])
+  const movieData = getSafeContent(movie)
+  return { ...movieData, media_type: 'movie' as const }
 }
 
 export async function getSeasonDetails(id: number, season: number) {
