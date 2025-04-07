@@ -12,7 +12,7 @@ import { Image } from 'astro:assets'
 const { media, mediaId } = Astro.params
 const id = +(mediaId ?? 0)
 
-if (media !== 'tv' && media !== 'movie') return Astro.redirect('/')
+if (media !== 'tv' && media !== 'movie') return Astro.rewrite('/404')
 
 const season = getSeasonOrEpisode(Astro.url.searchParams.get('season'))
 const episode = getSeasonOrEpisode(Astro.url.searchParams.get('episode'))
@@ -38,7 +38,7 @@ if (media === 'tv') {
 }
 
 if (!result) {
-  return Astro.redirect('/')
+  return Astro.rewrite('/404')
 }
 
 const isTV = result.media_type === 'tv'
