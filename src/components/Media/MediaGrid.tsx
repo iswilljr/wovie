@@ -6,7 +6,7 @@ import { MediaPostsLoader } from '../Loader'
 export interface MediaGridProps {
   media: 'tv' | 'movie'
   title: string
-  results: Array<Movie | TV | Recommendation>
+  results: Array<(Movie | TV | Recommendation) & { quality?: string }>
   class?: string
   icon?: React.ReactNode
 }
@@ -39,6 +39,7 @@ export function MediaGrid({
               key={movie.id}
               media={media}
               id={movie.id}
+              quality={movie.quality}
               rating={movie.vote_average}
               image={movie.poster_path}
               language={movie.original_language}

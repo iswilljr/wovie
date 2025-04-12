@@ -14,6 +14,7 @@ export interface MediaListProps {
   results: Array<
     (TVWithMediaType | MovieWithMediaType | PersonWithMediaType) & {
       watching?: any
+      quality?: string
     }
   >
 }
@@ -44,6 +45,7 @@ export function MediaList({ id, results, title, icon }: MediaListProps) {
                 key={movie.id}
                 media={movie.media_type}
                 id={movie.id}
+                quality={movie.quality}
                 rating={movie.vote_average}
                 image={movie.backdrop_path}
                 language={movie.original_language}

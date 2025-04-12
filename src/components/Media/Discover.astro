@@ -4,7 +4,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-astro'
 import type { Movie } from 'tmdb-ts'
 
 export interface Props {
-  discover: Movie[]
+  discover: Array<Movie & { quality?: string | undefined }>
 }
 
 const { discover } = Astro.props
@@ -39,6 +39,7 @@ const { discover } = Astro.props
           releaseDate={movie.release_date}
           title={movie.title}
           overview={movie.overview}
+          quality={movie.quality}
         />
       ))
     }

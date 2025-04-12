@@ -8,6 +8,7 @@ interface Props {
   rating: number
   releaseDate: string
   title: string
+  quality?: string | undefined
 }
 
 function Star(props: React.SVGAttributes<SVGSVGElement>) {
@@ -41,7 +42,8 @@ function Play(props: React.SVGAttributes<SVGSVGElement>) {
 }
 
 export function MediaPoster(props: Props) {
-  const { id, media, image, language, rating, releaseDate, title } = props
+  const { id, media, image, language, rating, releaseDate, title, quality } =
+    props
 
   return (
     <a
@@ -76,8 +78,12 @@ export function MediaPoster(props: Props) {
           <p>{new Date(releaseDate).getFullYear() || 'N/A'}</p>
           <span>•</span>
           <p className='uppercase'>{language}</p>
-          <span>•</span>
-          <p>HD</p>
+          {quality && (
+            <>
+              <span>•</span>
+              <p>{quality}</p>
+            </>
+          )}
         </div>
         <p className='line-clamp-2 text-center text-sm font-medium leading-tight text-white'>
           {title}

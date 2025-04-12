@@ -49,8 +49,6 @@ function SearchPost({ result, onClick }: SearchPostProps) {
         <p className='flex gap-[5px] text-[.7rem] font-medium !leading-none text-primary-400 2xl:text-xs'>
           <span className=''>{isMovie ? 'Movie' : 'TV'}</span>
           <span>•</span>
-          <span>HD</span>
-          <span>•</span>
           <span>{year}</span>
         </p>
       </div>

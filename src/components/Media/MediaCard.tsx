@@ -11,6 +11,7 @@ export interface MediaCardProps {
   rating: number
   releaseDate: string
   title: string
+  quality?: string | undefined
 
   watching?: {
     runtime: number
@@ -30,6 +31,7 @@ export function MediaCard({
   rating,
   releaseDate,
   title,
+  quality,
   watching,
 }: MediaCardProps) {
   const isWatching = watching != null
@@ -81,6 +83,8 @@ export function MediaCard({
             <p>{formatDate(releaseDate)}</p>
             <span>•</span>
             <p className='uppercase'>{language}</p>
+            <span>•</span>
+            <p>{quality ?? 'HD'}</p>
           </div>
         </div>
         {percentageWatched > 0 && (
