@@ -3,15 +3,15 @@ import { Redis } from '@upstash/redis'
 import {
   CACHE_ENABLED,
   CACHE_TTL_SECONDS,
-  REDIS_TOKEN,
-  REDIS_URL,
+  KV_REST_API_TOKEN,
+  KV_REST_API_URL,
 } from 'astro:env/server'
 
 const DEFAULT_CACHE_TTL_SECONDS = 1 * 60 * 60 * 6 // 6 hours
 
 const redisConfig = {
-  REDIS_URL,
-  REDIS_TOKEN,
+  REDIS_URL: KV_REST_API_URL,
+  REDIS_TOKEN: KV_REST_API_TOKEN,
   CACHE_ENABLED,
   CACHE_TTL_SECONDS: CACHE_TTL_SECONDS ?? DEFAULT_CACHE_TTL_SECONDS,
 }

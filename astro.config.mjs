@@ -63,8 +63,8 @@ export default defineConfig({
         access: 'secret',
         context: 'server',
       }),
-      REDIS_TOKEN: OptionalString,
-      REDIS_URL: OptionalString,
+      KV_REST_API_TOKEN: OptionalString,
+      KV_REST_API_URL: OptionalString,
 
       // Quality Label
       SHOW_REAL_MOVIE_QUALITY: OptionalBoolean,
