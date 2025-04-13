@@ -1,6 +1,7 @@
 import { z } from 'astro/zod'
-import { TMDB, type TrendingMediaType } from 'tmdb-ts'
+import { TMDB, type TrendingMediaType, type TrendingResults } from 'tmdb-ts'
 import { getSafeContent, getSafeId } from './blockers.ts'
+import { getMediaResultsWithQuality } from './quality.ts'
 import { cache } from './cache.ts'
 
 const apiKey = z.string().parse(import.meta.env.TMDB_KEY)
@@ -9,12 +10,32 @@ const tmdb = new TMDB(apiKey)
 export const getTrending = cache(
   'trending',
   async <T extends TrendingMediaType>(type: T, { page = 1 } = {}) => {
-    return await tmdb.trending.trending(type, 'week', { page })
+    const trending = await tmdb.trending.trending(type, 'week', { page })
+    const trendingWithType = trending.results.map(media => ({
+      ...media,
+      media_type:
+        'media_type' in media
+          ? media.media_type
+          : type === 'all'
+            ? 'movie'
+            : type,
+    }))
+    const results = (await getMediaResultsWithQuality<any>(
+      trendingWithType
+    )) as TrendingResults<T>['results']
+
+    return { ...trending, results }
   }
 )
 
 export const getNowPlaying = cache('playing', async () => {
-  return await tmdb.movies.nowPlaying({ page: 1 })
+  const nowPlaying = await tmdb.movies.nowPlaying({ page: 1 })
+  const nowPlayingWithType = nowPlaying.results.map(movie => ({
+    ...movie,
+    media_type: 'movie' as const,
+  }))
+  const results = await getMediaResultsWithQuality(nowPlayingWithType)
+  return { ...nowPlaying, results }
 })
 
 export const getTVShow = cache('tv', async (id: number) => {
@@ -45,6 +66,10 @@ export const getSeasonDetails = cache(
     return await tmdb.tvShows.season(id, season)
   }
 )
+
+export const getReleaseDates = cache('release_dates', async (id: number) => {
+  return await tmdb.movies.releaseDates(id)
+})
 
 export const multiSearch = cache('search', async (query: string) => {
   return await tmdb.search.multi({ query })

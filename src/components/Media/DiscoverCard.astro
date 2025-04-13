@@ -12,10 +12,20 @@ export interface Props {
   releaseDate: string
   overview: string
   title: string
+  quality?: string | undefined
 }
 
-const { id, media, image, language, overview, rating, releaseDate, title } =
-  Astro.props
+const {
+  id,
+  media,
+  image,
+  language,
+  overview,
+  rating,
+  releaseDate,
+  title,
+  quality,
+} = Astro.props
 
 const slug = snakeCase(title)
 ---
@@ -51,7 +61,7 @@ const slug = snakeCase(title)
         <p class='flex items-center gap-1'>
           <span class='uppercase'>{language}</span>
           <span>•</span>
-          <span>HD</span>
+          <p>{quality ?? 'HD'}</p>
         </p>
       </div>
     </div>
