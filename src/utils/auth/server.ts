@@ -2,10 +2,11 @@ import { betterAuth } from 'better-auth'
 import { anonymous } from 'better-auth/plugins'
 import { LibsqlDialect } from '@libsql/kysely-libsql'
 import { linkWatching } from '../watching'
+import { ASTRO_DB_APP_TOKEN, ASTRO_DB_REMOTE_URL } from 'astro:env/server'
 
 const dialect = new LibsqlDialect({
-  url: import.meta.env.ASTRO_DB_REMOTE_URL ?? '',
-  authToken: import.meta.env.ASTRO_DB_APP_TOKEN ?? '',
+  url: ASTRO_DB_REMOTE_URL,
+  authToken: ASTRO_DB_APP_TOKEN,
 })
 
 export const auth = betterAuth({

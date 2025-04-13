@@ -1,10 +1,9 @@
-import { z } from 'astro/zod'
+import { TMDB_KEY as apiKey } from 'astro:env/server'
 import { TMDB, type TrendingMediaType, type TrendingResults } from 'tmdb-ts'
 import { getSafeContent, getSafeId } from './blockers.ts'
 import { getMediaResultsWithQuality } from './quality.ts'
 import { cache } from './cache.ts'
 
-const apiKey = z.string().parse(import.meta.env.TMDB_KEY)
 const tmdb = new TMDB(apiKey)
 
 export const getTrending = cache(
