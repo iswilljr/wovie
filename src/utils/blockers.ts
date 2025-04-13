@@ -1,14 +1,8 @@
+import { BLOCKED_COMPANY_LIST, BLOCKED_MOVIE_LIST } from 'astro:env/server'
 import type { MovieDetails, TvShowDetails } from 'tmdb-ts'
 
-const BLOCKED_MOVIES = new Set(
-  ((import.meta.env.BLOCKED_MOVIE_LIST as string) ?? '').split(',').map(Number)
-)
-
-const BLOCKED_COMPANIES = new Set(
-  ((import.meta.env.BLOCKED_COMPANY_LIST as string) ?? '')
-    .split(',')
-    .map(Number)
-)
+const BLOCKED_MOVIES = new Set(BLOCKED_MOVIE_LIST.split(',').map(Number))
+const BLOCKED_COMPANIES = new Set(BLOCKED_COMPANY_LIST.split(',').map(Number))
 
 export function getSafeId(mediaID: number) {
   if (BLOCKED_MOVIES.has(mediaID)) {

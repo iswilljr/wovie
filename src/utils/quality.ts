@@ -1,4 +1,3 @@
-import { z } from 'astro/zod'
 import {
   ReleaseDateType,
   type Movie,
@@ -8,6 +7,7 @@ import {
   type TVWithMediaType,
 } from 'tmdb-ts'
 import { getReleaseDates } from './tmdb'
+import { SHOW_REAL_MOVIE_QUALITY } from 'astro:env/server'
 
 type Quality = 'N/A' | 'CAM' | 'HD'
 
@@ -16,18 +16,6 @@ export type Media = MovieWithMediaType | TVWithMediaType | PersonWithMediaType
 export type MediaWithQuality<T extends Media> = T & {
   quality: Quality
 }
-
-const ConfigSchema = z.object({
-  SHOW_REAL_MOVIE_QUALITY: z
-    .enum(['true', 'false'])
-    .optional()
-    .default('false')
-    .transform(val => val === 'true'),
-})
-
-const config = ConfigSchema.parse({
-  SHOW_REAL_MOVIE_QUALITY: import.meta.env.SHOW_REAL_MOVIE_QUALITY,
-})
 
 export function getQuality(
   movie: Movie,
@@ -51,7 +39,7 @@ export function getQuality(
 export async function getMediaQuality<T extends Media>(
   media: T
 ): Promise<Quality> {
-  if (!config.SHOW_REAL_MOVIE_QUALITY) return 'HD'
+  if (!SHOW_REAL_MOVIE_QUALITY) return 'HD'
 
   try {
     if (media.media_type !== 'movie') return 'HD'
