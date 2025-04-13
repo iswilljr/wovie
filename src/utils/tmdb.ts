@@ -37,7 +37,7 @@ export const getNowPlaying = cache('playing', async () => {
   return { ...nowPlaying, results }
 })
 
-export const getTVShow = cache('tv', async (id: number) => {
+export async function getTVShow(id: number) {
   const mediaID = getSafeId(id)
   const tv = await tmdb.tvShows.details(mediaID, [
     'credits',
@@ -46,9 +46,9 @@ export const getTVShow = cache('tv', async (id: number) => {
   ])
   const tvData = getSafeContent(tv)
   return { ...tvData, media_type: 'tv' as const }
-})
+}
 
-export const getMovie = cache('movie', async (id: number) => {
+export async function getMovie(id: number) {
   const mediaId = getSafeId(id)
   const movie = await tmdb.movies.details(mediaId, [
     'credits',
@@ -57,19 +57,16 @@ export const getMovie = cache('movie', async (id: number) => {
   ])
   const movieData = getSafeContent(movie)
   return { ...movieData, media_type: 'movie' as const }
-})
+}
 
-export const getSeasonDetails = cache(
-  'season',
-  async (id: number, season: number) => {
-    return await tmdb.tvShows.season(id, season)
-  }
-)
+export async function getSeasonDetails(id: number, season: number) {
+  return await tmdb.tvShows.season(id, season)
+}
 
-export const getReleaseDates = cache('release_dates', async (id: number) => {
+export async function getReleaseDates(id: number) {
   return await tmdb.movies.releaseDates(id)
-})
+}
 
-export const multiSearch = cache('search', async (query: string) => {
+export async function multiSearch(query: string) {
   return await tmdb.search.multi({ query })
-})
+}
