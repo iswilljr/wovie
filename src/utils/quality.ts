@@ -27,11 +27,16 @@ export function getQuality(
   if (releaseDate > now) return 'N/A'
 
   const dates = releaseDates.flatMap(result => result.release_dates)
-  const isDigitalReleased = dates.some(
+  const digitalRelease = dates.find(
     date =>
       date.type === ReleaseDateType.Digital ||
       date.type === ReleaseDateType.Physical
   )
+
+  if (!digitalRelease) return 'CAM'
+
+  const digitalReleaseTime = new Date(digitalRelease.release_date).getTime()
+  const isDigitalReleased = now > digitalReleaseTime
 
   return isDigitalReleased ? 'HD' : 'CAM'
 }
