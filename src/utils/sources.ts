@@ -24,13 +24,6 @@ export const SOURCES: Source[] = [
     rank: 8,
   },
   {
-    id: 'vidsrc.dev',
-    name: 'Vid Binge',
-    movieUrl: 'https://vidsrc.dev/embed/movie/{id}',
-    tvUrl: 'https://vidsrc.dev/embed/tv/{id}/{season}/{episode}',
-    rank: 6,
-  },
-  {
     id: 'vidsrc.to',
     name: 'VidSrc.to',
     movieUrl: 'https://vidsrc.to/embed/movie/{id}',
@@ -59,6 +52,13 @@ export const SOURCES: Source[] = [
     rank: 11,
   },
   {
+    id: 'vidfast.pro',
+    name: 'Vid Fast',
+    movieUrl: 'https://vidfast.pro/movie/{id}?theme=3b82f6',
+    tvUrl: 'https://vidfast.pro/tv/{id}/{season}/{episode}?theme=3b82f6',
+    rank: 0,
+  },
+  {
     id: 'vidsrc.vip',
     name: 'VidSrc.vip',
     tvUrl: 'https://vidsrc.vip/embed/tv/{id}/{season}/{episode}',
@@ -66,24 +66,10 @@ export const SOURCES: Source[] = [
     rank: 4,
   },
   {
-    id: 'rivestream',
-    name: 'Rive Stream',
-    tvUrl: `https://rivestream.live/embed?type=tv&id={id}&season={season}&episode={episode}`,
-    movieUrl: 'https://rivestream.live/embed?type=movie&id={id}',
-    rank: 0,
-  },
-  {
     id: '111movies',
     name: '111 Movies',
     tvUrl: 'https://111movies.com/tv/{id}/{season}/{episode}',
     movieUrl: 'https://111movies.com/movie/{id}',
-    rank: 0,
-  },
-  {
-    id: 'spencerdevs',
-    name: 'Spencer',
-    tvUrl: 'https://embed.spencerdevs.xyz/api/embed/tv2/?id={id}&s={id}&e={id}',
-    movieUrl: 'https://embed.spencerdevs.xyz/api/embed/movie2/?id={id}',
     rank: 0,
   },
 ].sort((a, b) => b.rank - a.rank)
