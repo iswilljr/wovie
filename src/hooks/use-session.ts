@@ -8,7 +8,12 @@ async function updateSession() {
 
   const session = await client.getSession({})
 
-  const { data } = session
+  let { data } = session
+
+  if (!data) {
+    const anonymousSession = await client.signIn.anonymous({})
+    data = anonymousSession.data as any
+  }
 
   const newUserSession = {
     user: data?.user,
