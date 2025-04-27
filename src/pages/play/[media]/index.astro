@@ -9,7 +9,10 @@ import { getMovieUrl, getSource } from '@/utils/sources'
 import { getMovie, getSeasonDetails, getTVShow } from '@/utils/tmdb'
 import { Image } from 'astro:assets'
 
-const { media, mediaId } = Astro.params
+const { media: slugParam } = Astro.params
+
+const [media, mediaId] = slugParam?.split('-').slice(-2) ?? []
+
 const id = +(mediaId ?? 0)
 
 if (media !== 'tv' && media !== 'movie') return Astro.rewrite('/404')
@@ -64,6 +67,8 @@ Astro.response.headers.set(
   'Cache-Control',
   'public, s-maxage=60, stale-while-revalidate=30'
 )
+
+Astro.response.status = 404
 ---
 
 <Layout

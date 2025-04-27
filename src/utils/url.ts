@@ -1,4 +1,4 @@
-import { snakeCase } from '.'
+import { slugifyTitle } from '.'
 import { DEFAULT_SOURCE } from './sources'
 
 export function getEpisodeUrl(
@@ -25,7 +25,7 @@ export function getEpisodeUrl(
   const search = searchParams.toString()
   const query = search ? `?${search}` : ''
 
-  return `/play/tv/${id}/${snakeCase(name)}${query}`
+  return `/play/${slugifyTitle(name)}-tv-${id}${query}`
 }
 
 export function getMovieUrl(
@@ -42,7 +42,7 @@ export function getMovieUrl(
   const search = searchParams.toString()
   const query = search ? `?${search}` : ''
 
-  return `/play/movie/${id}/${snakeCase(title)}${query}`
+  return `/play/${slugifyTitle(title)}-movie-${id}${query}`
 }
 
 export function getTvOrMovieUrl(

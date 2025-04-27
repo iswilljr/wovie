@@ -1,7 +1,8 @@
 ---
 import { CalendarDays, Info, Play, Star } from 'lucide-astro'
 import { Image } from 'astro:assets'
-import { formatDate, snakeCase, getImagePath } from '@/utils'
+import { formatDate, slugifyTitle, getImagePath } from '@/utils'
+import { getTvOrMovieUrl } from '@/utils/url'
 
 export interface Props {
   media: 'tv' | 'movie'
@@ -27,7 +28,7 @@ const {
   quality,
 } = Astro.props
 
-const slug = snakeCase(title)
+const slug = slugifyTitle(title)
 ---
 
 <div
@@ -71,14 +72,14 @@ const slug = snakeCase(title)
     <div class='mt-2 flex gap-2'>
       <a
         class='flex w-[7rem] flex-shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full bg-primary-500 p-2 text-sm font-semibold text-black hover:brightness-[.8] sm:w-[10rem] sm:rounded-lg sm:py-[.65rem] sm:text-base'
-        href={`/play/${media}/${id}/${slug}`}
+        href={getTvOrMovieUrl(media, id, slug)}
       >
         <Play width='18' height='18' fill='#000' />
         Play <span class='hidden sm:block'>Now</span>
       </a>
       <a
         class='flex w-[7rem] items-center justify-center gap-1 overflow-hidden rounded-full bg-[#e6e5eb33] p-2 text-sm font-medium tracking-wide text-[whitesmoke] hover:bg-white/10 sm:w-[10rem] sm:rounded-lg sm:py-[.65rem] sm:text-base'
-        href={`/play/${media}/${id}/${slug}#info`}
+        href={`${getTvOrMovieUrl(media, id, slug)}#info`}
       >
         <Info width='18' height='18' />
         <span class='hidden sm:block'>More</span> Info

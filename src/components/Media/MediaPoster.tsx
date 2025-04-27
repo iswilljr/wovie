@@ -1,4 +1,5 @@
-import { snakeCase, getImagePath } from '@/utils'
+import { slugifyTitle, getImagePath } from '@/utils'
+import { getTvOrMovieUrl } from '@/utils/url'
 
 interface Props {
   media: 'tv' | 'movie'
@@ -48,7 +49,7 @@ export function MediaPoster(props: Props) {
   return (
     <a
       className='group relative flex aspect-[2/3] flex-col items-center justify-center overflow-hidden rounded-lg bg-[#35383f] outline-none'
-      href={`/play/${media}/${id}/${snakeCase(title)}`}
+      href={getTvOrMovieUrl(media, id, slugifyTitle(title))}
     >
       {image && (
         <img

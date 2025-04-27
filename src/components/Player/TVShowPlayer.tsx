@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { $playerState } from '@/store/player'
 import { getTvUrl } from '@/utils/sources'
-import { snakeCase } from '@/utils'
+import { slugifyTitle } from '@/utils'
 import { SelectSeason } from './SelectSeason'
 import { SelectSource } from './SelectSource'
 import { SelectEpisode } from './SelectEpisode'
@@ -55,7 +55,7 @@ export function TVShowPlayer({
             id={id}
             seasons={tvSeasons}
             activeSeason={season}
-            title={snakeCase(name)}
+            title={slugifyTitle(name)}
             sourceId={currentSourceId}
           />
         </div>
