@@ -18,7 +18,6 @@ export const auth = betterAuth({
     type: 'sqlite',
   },
   plugins: [
-    // @ts-expect-error bad types
     anonymous({
       async onLinkAccount({ anonymousUser, newUser }) {
         await linkWatching({ anonymousUser, newUser })
