@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useOnClickOutside } from '@/hooks/use-on-click-outside'
 import { useSearchResults } from '@/hooks/use-search'
-import { snakeCase, getImagePath } from '@/utils'
+import { slugifyTitle, getImagePath } from '@/utils'
+import { getTvOrMovieUrl } from '@/utils/url'
 import { Loader } from './Loader'
 import type { MultiSearchResult } from 'tmdb-ts'
 
@@ -28,7 +29,7 @@ function SearchPost({ result, onClick }: SearchPostProps) {
     <a
       key={result.id}
       onClick={onClick}
-      href={`/play/${result.media_type}/${result.id}/${snakeCase(title)}`}
+      href={getTvOrMovieUrl(result.media_type, result.id, slugifyTitle(title))}
       className='flex aspect-[4/1] w-full flex-shrink-0 gap-1 overflow-hidden rounded-md hover:bg-white/10'
     >
       <div className='aspect-[3/4] h-full flex-shrink-0 overflow-hidden rounded-md bg-zinc-700/90'>

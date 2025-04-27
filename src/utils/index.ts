@@ -39,8 +39,8 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function snakeCase(str = '') {
-  return words(str).join('_')
+export function slugifyTitle(str = '') {
+  return words(str).join('-').toLowerCase()
 }
 
 export function getImagePath(imagePath: string, size: ImageSize) {
