@@ -66,10 +66,24 @@ export const SOURCES: Source[] = [
     rank: 4,
   },
   {
+    id: 'rivestream',
+    name: 'Rive Stream',
+    tvUrl: `https://rivestream.net/embed?type=tv&id={id}&season={season}&episode={episode}`,
+    movieUrl: 'https://rivestream.net/embed?type=movie&id={id}',
+    rank: 0,
+  },
+  {
     id: '111movies',
     name: '111 Movies',
     tvUrl: 'https://111movies.com/tv/{id}/{season}/{episode}',
     movieUrl: 'https://111movies.com/movie/{id}',
+    rank: 0,
+  },
+  {
+    id: 'aetherapi',
+    name: 'Aether',
+    tvUrl: 'https://embed.aether.mom/embed/tmdb-tv-{id}/{season}/{episode}',
+    movieUrl: 'https://embed.aether.mom/embed/tmdb-movie-{id}',
     rank: 0,
   },
 ].sort((a, b) => b.rank - a.rank)
