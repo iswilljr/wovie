@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { $playerState } from '@/store/player'
 import { getTvUrl } from '@/utils/sources'
-import { slugifyTitle } from '@/utils'
+import { getSeasonOrEpisode, slugifyTitle } from '@/utils'
 import { SelectSeason } from './SelectSeason'
 import { SelectSource } from './SelectSource'
 import { SelectEpisode } from './SelectEpisode'
@@ -43,6 +43,8 @@ export function TVShowPlayer({
   const iframeUrl = getTvUrl(currentSourceId, id, season, episode)
 
   useEffect(() => {
+    const search = new URLSearchParams(window.location.search)
+    const episode = getSeasonOrEpisode(search.get('episode'))
     $playerState.set({ ...$playerState.get(), episode })
   }, [episode])
 
