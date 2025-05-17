@@ -6,7 +6,7 @@ import { getTvOrMovieUrl } from '@/utils/url'
 import { Loader } from './Loader'
 import type { MultiSearchResult } from 'tmdb-ts'
 
-const LIMIT = 3
+// const LIMIT = 3
 
 interface SearchPostProps {
   result: MultiSearchResult
@@ -96,10 +96,10 @@ export function Search({ children }: React.ComponentProps<'div'>) {
           {!isLoading && results.length === 0 && (
             <p className='py-3 text-center text-gray-500'>No results found!</p>
           )}
-          {results.slice(0, LIMIT).map(result => (
+          {results.map(result => (
             <SearchPost key={result.id} result={result} onClick={handleBlur} />
           ))}
-          {results.length > LIMIT && (
+          {/* {results.length > LIMIT && (
             <div className='flex h-full flex-col items-center justify-end'>
               <a
                 href={`/explore?q=${query}`}
@@ -109,7 +109,7 @@ export function Search({ children }: React.ComponentProps<'div'>) {
                 View {results.length - LIMIT} more results
               </a>
             </div>
-          )}
+          )} */}
         </div>
       )}
     </div>

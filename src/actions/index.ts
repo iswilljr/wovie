@@ -1,4 +1,4 @@
-import { getTrending, multiSearch } from '@/utils/tmdb'
+import { getNowPlaying, getTrending, multiSearch } from '@/utils/tmdb'
 import { deleteItemFromWatching, getWatching } from '@/utils/watching'
 import { defineAction } from 'astro:actions'
 import { z } from 'astro:schema'
@@ -45,15 +45,17 @@ export const server = {
   trending: defineAction({
     handler: async () => {
       try {
-        const [all, movies, tvShows] = await Promise.all([
+        const [all, movies, tvShows, nowPlaying] = await Promise.all([
           getTrending('all'),
           getTrending('movie'),
           getTrending('tv'),
+          getNowPlaying(),
         ])
         return {
           all: all.results,
           movies: movies.results,
           tvShows: tvShows.results,
+          nowPlaying: nowPlaying.results,
         }
       } catch (e) {
         return null

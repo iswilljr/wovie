@@ -52,6 +52,10 @@ export function getSeasonOrEpisode(s: unknown, d = 1) {
   return Number.isNaN(n) ? d : n !== 0 ? n : d
 }
 
+export function getSeasonFromPathname(pathname: string) {
+  return Number(pathname.match(/[0-9]+-([0-9]+)$/)?.[1] ?? 0) || 1
+}
+
 export function formatDate(date: string) {
   if (!date) return 'N/A'
 
