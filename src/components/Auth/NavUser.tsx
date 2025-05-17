@@ -14,8 +14,8 @@ async function handleLogout() {
   window.location.reload()
 }
 
-export function NavUser({ isBot = false }: { isBot?: boolean }) {
-  const { user, isLoading, isAuthenticated } = useSession({ isBot })
+export function NavUser() {
+  const { user, isLoading, isAuthenticated } = useSession()
 
   if (isLoading || !isAuthenticated) {
     return <AuthDialog />

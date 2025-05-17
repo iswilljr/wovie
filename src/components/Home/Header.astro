@@ -1,11 +1,7 @@
 ---
 import { NavUser } from '@/components/Auth/NavUser'
 import { Search, SearchMobile } from '@/components/Search'
-import { Search as SearchIcon, Telescope as PopcornIcon } from 'lucide-astro'
-import { isbot } from 'isbot'
-
-const pathname = Astro.url.pathname
-const isBot = isbot(Astro.request.headers.get('user-agent')) || false
+import { Search as SearchIcon } from 'lucide-astro'
 ---
 
 <header class='absolute inset-0 z-[99] h-16 w-full'>
@@ -21,24 +17,13 @@ const isBot = isbot(Astro.request.headers.get('user-agent')) || false
       </a>
     </h1>
     <div class='flex items-center gap-2'>
-      {
-        pathname !== '/explore' && (
-          <Search client:idle transition:persist>
-            <SearchIcon width='16' height='16' stroke='#9c9c9c' />
-          </Search>
-        )
-      }
+      <Search client:idle transition:persist>
+        <SearchIcon width='16' height='16' stroke='#9c9c9c' />
+      </Search>
       <SearchMobile client:idle transition:persist>
         <SearchIcon width='16' height='16' stroke='#9c9c9c' />
       </SearchMobile>
-      <a
-        href='/explore'
-        class='flex size-7 items-center justify-center rounded bg-primary-500'
-      >
-        <PopcornIcon width='16' height='16' stroke='#000' />
-        <span class='sr-only'>Explore</span>
-      </a>
-      <NavUser client:idle isBot={isBot} />
+      <NavUser client:idle />
     </div>
   </div>
 </header>
