@@ -17,45 +17,66 @@ const SITE_URL =
 const cloudflareAdapterEnabled =
   process.env.CLOUDFLARE_ADAPTER_ENABLED === 'true'
 
+const OptionalBoolean = envField.boolean({
+  optional: true,
+  access: 'secret',
+  context: 'server',
+  default: false,
+})
+
+const OptionalString = envField.string({
+  optional: true,
+  access: 'secret',
+  context: 'server',
+  default: '',
+})
+
+const RequiredString = envField.string({
+  optional: false,
+  access: 'secret',
+  context: 'server',
+})
+
 // https://astro.build/config
 export default defineConfig({
   output: 'server',
+  prefetch: false,
   site: SITE_URL,
-  adapter: cloudflareAdapterEnabled ? cloudflare() : vercel(),
+  adapter: cloudflareAdapterEnabled ? cloudflare() : vercel({
+    isr: {
+      expiration: 60 * 60 * 24 * 6,
+      exclude: [/^\/api\/.+/, /^\/_actions\/.+/],
+    },
+  }),
   integrations: [tailwind(), db(), react(), sitemap()],
   env: {
     schema: {
-      TMDB_KEY: envField.string({
-        context: 'server',
+      // TMDB
+      TMDB_KEY: RequiredString,
+
+      // Auth
+      ASTRO_DB_APP_TOKEN: RequiredString,
+      ASTRO_DB_REMOTE_URL: RequiredString,
+      BETTER_AUTH_SECRET: RequiredString,
+      BETTER_AUTH_TRUSTED_ORIGINS: RequiredString,
+      BETTER_AUTH_URL: RequiredString,
+
+      // Blocked Content
+      BLOCKED_COMPANY_LIST: OptionalString,
+      BLOCKED_MOVIE_LIST: OptionalString,
+
+      // Redis Cache
+      CACHE_ENABLED: OptionalBoolean,
+      CACHE_TTL_SECONDS: envField.number({
+        optional: true,
         access: 'secret',
-        optional: false,
-      }),
-      BETTER_AUTH_URL: envField.string({
         context: 'server',
-        access: 'secret',
-        optional: false,
-        url: true,
       }),
-      BETTER_AUTH_TRUSTED_ORIGINS: envField.string({
-        context: 'server',
-        access: 'secret',
-        optional: false,
-      }),
-      BETTER_AUTH_SECRET: envField.string({
-        context: 'server',
-        access: 'secret',
-        optional: false,
-      }),
-      ASTRO_DB_REMOTE_URL: envField.string({
-        context: 'server',
-        access: 'secret',
-        optional: false,
-      }),
-      ASTRO_DB_APP_TOKEN: envField.string({
-        context: 'server',
-        access: 'secret',
-        optional: false,
-      }),
+      KV_REST_API_TOKEN: OptionalString,
+      KV_REST_API_URL: OptionalString,
+
+      // Quality Label
+      SHOW_REAL_MOVIE_QUALITY: OptionalBoolean,
     },
   },
   vite: {

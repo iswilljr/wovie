@@ -3,6 +3,7 @@ import { anonymous } from 'better-auth/plugins'
 import { LibsqlDialect } from '@libsql/kysely-libsql'
 import { ASTRO_DB_APP_TOKEN, ASTRO_DB_REMOTE_URL } from 'astro:env/server'
 import { linkWatching } from '../watching'
+import { ASTRO_DB_APP_TOKEN, ASTRO_DB_REMOTE_URL } from 'astro:env/server'
 
 const dialect = new LibsqlDialect({
   url: ASTRO_DB_REMOTE_URL,
@@ -25,11 +26,3 @@ export const auth = betterAuth({
     }),
   ],
 })
-
-export const getSession = async (ctx: { headers: Headers }) => {
-  const session = await auth.api.getSession(ctx)
-  if (!session) {
-    return await auth.api.signInAnonymous(ctx)
-  }
-  return session
-}

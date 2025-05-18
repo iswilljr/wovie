@@ -1,20 +1,38 @@
 ---
 import { MediaGrid } from '@/components/Media/MediaGrid'
 import PlayMediaCard from '@/components/Media/PlayMediaCard.astro'
-import SelectSource from '@/components/Player/SelectSource.astro'
-import TVShowPlayer from '@/components/Player/TVShowPlayer.astro'
 import Layout from '@/layouts/Layout.astro'
-import { getImagePath, getSeasonOrEpisode } from '@/utils'
+import { SelectSource } from '@/components/Player/SelectSource'
+import { TVShowPlayer } from '@/components/Player/TVShowPlayer'
+import {
+  getImagePath,
+  getSeasonFromPathname,
+  getSeasonOrEpisode,
+} from '@/utils'
 import { getMovieUrl, getSource } from '@/utils/sources'
 import { getMovie, getSeasonDetails, getTVShow } from '@/utils/tmdb'
 import { Image } from 'astro:assets'
 
-const { media, mediaId } = Astro.params
+const { media: slugParam } = Astro.params
+
+const [mediaType, mediaIdOrType, mediaIdOrSeason] =
+  slugParam?.split('-').slice(-3) ?? []
+
+const media =
+  mediaIdOrType === 'tv' || mediaIdOrType === 'movie'
+    ? mediaIdOrType
+    : mediaType
+
+const mediaId =
+  mediaIdOrType !== 'tv' && mediaIdOrType !== 'movie'
+    ? mediaIdOrType
+    : mediaIdOrSeason
+
 const id = +(mediaId ?? 0)
 
-if (media !== 'tv' && media !== 'movie') return Astro.redirect('/')
+if (media !== 'tv' && media !== 'movie') return Astro.rewrite('/404')
 
-const season = getSeasonOrEpisode(Astro.url.searchParams.get('season'))
+const season = getSeasonFromPathname(Astro.url.pathname)
 const episode = getSeasonOrEpisode(Astro.url.searchParams.get('episode'))
 
 let result:
@@ -38,7 +56,7 @@ if (media === 'tv') {
 }
 
 if (!result) {
-  return Astro.redirect('/')
+  return Astro.rewrite('/404')
 }
 
 const isTV = result.media_type === 'tv'
@@ -64,9 +82,12 @@ Astro.response.headers.set(
   'Cache-Control',
   'public, s-maxage=60, stale-while-revalidate=30'
 )
+
+// Astro.response.status = 404
 ---
 
 <Layout
+  noIndex
   title={`${mediaTitle} | Wovie`}
   description={`Watch ${mediaTitle} on Wovie. ${result.overview}`}
   image={getImagePath(result.backdrop_path, 'w1280')}
@@ -97,18 +118,33 @@ Astro.response.headers.set(
       </div>
       {
         result.media_type === 'tv' ? (
-          <TVShowPlayer result={result} seasonDetails={seasonDetails!} />
+          <TVShowPlayer
+            client:idle
+            season={season}
+            result={result}
+            episode={episode}
+            seasonDetails={seasonDetails!}
+            currentSourceId={currentSource.id}
+          />
         ) : (
           <div class='space-y-4'>
             <div class='aspect-video w-full flex-grow rounded-2xl bg-white/10 shadow-2xl'>
               <iframe
+                id='player-video'
                 title={mediaTitle}
                 class='aspect-video w-full rounded-2xl bg-transparent'
                 allowfullscreen
                 src={iframeUrl}
               />
             </div>
-            <SelectSource />
+            <div>
+              <SelectSource
+                client:idle
+                mediaType='movie'
+                mediaId={result.id}
+                currentSourceId={currentSource.id}
+              />
+            </div>
           </div>
         )
       }
@@ -141,8 +177,11 @@ Astro.response.headers.set(
 <script is:inline data-astro-rerun define:vars={{ mediaDetails }}>
   function handler() {
     let search = new URLSearchParams(window.location.search)
-    mediaDetails.season = Number(search.get('season')) || 1
+    let pathname = window.location.pathname
+    mediaDetails.season =
+      Number(pathname.match(/[0-9]+-([0-9]+)$/)?.[1] || 0) || 1
     mediaDetails.episode = Number(search.get('episode')) || 1
+    mediaDetails.sourceId = search.get('source')
     fetch('/api/watching', {
       method: 'POST',
       headers: {

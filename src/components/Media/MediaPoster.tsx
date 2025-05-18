@@ -1,4 +1,5 @@
-import { snakeCase, getImagePath } from '@/utils'
+import { slugifyTitle, getImagePath } from '@/utils'
+import { getTvOrMovieUrl } from '@/utils/url'
 
 interface Props {
   media: 'tv' | 'movie'
@@ -8,6 +9,7 @@ interface Props {
   rating: number
   releaseDate: string
   title: string
+  quality?: string | undefined
 }
 
 function Star(props: React.SVGAttributes<SVGSVGElement>) {
@@ -41,12 +43,13 @@ function Play(props: React.SVGAttributes<SVGSVGElement>) {
 }
 
 export function MediaPoster(props: Props) {
-  const { id, media, image, language, rating, releaseDate, title } = props
+  const { id, media, image, language, rating, releaseDate, title, quality } =
+    props
 
   return (
     <a
       className='group relative flex aspect-[2/3] flex-col items-center justify-center overflow-hidden rounded-lg bg-[#35383f] outline-none'
-      href={`/play/${media}/${id}/${snakeCase(title)}`}
+      href={getTvOrMovieUrl(media, id, slugifyTitle(title))}
     >
       {image && (
         <img
@@ -71,13 +74,17 @@ export function MediaPoster(props: Props) {
       >
         <Play width='16' height='16' fill='#000000d5' stroke='#000000d5' />
       </div>
-      <div className='absolute inset-0 z-10 flex flex-col justify-end gap-1 rounded-lg bg-gradient-to-t from-[#000000d0] p-3 outline-none ring-inset ring-primary-500 duration-150 group-hover:opacity-100 group-hover:ring-2 group-focus:opacity-100 group-focus:ring-2 group-[:not(:has(>img))]:opacity-100 sm:opacity-0'>
+      <div className='absolute inset-0 z-10 flex flex-col justify-end gap-1 rounded-lg bg-gradient-to-t from-[#000000d0] p-3 outline-none ring-inset ring-primary-500 duration-150 group-hover:opacity-100 group-hover:ring-2 group-focus:opacity-100 group-focus:ring-2 group-[:not(:has(>img))]:opacity-100'>
         <div className='flex items-center justify-center gap-1 text-xs text-[#d8d8d8]'>
           <p>{new Date(releaseDate).getFullYear() || 'N/A'}</p>
           <span>•</span>
           <p className='uppercase'>{language}</p>
-          <span>•</span>
-          <p>HD</p>
+          {quality && (
+            <>
+              <span>•</span>
+              <p>{quality}</p>
+            </>
+          )}
         </div>
         <p className='line-clamp-2 text-center text-sm font-medium leading-tight text-white'>
           {title}

@@ -1,3 +1,4 @@
+import { isbot } from 'isbot'
 import { useEffect } from 'react'
 import { client } from '@/utils/auth/react'
 import { useStore } from '@nanostores/react'
@@ -12,7 +13,7 @@ async function updateSession() {
 
   if (!data) {
     const anonymousSession = await client.signIn.anonymous({})
-    data = anonymousSession.data
+    data = anonymousSession.data as any
   }
 
   const newUserSession = {
@@ -24,11 +25,12 @@ async function updateSession() {
   $userSession.set(newUserSession)
 }
 
-export function useSession({ isBot = false } = {}) {
+export function useSession() {
   const userSession = useStore($userSession)
 
   useEffect(() => {
-    if (isBot) {
+    const isUABot = isbot(navigator.userAgent)
+    if (isUABot) {
       $userSession.set({ session: null, user: null, status: 'unauthenticated' })
       return
     }
@@ -42,7 +44,9 @@ export function useSession({ isBot = false } = {}) {
 
   const isLoading = ['initial', 'loading'].includes(userSession.status)
   const isAuthenticated =
-    userSession.status === 'authenticated' && !userSession.user.isAnonymous
+    userSession.status === 'authenticated' &&
+    userSession.session != null &&
+    !userSession.user.isAnonymous
 
   return {
     ...userSession,

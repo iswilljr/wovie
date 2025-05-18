@@ -17,9 +17,12 @@ const Session = defineTable({
   columns: {
     id: column.text({ primaryKey: true }),
     expiresAt: column.date(),
+    token: column.text({ optional: true, unique: true }),
     ipAddress: column.text({ optional: true }),
     userAgent: column.text({ optional: true }),
     userId: column.text({ references: () => User.columns.id }),
+    createdAt: column.date({ default: NOW }),
+    updatedAt: column.date({ default: NOW }),
   },
   indexes: [
     {
@@ -37,8 +40,13 @@ const Account = defineTable({
     accessToken: column.text({ optional: true }),
     refreshToken: column.text({ optional: true }),
     idToken: column.text({ optional: true }),
-    expiresAt: column.date({ optional: true }),
+    accessTokenExpiresAt: column.date({ optional: true }),
+    refreshTokenExpiresAt: column.date({ optional: true }),
+    expiresAt: column.date({ optional: true, deprecated: true }),
+    scope: column.text({ optional: true }),
     password: column.text({ optional: true }),
+    createdAt: column.date({ default: NOW }),
+    updatedAt: column.date({ default: NOW }),
   },
   indexes: [
     {
@@ -53,6 +61,8 @@ const Verification = defineTable({
     identifier: column.text(),
     value: column.text(),
     expiresAt: column.date(),
+    createdAt: column.date({ default: NOW }),
+    updatedAt: column.date({ default: NOW }),
   },
 })
 

@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useOnClickOutside } from '@/hooks/use-on-click-outside'
 import { useSearchResults } from '@/hooks/use-search'
-import { snakeCase, getImagePath } from '@/utils'
+import { slugifyTitle, getImagePath } from '@/utils'
+import { getTvOrMovieUrl } from '@/utils/url'
 import { Loader } from './Loader'
 import type { MultiSearchResult } from 'tmdb-ts'
 
-const LIMIT = 3
+// const LIMIT = 3
 
 interface SearchPostProps {
   result: MultiSearchResult
@@ -28,7 +29,7 @@ function SearchPost({ result, onClick }: SearchPostProps) {
     <a
       key={result.id}
       onClick={onClick}
-      href={`/play/${result.media_type}/${result.id}/${snakeCase(title)}`}
+      href={getTvOrMovieUrl(result.media_type, result.id, slugifyTitle(title))}
       className='flex aspect-[4/1] w-full flex-shrink-0 gap-1 overflow-hidden rounded-md hover:bg-white/10'
     >
       <div className='aspect-[3/4] h-full flex-shrink-0 overflow-hidden rounded-md bg-zinc-700/90'>
@@ -48,8 +49,6 @@ function SearchPost({ result, onClick }: SearchPostProps) {
         </p>
         <p className='flex gap-[5px] text-[.7rem] font-medium !leading-none text-primary-400 2xl:text-xs'>
           <span className=''>{isMovie ? 'Movie' : 'TV'}</span>
-          <span>•</span>
-          <span>HD</span>
           <span>•</span>
           <span>{year}</span>
         </p>
@@ -97,10 +96,10 @@ export function Search({ children }: React.ComponentProps<'div'>) {
           {!isLoading && results.length === 0 && (
             <p className='py-3 text-center text-gray-500'>No results found!</p>
           )}
-          {results.slice(0, LIMIT).map(result => (
+          {results.map(result => (
             <SearchPost key={result.id} result={result} onClick={handleBlur} />
           ))}
-          {results.length > LIMIT && (
+          {/* {results.length > LIMIT && (
             <div className='flex h-full flex-col items-center justify-end'>
               <a
                 href={`/explore?q=${query}`}
@@ -110,7 +109,7 @@ export function Search({ children }: React.ComponentProps<'div'>) {
                 View {results.length - LIMIT} more results
               </a>
             </div>
-          )}
+          )} */}
         </div>
       )}
     </div>
@@ -171,9 +170,9 @@ export function SearchMobile({ children }: React.ComponentProps<'div'>) {
                 viewBox='0 0 24 24'
                 fill='none'
                 stroke='currentColor'
-                stroke-width='2'
-                stroke-linecap='round'
-                stroke-linejoin='round'
+                strokeWidth='2'
+                strokeLinecap='round'
+                strokeLinejoin='round'
               >
                 <path d='M18 6 6 18' />
                 <path d='m6 6 12 12' />
@@ -182,7 +181,11 @@ export function SearchMobile({ children }: React.ComponentProps<'div'>) {
           </div>
           <div className='custom-scrollbars flex h-full max-h-[calc(100%-3rem)] w-full flex-col gap-2 overflow-y-auto'>
             {results.map(result => (
-              <SearchPost key={result.id} result={result} />
+              <SearchPost
+                key={result.id}
+                result={result}
+                onClick={handleClick}
+              />
             ))}
             {isLoading && (
               <div className='flex h-full flex-col items-center justify-center'>
