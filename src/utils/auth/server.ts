@@ -1,27 +1,28 @@
 import { betterAuth } from 'better-auth'
 import { anonymous } from 'better-auth/plugins'
-import { Account, db, Session, User, Verification } from 'astro:db'
-import { drizzleAdapter } from 'better-auth/adapters/drizzle'
+import { LibsqlDialect } from '@libsql/kysely-libsql'
 import { linkWatching } from '../watching'
 import {
+  ASTRO_DB_APP_TOKEN,
+  ASTRO_DB_REMOTE_URL,
   BETTER_AUTH_SECRET,
   BETTER_AUTH_TRUSTED_ORIGINS,
   BETTER_AUTH_URL,
 } from 'astro:env/server'
 
+const dialect = new LibsqlDialect({
+  url: ASTRO_DB_REMOTE_URL,
+  authToken: ASTRO_DB_APP_TOKEN,
+})
+
 export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
   },
-  database: drizzleAdapter(db, {
-    provider: 'sqlite',
-    schema: {
-      user: User,
-      session: Session,
-      account: Account,
-      verification: Verification,
-    },
-  }),
+  database: {
+    dialect,
+    type: 'sqlite',
+  },
   plugins: [
     anonymous({
       async onLinkAccount({ anonymousUser, newUser }) {
