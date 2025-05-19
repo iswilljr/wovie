@@ -38,12 +38,7 @@ export default defineConfig({
   output: 'server',
   prefetch: false,
   site: SITE_URL,
-  adapter: vercel({
-    isr: {
-      expiration: 60 * 60 * 24 * 6,
-      exclude: [/^\/api\/.+/, /^\/_actions\/.+/],
-    },
-  }),
+  adapter: vercel(),
   integrations: [tailwind(), db(), react(), sitemap()],
   env: {
     schema: {

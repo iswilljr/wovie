@@ -1,4 +1,4 @@
-import { cn, getSeasonFromPathname, getSeasonOrEpisode } from '@/utils'
+import { cn, getSeasonOrEpisode } from '@/utils'
 import {
   Popover,
   PopoverContent,
@@ -54,7 +54,7 @@ export function SelectSource({
     const olsSrc = playerVideo.getAttribute('src')
     const searchParams = new URL(window.location.href).searchParams
 
-    const season = getSeasonFromPathname(window.location.pathname)
+    const season = getSeasonOrEpisode(searchParams.get('season'))
     const episode = getSeasonOrEpisode(searchParams.get('episode'))
 
     const newSrc =

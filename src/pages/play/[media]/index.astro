@@ -4,35 +4,20 @@ import PlayMediaCard from '@/components/Media/PlayMediaCard.astro'
 import Layout from '@/layouts/Layout.astro'
 import { SelectSource } from '@/components/Player/SelectSource'
 import { TVShowPlayer } from '@/components/Player/TVShowPlayer'
-import {
-  getImagePath,
-  getSeasonFromPathname,
-  getSeasonOrEpisode,
-} from '@/utils'
+import { getImagePath, getSeasonOrEpisode } from '@/utils'
 import { getMovieUrl, getSource } from '@/utils/sources'
 import { getMovie, getSeasonDetails, getTVShow } from '@/utils/tmdb'
 import { Image } from 'astro:assets'
 
 const { media: slugParam } = Astro.params
 
-const [mediaType, mediaIdOrType, mediaIdOrSeason] =
-  slugParam?.split('-').slice(-3) ?? []
-
-const media =
-  mediaIdOrType === 'tv' || mediaIdOrType === 'movie'
-    ? mediaIdOrType
-    : mediaType
-
-const mediaId =
-  mediaIdOrType !== 'tv' && mediaIdOrType !== 'movie'
-    ? mediaIdOrType
-    : mediaIdOrSeason
+const [media, mediaId] = slugParam?.split('-').slice(-2) ?? []
 
 const id = +(mediaId ?? 0)
 
 if (media !== 'tv' && media !== 'movie') return Astro.rewrite('/404')
 
-const season = getSeasonFromPathname(Astro.url.pathname)
+const season = getSeasonOrEpisode(Astro.url.searchParams.get('season'))
 const episode = getSeasonOrEpisode(Astro.url.searchParams.get('episode'))
 
 let result:
@@ -177,9 +162,7 @@ Astro.response.headers.set(
 <script is:inline data-astro-rerun define:vars={{ mediaDetails }}>
   function handler() {
     let search = new URLSearchParams(window.location.search)
-    let pathname = window.location.pathname
-    mediaDetails.season =
-      Number(pathname.match(/[0-9]+-([0-9]+)$/)?.[1] || 0) || 1
+    mediaDetails.season = Number(search.get('season')) || 1
     mediaDetails.episode = Number(search.get('episode')) || 1
     mediaDetails.sourceId = search.get('source')
     fetch('/api/watching', {
