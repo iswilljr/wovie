@@ -69,16 +69,6 @@ export function SelectSource({
     container?.append(playerVideo)
   }, [currentSource, mediaId, mediaType])
 
-  useEffect(() => {
-    const search = new URLSearchParams(window.location.search)
-    const source = getSource(search.get('source'))
-    const currentSource = getSource(currentSourceId)
-
-    if (currentSource.id !== source.id) {
-      setCurrentSource(source)
-    }
-  }, [currentSourceId])
-
   return (
     <div className='w-full rounded-2xl bg-white/10 p-2'>
       <div className='flex items-center !gap-2 p-1'>
