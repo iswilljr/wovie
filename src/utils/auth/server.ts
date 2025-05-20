@@ -1,7 +1,6 @@
 import { betterAuth } from 'better-auth'
 import { anonymous } from 'better-auth/plugins'
 import { LibsqlDialect } from '@libsql/kysely-libsql'
-import { linkWatching } from '../watching'
 import {
   ASTRO_DB_APP_TOKEN,
   ASTRO_DB_REMOTE_URL,
@@ -23,13 +22,7 @@ export const auth = betterAuth({
     dialect,
     type: 'sqlite',
   },
-  plugins: [
-    anonymous({
-      async onLinkAccount({ anonymousUser, newUser }) {
-        await linkWatching({ anonymousUser, newUser })
-      },
-    }),
-  ],
+  plugins: [anonymous({})],
   secret: BETTER_AUTH_SECRET,
   trustedOrigins: BETTER_AUTH_TRUSTED_ORIGINS.split(','),
   baseURL: BETTER_AUTH_URL,
