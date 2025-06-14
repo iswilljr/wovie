@@ -24,6 +24,6 @@ export const auth = betterAuth({
   },
   plugins: [anonymous({})],
   secret: BETTER_AUTH_SECRET,
-  trustedOrigins: ['https://wovie.vercel.app', 'https://wovie-d3k.pages.dev'],
+  trustedOrigins: BETTER_AUTH_TRUSTED_ORIGINS.split(','),
   baseURL: BETTER_AUTH_URL,
 })
