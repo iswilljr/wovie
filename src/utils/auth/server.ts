@@ -5,7 +5,6 @@ import {
   ASTRO_DB_APP_TOKEN,
   ASTRO_DB_REMOTE_URL,
   BETTER_AUTH_SECRET,
-  BETTER_AUTH_TRUSTED_ORIGINS,
   BETTER_AUTH_URL,
 } from 'astro:env/server'
 
