@@ -5,6 +5,6 @@ export const client = createAuthClient({
   plugins: [anonymousClient()],
   baseURL: 'https://wovie.vercel.app',
   fetchOptions: {
-    credentials: 'include',
+    credentials: 'include'
   },
 })
