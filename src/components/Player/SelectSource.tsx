@@ -1,4 +1,4 @@
-import { cn, getSeasonFromPathname, getSeasonOrEpisode } from '@/utils'
+import { cn, getSeasonOrEpisode } from '@/utils'
 import {
   Popover,
   PopoverContent,
@@ -54,7 +54,7 @@ export function SelectSource({
     const olsSrc = playerVideo.getAttribute('src')
     const searchParams = new URL(window.location.href).searchParams
 
-    const season = getSeasonFromPathname(window.location.pathname)
+    const season = getSeasonOrEpisode(searchParams.get('season'))
     const episode = getSeasonOrEpisode(searchParams.get('episode'))
 
     const newSrc =
@@ -68,16 +68,6 @@ export function SelectSource({
     playerVideo.setAttribute('src', newSrc)
     container?.append(playerVideo)
   }, [currentSource, mediaId, mediaType])
-
-  useEffect(() => {
-    const search = new URLSearchParams(window.location.search)
-    const source = getSource(search.get('source'))
-    const currentSource = getSource(currentSourceId)
-
-    if (currentSource.id !== source.id) {
-      setCurrentSource(source)
-    }
-  }, [currentSourceId])
 
   return (
     <div className='w-full rounded-2xl bg-white/10 p-2'>

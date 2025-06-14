@@ -10,6 +10,10 @@ export function getEpisodeUrl(
 ) {
   const searchParams = new URLSearchParams()
 
+  if (season !== 1) {
+    searchParams.set('season', season.toString())
+  }
+
   if (episode !== 1) {
     searchParams.set('episode', episode.toString())
   }
@@ -21,7 +25,7 @@ export function getEpisodeUrl(
   const search = searchParams.toString()
   const query = search ? `?${search}` : ''
 
-  return `/play/${slugifyTitle(name)}-tv-${id}-${season}${query}`
+  return `/play/${slugifyTitle(name)}-tv-${id}${query}`
 }
 
 export function getMovieUrl(

@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { PlayIcon } from 'lucide-react'
 import { useStore } from '@nanostores/react'
 import { $playerState } from '@/store/player'
-import { getSeasonFromPathname } from '@/utils'
+import { getSeasonOrEpisode } from '@/utils'
 import { getEpisodeUrl } from '@/utils/url'
 import { getSource, getTvUrl } from '@/utils/sources'
 import type { Episode } from 'tmdb-ts'
@@ -55,7 +55,7 @@ export function SelectEpisode({
     const searchParams = new URL(window.location.href).searchParams
 
     const source = getSource(searchParams.get('source'))
-    const season = getSeasonFromPathname(window.location.pathname)
+    const season = getSeasonOrEpisode(searchParams.get('season'))
     const episode = episodeDetails.episode_number
 
     const newSrc = getTvUrl(source.id, mediaId, season, episode)

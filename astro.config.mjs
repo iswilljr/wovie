@@ -42,14 +42,7 @@ export default defineConfig({
   output: 'server',
   prefetch: false,
   site: SITE_URL,
-  adapter: cloudflareAdapterEnabled
-    ? cloudflare()
-    : vercel({
-        isr: {
-          expiration: 60 * 60 * 24 * 6,
-          exclude: [/^\/api\/.+/, /^\/_actions\/.+/],
-        },
-      }),
+  adapter: cloudflareAdapterEnabled ? cloudflare() : vercel(),
   integrations: [tailwind(), db(), react(), sitemap()],
   env: {
     schema: {
