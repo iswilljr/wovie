@@ -24,6 +24,14 @@ export const auth = betterAuth({
   },
   plugins: [anonymous({})],
   secret: BETTER_AUTH_SECRET,
-  trustedOrigins: BETTER_AUTH_TRUSTED_ORIGINS.split(','),
+  trustedOrigins: ['https://wovie.vercel.app', 'https://wovie-d3k.pages.dev'],
+  advanced: {
+    defaultCookieAttributes: {
+      secure: true,
+      httpOnly: true,
+      sameSite: 'none', // Allows CORS-based cookie sharing across subdomains
+      partitioned: true, // New browser standards will mandate this for foreign cookies
+    },
+  },
   baseURL: BETTER_AUTH_URL,
 })
