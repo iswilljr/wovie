@@ -43,7 +43,7 @@ export function Discover() {
         ))}
 
         {(nowPlaying?.data?.nowPlaying == null ||
-          nowPlaying?.data.nowPlaying.length === 0) && <DiscoverCardSkeleton />}
+          nowPlaying.data.nowPlaying.length === 0) && <DiscoverCardSkeleton />}
       </div>
     </div>
   )
