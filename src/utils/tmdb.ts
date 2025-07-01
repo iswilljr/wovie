@@ -16,8 +16,8 @@ export const getTrending = cache(
         'media_type' in media
           ? media.media_type
           : type === 'all'
-            ? 'movie'
-            : type,
+          ? 'movie'
+          : type,
     }))
     const results = (await getMediaResultsWithQuality<any>(
       trendingWithType
@@ -67,6 +67,21 @@ export async function getReleaseDates(id: number) {
   return await tmdb.movies.releaseDates(id)
 }
 
-export async function multiSearch(query: string) {
-  return await tmdb.search.multi({ query })
+export function multiSearch(query: string) {
+  return tmdb.search.multi({ query })
+}
+
+export function getMovieGenres() {
+  return tmdb.genres.movies()
+}
+
+export function getTvShowGenres() {
+  return tmdb.genres.tvShows()
+}
+
+export function discoverMedia(mediaType: 'movie' | 'tv', genres: string) {
+  if (mediaType === 'movie') {
+    return tmdb.discover.movie({ with_genres: genres })
+  }
+  return tmdb.discover.tvShow({ with_genres: genres })
 }

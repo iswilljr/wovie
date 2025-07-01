@@ -1,13 +1,9 @@
 import { actions } from 'astro:actions'
 import { useStore } from '@nanostores/react'
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { searchResults } from '@/store/search'
+import { useCallback, useEffect, useState } from 'react'
+import { searchResults as searchResultsStore } from '@/store/search'
 import { useDebouncedState } from './use-debounced-state'
-import type {
-  MovieWithMediaType,
-  MultiSearchResult,
-  TVWithMediaType,
-} from 'tmdb-ts'
+import type { MultiSearchResult } from 'tmdb-ts'
 
 type ResultsData = MultiSearchResult[] | null
 
@@ -18,8 +14,11 @@ export function useSearchResults({
   trending = null as ResultsData,
   initialResults = null as ResultsData,
 }) {
-  const searchResultsMap = useStore(searchResults)
+  useStore(searchResultsStore)
   const [isLoading, setIsLoading] = useState(false)
+  const [results, setResults] = useState<MultiSearchResult[]>(
+    initialResults ?? trending ?? []
+  )
 
   const [query, setQuery] = useDebouncedState(
     () => {
@@ -28,51 +27,41 @@ export function useSearchResults({
       return document.querySelector<HTMLInputElement>(id)?.value ?? ''
     },
     {
-      callback: useCallback((q: string) => {
-        if (!isExplorePage) return
-        const path = q ? `/explore?q=${q}` : '/explore'
-        window.history.replaceState({}, '', path)
-      }, []),
+      callback: useCallback(
+        (q: string) => {
+          if (!isExplorePage) return
+          const path = q ? `/explore?q=${q}` : '/explore'
+          window.history.replaceState({}, '', path)
+        },
+        [isExplorePage]
+      ),
     }
   )
-
-  const results = useMemo(() => {
-    let _results = searchResultsMap[query] ?? []
-
-    if (initialQuery === query && initialResults) {
-      _results = initialResults
-    }
-
-    if (isExplorePage && !query) {
-      _results = trending ?? []
-    }
-
-    const filteredResults = _results.filter(
-      result => result.media_type === 'movie' || result.media_type === 'tv'
-    )
-
-    return filteredResults as unknown as Array<
-      MovieWithMediaType | TVWithMediaType
-    >
-  }, [trending, searchResultsMap, query, isExplorePage])
 
   const handleInput = useCallback<React.ChangeEventHandler<HTMLInputElement>>(
     e => {
       setQuery(e.currentTarget.value)
     },
-    []
+    [setQuery]
   )
 
-  const handleSearch = useCallback(async (query: string) => {
-    if (Object.hasOwn(searchResults.get(), query)) return
+  const handleSearch = useCallback(
+    async (query: string) => {
+      if (Object.hasOwn(searchResultsStore.get(), query)) {
+        setResults(searchResultsStore.get()[query] ?? [])
+        return
+      }
 
-    setIsLoading(true)
+      setIsLoading(true)
 
-    const results = await actions.search({ query }).catch(() => null)
-
-    searchResults.setKey(query, results?.data ?? [])
-    setIsLoading(false)
-  }, [])
+      const searchAction = await actions.search({ query }).catch(() => null)
+      const results = (searchAction?.data ?? []) as MultiSearchResult[]
+      searchResultsStore.setKey(query, results)
+      setResults(results)
+      setIsLoading(false)
+    },
+    [setResults]
+  )
 
   useEffect(() => {
     if (initialQuery === query || !query) {
@@ -80,12 +69,13 @@ export function useSearchResults({
     }
 
     handleSearch(query).catch(() => null)
-  }, [query, handleSearch])
+  }, [query, handleSearch, initialQuery])
 
   return {
     query,
     results,
     isLoading,
+    setResults,
     handleSearch,
     handleInput,
   }
