@@ -3,20 +3,39 @@ import { Image } from 'astro:assets'
 import Layout from '@/layouts/Layout.astro'
 import { ExplorePage } from '@/components/Explore/Explore'
 import { Search as SearchIcon } from 'lucide-astro'
-import { getTrending, multiSearch } from '@/utils/tmdb'
+import {
+  getMovieGenres,
+  getTrending,
+  getTvShowGenres,
+  multiSearch,
+} from '@/utils/tmdb'
 import { getImagePath } from '@/utils'
 import type { MovieWithMediaType } from 'tmdb-ts'
 
 const query = Astro.url.searchParams.get('q') ?? ''
 
-const searchData = query ? await multiSearch(query) : null
+const [searchData, trendingResults, movieGenres, tvShowGenres] =
+  await Promise.all([
+    query ? multiSearch(query) : null,
+    getTrending('all'),
+    getMovieGenres(),
+    getTvShowGenres(),
+  ])
 
-const trendingResults = await getTrending('all')
 const trendingMovies = trendingResults.results
   .filter((movie): movie is MovieWithMediaType => movie.media_type === 'movie')
   .sort((a, b) => b.vote_average - a.vote_average)
 
 const data = trendingMovies[0]
+
+const uniqueGenres = Array.from(
+  new Map(
+    [...movieGenres.genres, ...tvShowGenres.genres].map(genre => [
+      genre.name,
+      genre,
+    ])
+  ).values()
+)
 ---
 
 <Layout
@@ -43,6 +62,7 @@ const data = trendingMovies[0]
       query={query}
       trending={trendingResults.results}
       searchData={searchData?.results}
+      genres={uniqueGenres}
     >
       <SearchIcon width='24' height='24' stroke='#9c9c9c' />
     </ExplorePage>
