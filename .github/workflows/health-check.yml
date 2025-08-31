@@ -12,32 +12,11 @@ jobs:
       DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
       WEBSITE_URL: ${{ secrets.WEBSITE_URL }}
     steps:
-      - name: Download previous health check result
-        id: download_artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: last-health-check
-        continue-on-error: true
-      - name: Read previous health check status
-        id: prev_status
-        run: |
-          if [ -f last_status.txt ]; then
-            PREV_STATUS=$(cat last_status.txt)
-          else
-            PREV_STATUS="unknown"
-          fi
-          echo "prev_status=$PREV_STATUS" >> $GITHUB_OUTPUT
       - name: Check website health
         id: health
         run: |
           STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$WEBSITE_URL")
           echo "status=$STATUS" >> $GITHUB_OUTPUT
-          echo "$STATUS" > last_status.txt
-      - name: Upload current health check result
-        uses: actions/upload-artifact@v4
-        with:
-          name: last-health-check
-          path: last_status.txt
       - name: Send Discord notification if health check fails
         if: steps.health.outputs.status != '200'
         run: |
@@ -45,9 +24,3 @@ jobs:
             -d '{"content": "🚨 Website health check failed! Status: ${{ steps.health.outputs.status }}"}' \
             "$DISCORD_WEBHOOK_URL"
           exit 1
-      - name: Send Discord notification if recovered
-        if: steps.prev_status.outputs.prev_status != '200' && steps.health.outputs.status == '200'
-        run: |
-          curl -H "Content-Type: application/json" \
-            -d '{"content": "✅ Website health check recovered! Status: ${{ steps.health.outputs.status }}"}' \
-            "$DISCORD_WEBHOOK_URL"
