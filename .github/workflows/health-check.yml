@@ -18,9 +18,11 @@ jobs:
           STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$WEBSITE_URL")
           echo "status=$STATUS" >> $GITHUB_OUTPUT
       - name: Send Discord notification if health check fails
-        if: steps.health.outputs.status != '200'
+        if: always()
         run: |
-          curl -H "Content-Type: application/json" \
-            -d '{"content": "🚨 Website health check failed! Status: ${{ steps.health.outputs.status }}"}' \
-            "$DISCORD_WEBHOOK_URL"
-          exit 1
+          if [ "${{ steps.health.outputs.status }}" != "200" ]; then
+            curl -H "Content-Type: application/json" \
+              -d '{"content": "🚨 Website health check failed! Status: ${{ steps.health.outputs.status }}"}' \
+              "$DISCORD_WEBHOOK_URL"
+            exit 1
+          fi
