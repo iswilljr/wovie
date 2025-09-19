@@ -1,7 +1,9 @@
-import { formatDate, getImagePath } from '@/utils'
+import { cn, formatDate, getImagePath } from '@/utils'
 import { getTvOrMovieUrl } from '@/utils/url'
 import { Progress } from '@/components/ui/progress'
 import { DeleteWatchingButton } from './DeleteWatchingButton'
+import { useStore } from '@nanostores/react'
+import { $editModeState } from '@/store/editMode'
 
 export interface MediaCardProps {
   media: 'tv' | 'movie'
@@ -44,6 +46,8 @@ export function MediaCard({
   const percentageWatched = isWatching
     ? Math.round((watching.watchedTime / watching.runtime) * 100)
     : 0
+
+  const editModeState = useStore($editModeState)
 
   return (
     <div
@@ -94,7 +98,12 @@ export function MediaCard({
         )}
       </a>
       {isWatching && (
-        <div className='absolute right-2 top-2 opacity-0 group-hover:opacity-100 group-focus:opacity-100'>
+        <div
+          className={cn(
+            'absolute right-2 top-2 opacity-0 md:group-hover:opacity-100 md:group-focus:opacity-100',
+            editModeState.isEditMode && 'opacity-100'
+          )}
+        >
           <DeleteWatchingButton id={id} mediaTitle={mediaTitle} />
         </div>
       )}
