@@ -100,8 +100,11 @@ export function MediaCard({
       {isWatching && (
         <div
           className={cn(
-            'absolute right-2 top-2 opacity-0 md:group-hover:opacity-100 md:group-focus:opacity-100',
-            editModeState.isEditMode && 'opacity-100'
+            'absolute right-2 top-2 will-change-transform transition-all duration-500 ease-[cubic-bezier(.34,1.56,.64,1)]',
+            'opacity-0 md:group-hover:opacity-100 md:group-focus:opacity-100',
+            editModeState.isEditMode
+              ? 'opacity-100 translate-y-0 scale-100 rotate-0 shadow-lg'
+              : 'opacity-0 -translate-y-3 scale-90 -rotate-12 shadow-none'
           )}
         >
           <DeleteWatchingButton id={id} mediaTitle={mediaTitle} />

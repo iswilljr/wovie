@@ -48,10 +48,23 @@ export function MediaList({
         {enableEditModeOnMobile && (
           <button
             aria-label='Enable Edit Mode'
-            className='flex size-12 items-center justify-center text-gray-400 md:hidden'
+            className='flex size-12 items-center justify-center text-gray-400 transition-all duration-300 ease-in-out rounded-lg active:scale-75 md:hidden'
             onClick={handleDelete}
           >
-            {editModeState.isEditMode ? <PenOff /> : <Edit />}
+            <div className='relative size-6 flex items-center justify-center'>
+              <span
+                aria-hidden='true'
+                className={`absolute size-6 inset-0 flex items-center justify-center transition-all duration-300 ease-out ${editModeState.isEditMode ? 'opacity-100 scale-100 rotate-0' : 'opacity-0 scale-75 -rotate-90'}`}
+              >
+                <PenOff />
+              </span>
+              <span
+                aria-hidden='true'
+                className={`absolute size-6 inset-0 flex items-center justify-center transition-all duration-300 ease-out ${editModeState.isEditMode ? 'opacity-0 scale-75 rotate-90' : 'opacity-100 scale-100 rotate-0'}`}
+              >
+                <Edit />
+              </span>
+            </div>
           </button>
         )}
       </div>
