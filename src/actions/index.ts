@@ -66,9 +66,14 @@ export const server = {
   }),
   watching: defineAction({
     handler: async (_, context) => {
-      const watching = await getWatching({ headers: context.request.headers })
-      console.log(watching)
-      return watching
+      try {
+        const watching = await getWatching({ headers: context.request.headers })
+        console.log(watching)
+        return watching
+      } catch (e) {
+        console.error(e)
+        return null
+      }
     },
   }),
 }
