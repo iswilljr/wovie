@@ -1,9 +1,28 @@
-import { getNowPlaying, getTrending, multiSearch } from '@/utils/tmdb'
+import {
+  discoverMedia,
+  getNowPlaying,
+  getTrending,
+  multiSearch,
+} from '@/utils/tmdb'
 import { deleteItemFromWatching, getWatching } from '@/utils/watching'
 import { defineAction } from 'astro:actions'
 import { z } from 'astro:schema'
 
 export const server = {
+  discoverByGenre: defineAction({
+    input: z.object({
+      mediaType: z.enum(['movie', 'tv']),
+      genres: z.string(),
+    }),
+    handler: async ({ mediaType, genres }) => {
+      try {
+        const data = await discoverMedia(mediaType, genres)
+        return data.results
+      } catch (e) {
+        return []
+      }
+    },
+  }),
   search: defineAction({
     input: z.object({ query: z.string().min(1) }),
     handler: async ({ query }) => {

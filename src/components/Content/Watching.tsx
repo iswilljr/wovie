@@ -18,6 +18,7 @@ export function Watching() {
       id='watching'
       results={watching?.data ?? []}
       title='Continue Watching'
+      enableEditModeOnMobile={true}
       icon={<PopcornIcon width='18' height='18' stroke='#000' />}
     />
   )

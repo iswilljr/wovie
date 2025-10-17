@@ -1,0 +1,28 @@
+name: Website Health Check
+
+on:
+  schedule:
+    - cron: '0 * * * *' # Every hour
+  workflow_dispatch:
+
+jobs:
+  health-check:
+    runs-on: ubuntu-latest
+    env:
+      DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+      WEBSITE_URL: ${{ secrets.WEBSITE_URL }}
+    steps:
+      - name: Check website health
+        id: health
+        run: |
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$WEBSITE_URL")
+          echo "status=$STATUS" >> $GITHUB_OUTPUT
+      - name: Send Discord notification if health check fails
+        if: always()
+        run: |
+          if [ "${{ steps.health.outputs.status }}" != "200" ]; then
+            curl -H "Content-Type: application/json" \
+              -d '{"content": "🚨 Website health check failed! Status: ${{ steps.health.outputs.status }}"}' \
+              "$DISCORD_WEBHOOK_URL"
+            exit 1
+          fi

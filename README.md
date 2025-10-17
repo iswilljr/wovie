@@ -79,3 +79,5 @@ BETTER_AUTH_SECRET="your-secret-key"
 or deploy a new project
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?demo-description=Discover+and+Watch+trending+movies+and+tv+shows&demo-title=Wovie+-+Watch+Movies+%26+TV+Shows+Free&demo-url=https%3A%2F%2Fwovie.vercel.app%2F&env=ASTRO_DB_REMOTE_URL%2CASTRO_DB_APP_TOKEN%2CTMDB_KEY%2CBETTER_AUTH_URL%2CBETTER_AUTH_TRUSTED_ORIGINS%2CBETTER_AUTH_SECRET&envDescription=How+to+get+these+env+variables%3A&envLink=https%3A%2F%2Fgithub.com%2Fiswilljr%2Fwovie%2Fblob%2Fmaster%2F.env.example&external-id=https%3A%2F%2Fgithub.com%2Fiswilljr%2Fwovie%2Ftree%2Fmaster&project-name=Wovie&repository-name=wovie&repository-url=https%3A%2F%2Fgithub.com%2Fiswilljr%2Fwovie)
+
+<!-- Hey what's up -->
