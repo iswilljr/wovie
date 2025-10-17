@@ -51,6 +51,7 @@ export const server = {
           getTrending('tv'),
           getNowPlaying(),
         ])
+        console.log(all)
         return {
           all: all.results,
           movies: movies.results,
@@ -58,6 +59,7 @@ export const server = {
           nowPlaying: nowPlaying.results,
         }
       } catch (e) {
+        console.error(e)
         return null
       }
     },
