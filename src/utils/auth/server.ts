@@ -23,7 +23,7 @@ export const auth = betterAuth({
   },
   plugins: [anonymous({})],
   secret: BETTER_AUTH_SECRET,
-  trustedOrigins: ['https://wovie.vercel.app', 'https://wovie-d3k.pages.dev'],
+  trustedOrigins: ['https://wovie-d3k.pages.dev'],
   advanced: {
     defaultCookieAttributes: {
       secure: true,
