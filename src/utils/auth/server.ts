@@ -21,16 +21,14 @@ export const auth = betterAuth({
     dialect,
     type: 'sqlite',
   },
-  plugins: [anonymous({})],
+  plugins: [
+    anonymous({
+      async onLinkAccount({ anonymousUser, newUser }) {
+        await linkWatching({ anonymousUser, newUser })
+      },
+    }),
+  ],
   secret: BETTER_AUTH_SECRET,
   trustedOrigins: ['https://wovie-d3k.pages.dev'],
-  advanced: {
-    defaultCookieAttributes: {
-      secure: true,
-      httpOnly: true,
-      sameSite: 'none', // Allows CORS-based cookie sharing across subdomains
-      partitioned: true, // New browser standards will mandate this for foreign cookies
-    },
-  },
   baseURL: BETTER_AUTH_URL,
 })

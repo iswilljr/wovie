@@ -70,7 +70,6 @@ export const server = {
           getTrending('tv'),
           getNowPlaying(),
         ])
-        console.log(all)
         return {
           all: all.results,
           movies: movies.results,
@@ -78,7 +77,6 @@ export const server = {
           nowPlaying: nowPlaying.results,
         }
       } catch (e) {
-        console.error(e)
         return null
       }
     },
@@ -87,10 +85,8 @@ export const server = {
     handler: async (_, context) => {
       try {
         const watching = await getWatching({ headers: context.request.headers })
-        console.log(watching)
         return watching
       } catch (e) {
-        console.error(e)
         return null
       }
     },
