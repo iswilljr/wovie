@@ -6,8 +6,8 @@ import { swrDefaultOptions } from '@/utils'
 
 export function Movies() {
   const { data: trendingMovies } = useSWR(
-    'trending',
-    () => actions.trending(),
+    'trendingMovies',
+    () => actions.trendingMovies(),
     swrDefaultOptions
   )
 
@@ -15,7 +15,7 @@ export function Movies() {
     <MediaGrid
       title='Movies'
       media='movie'
-      results={(trendingMovies?.data?.movies as any) ?? []}
+      results={(trendingMovies?.data as any) ?? []}
       icon={<ClapperboardIcon width='18' height='18' stroke='#000' />}
     />
   )

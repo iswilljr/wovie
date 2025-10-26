@@ -7,8 +7,8 @@ import { DiscoverCardSkeleton } from './DiscoverCardSkeleton'
 
 export function Discover() {
   const { data: nowPlaying } = useSWR(
-    'trending',
-    () => actions.trending(),
+    'nowPlaying',
+    () => actions.nowPlaying(),
     swrDefaultOptions
   )
 
@@ -27,7 +27,7 @@ export function Discover() {
         <ChevronRight />
       </button>
       <div className='swiper flex h-[30rem] min-h-[30rem] w-full overflow-auto scrollbar-hide sm:h-svh'>
-        {nowPlaying?.data?.nowPlaying.map(movie => (
+        {nowPlaying?.data?.map(movie => (
           <DiscoverCard
             key={movie.id}
             media='movie'
@@ -42,8 +42,7 @@ export function Discover() {
           />
         ))}
 
-        {(nowPlaying?.data?.nowPlaying == null ||
-          nowPlaying.data.nowPlaying.length === 0) && <DiscoverCardSkeleton />}
+        {(nowPlaying?.data?.length == null || nowPlaying.data.length === 0) && <DiscoverCardSkeleton />}
       </div>
     </div>
   )
