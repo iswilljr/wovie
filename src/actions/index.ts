@@ -64,12 +64,10 @@ export const server = {
   trending: defineAction({
     handler: async () => {
       try {
-        const [all, movies, tvShows, nowPlaying] = await Promise.all([
-          getTrending('all'),
-          getTrending('movie'),
-          getTrending('tv'),
-          getNowPlaying(),
-        ])
+        const all = await getTrending('all')
+        const movies = await getTrending('movie')
+        const tvShows = await getTrending('tv')
+        const nowPlaying = await getNowPlaying()
         return {
           all: all.results,
           movies: movies.results,
