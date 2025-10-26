@@ -77,6 +77,7 @@ export const server = {
           nowPlaying: nowPlaying.results,
         }
       } catch (e) {
+        console.error("Error fetching trending", e)
         return null
       }
     },
