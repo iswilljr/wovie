@@ -61,23 +61,47 @@ export const server = {
       }
     },
   }),
-  trending: defineAction({
+  trendingAll: defineAction({
     handler: async () => {
       try {
-        const [all, movies, tvShows, nowPlaying] = await Promise.all([
-          getTrending('all'),
-          getTrending('movie'),
-          getTrending('tv'),
-          getNowPlaying(),
-        ])
-        return {
-          all: all.results,
-          movies: movies.results,
-          tvShows: tvShows.results,
-          nowPlaying: nowPlaying.results,
-        }
+        const all = await getTrending('all')
+        return all.results
       } catch (e) {
+        console.error("Error fetching trending all", e)
         return null
+      }
+    },
+  }),
+  trendingMovies: defineAction({
+    handler: async () => {
+      try {
+        const movies = await getTrending('movie')
+        return movies.results
+      } catch (e) {
+        console.error("Error fetching trending movies", e)
+        return []
+      }
+    },
+  }),
+  trendingTv: defineAction({
+    handler: async () => {
+      try {
+        const tvShows = await getTrending('tv')
+        return tvShows.results
+      } catch (e) {
+        console.error("Error fetching trending tv shows", e)
+        return []
+      }
+    },
+  }),
+  nowPlaying: defineAction({
+    handler: async () => {
+      try {
+        const nowPlaying = await getNowPlaying()
+        return nowPlaying.results
+      } catch (e) {
+        console.error("Error fetching now playing", e)
+        return []
       }
     },
   }),

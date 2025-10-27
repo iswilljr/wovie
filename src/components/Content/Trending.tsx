@@ -6,15 +6,15 @@ import { swrDefaultOptions } from '@/utils'
 
 export function Trending() {
   const { data: trending } = useSWR(
-    'trending',
-    () => actions.trending(),
+    'trendingAll',
+    () => actions.trendingAll(),
     swrDefaultOptions
   )
 
   return (
     <MediaList
       id='trending'
-      results={(trending?.data?.all as any) ?? []}
+      results={(trending?.data as any) ?? []}
       title="What's Trending Today"
       icon={<FlameIcon width='18' height='18' fill='#000' stroke='#000' />}
     />

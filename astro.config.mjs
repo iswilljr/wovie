@@ -2,6 +2,7 @@ import { defineConfig, envField } from 'astro/config'
 import tailwind from '@astrojs/tailwind'
 import react from '@astrojs/react'
 import vercel from '@astrojs/vercel'
+import cloudflare from '@astrojs/cloudflare'
 import db from '@astrojs/db'
 import legacy from '@vitejs/plugin-legacy'
 import sitemap from '@astrojs/sitemap'
@@ -9,9 +10,12 @@ import { VitePWA } from 'vite-plugin-pwa'
 import { manifest } from './src/utils/manifest'
 
 const SITE_URL =
-  import.meta.env.SITE_URL ||
-  import.meta.env.BETTER_AUTH_URL ||
+  process.env.SITE_URL ??
+  process.env.BETTER_AUTH_URL ??
   'https://wovie.vercel.app'
+
+const cloudflareAdapterEnabled =
+  process.env.CLOUDFLARE_ADAPTER_ENABLED === 'true'
 
 const OptionalBoolean = envField.boolean({
   optional: true,
@@ -38,7 +42,7 @@ export default defineConfig({
   output: 'server',
   prefetch: false,
   site: SITE_URL,
-  adapter: vercel(),
+  adapter: cloudflareAdapterEnabled ? cloudflare() : vercel(),
   integrations: [tailwind(), db(), react(), sitemap()],
   env: {
     schema: {
@@ -90,5 +94,10 @@ export default defineConfig({
         },
       }),
     ],
+    define: {
+      'process.env.ASTRO_DB_APP_TOKEN': JSON.stringify(process.env.ASTRO_DB_APP_TOKEN),
+      'process.env.ASTRO_DB_REMOTE_URL': JSON.stringify(process.env.ASTRO_DB_REMOTE_URL),
+      'process.env.APP_ENV': JSON.stringify(process.env.APP_ENV),
+    },
   },
 })
