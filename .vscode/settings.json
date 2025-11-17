@@ -15,7 +15,8 @@
     "turso",
     "vidlink",
     "vidsrc",
-    "wovie"
+    "wovie",
+    "wovix"
   ],
   "template-string-converter.validLanguages": [
     "svelte",

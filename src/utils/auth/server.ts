@@ -30,6 +30,6 @@ export const auth = betterAuth({
     }),
   ],
   secret: BETTER_AUTH_SECRET,
-  trustedOrigins: ['https://wovie-d3k.pages.dev'],
+  trustedOrigins: ['https://wovix.app'],
   baseURL: BETTER_AUTH_URL,
 })
