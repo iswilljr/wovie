@@ -110,6 +110,7 @@ export function ExplorePage({
                 title={
                   result.media_type === 'movie' ? result.title : result.name
                 }
+                backdropPath={result.backdrop_path}
               />
             )
           })}

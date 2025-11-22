@@ -16,7 +16,8 @@
     "vidlink",
     "vidsrc",
     "wovie",
-    "wovix"
+    "wovix",
+    "watchlist"
   ],
   "template-string-converter.validLanguages": [
     "svelte",
