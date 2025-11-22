@@ -12,6 +12,8 @@ interface MediaItem {
   backdrop_path: string
   vote_average: number
   release_date: string
+  first_air_date: string
+  name: string
   original_language: string
 }
 
@@ -37,13 +39,13 @@ export function useWatchlist(media: MediaItem) {
     return map
   }, [watchlist])
 
-  const inWatchlist = watchlistMap.get(media.id)
+  const inWatchlist = watchlistMap.has(media.id)
 
   const toggleWatchlist = async (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
 
-    const inWatchlist = watchlistMap.get(media.id)
+    const inWatchlist = watchlistMap.has(media.id)
     const toastMessage = inWatchlist
       ? 'Removed from watchlist'
       : 'Added to watchlist'
@@ -80,12 +82,20 @@ export function useWatchlist(media: MediaItem) {
 
     try {
       if (inWatchlist) {
-        await actions.deleteFromWatchlist({ id: media.id })
+        const response = await actions.deleteFromWatchlist({ id: media.id })
+
+        if (!response.data) {
+          throw new Error('Failed to delete from watchlist')
+        }
       } else {
-        await actions.addToWatchlist({
+        const response = await actions.addToWatchlist({
           id: media.id,
           mediaType: media.mediaType,
         })
+
+        if (!response.data) {
+          throw new Error('Failed to add to watchlist')
+        }
       }
     } catch (error) {
       toast.error('Failed to update watchlist', { id: toastId })

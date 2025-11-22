@@ -17,7 +17,8 @@ export function Toaster({ ...props }: ToasterProps) {
             'group-[.toast]:bg-primary-500 group-[.toast]:text-white',
           cancelButton: 'group-[.toast]:bg-black/10 group-[.toast]:text-white',
           success: 'group-[.toaster]:!border-primary-500',
-          error: 'group-[.toaster]:!border-red-500',
+          error:
+            'group-[.toaster]:!border-red-500 group-[.toaster]:!bg-red-500',
           info: 'group-[.toaster]:!border-blue-500',
           warning: 'group-[.toaster]:!border-yellow-500',
         },

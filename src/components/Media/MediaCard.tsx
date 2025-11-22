@@ -56,11 +56,13 @@ export function MediaCard({
   const { inWatchlist, toggleWatchlist } = useWatchlist({
     id: +id,
     mediaType: media,
-    title: mediaTitle,
+    title,
     backdrop_path: image,
     vote_average: rating,
     release_date: releaseDate,
     original_language: language,
+    name: title,
+    first_air_date: releaseDate,
   })
 
   return (

@@ -66,6 +66,8 @@ export function MediaPoster(props: Props) {
     vote_average: rating,
     release_date: releaseDate,
     original_language: language,
+    name: title,
+    first_air_date: releaseDate,
   })
 
   return (
@@ -73,7 +75,7 @@ export function MediaPoster(props: Props) {
       <button
         onClick={toggleWatchlist}
         className={cn(
-          'pointer-events-auto absolute left-0 top-0 z-10 rounded-br-lg rounded-tl-lg bg-black/60 p-1.5 text-white backdrop-blur-md transition-all duration-300 hover:bg-primary-500',
+          'pointer-events-auto absolute left-[1.5px] top-[1.5px] z-10 rounded-br-lg rounded-tl-md bg-black/60 p-1.5 text-white backdrop-blur-md transition-all duration-300 hover:bg-primary-500',
           'opacity-0 group-hover:opacity-100 group-focus:opacity-100',
           inWatchlist && 'bg-primary-500 text-white'
         )}

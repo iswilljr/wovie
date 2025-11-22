@@ -12,6 +12,8 @@ interface WatchlistButtonProps {
     vote_average: number
     release_date: string
     original_language: string
+    name: string
+    first_air_date: string
   }
 }
 
