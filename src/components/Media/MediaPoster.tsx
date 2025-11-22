@@ -1,5 +1,7 @@
-import { slugifyTitle, getImagePath } from '@/utils'
+import { slugifyTitle, getImagePath, cn } from '@/utils'
 import { getTvOrMovieUrl } from '@/utils/url'
+import { BookmarkIcon, BookmarkCheckIcon } from 'lucide-react'
+import { useWatchlist } from '@/hooks/useWatchlist'
 
 interface Props {
   media: 'tv' | 'movie'
@@ -9,6 +11,7 @@ interface Props {
   rating: number
   releaseDate: string
   title: string
+  backdropPath: string | undefined
   quality?: string | undefined
 }
 
@@ -43,53 +46,88 @@ function Play(props: React.SVGAttributes<SVGSVGElement>) {
 }
 
 export function MediaPoster(props: Props) {
-  const { id, media, image, language, rating, releaseDate, title, quality } =
-    props
+  const {
+    id,
+    media,
+    image,
+    language,
+    rating,
+    releaseDate,
+    title,
+    quality,
+    backdropPath,
+  } = props
+
+  const { inWatchlist, toggleWatchlist } = useWatchlist({
+    id: +id,
+    mediaType: media,
+    title,
+    backdrop_path: backdropPath ?? image ?? '',
+    vote_average: rating,
+    release_date: releaseDate,
+    original_language: language,
+  })
 
   return (
-    <a
-      className='group relative flex aspect-[2/3] flex-col items-center justify-center overflow-hidden rounded-lg bg-[#35383f] outline-none'
-      href={getTvOrMovieUrl(media, id, slugifyTitle(title))}
-    >
-      {image && (
-        <img
-          width='300'
-          height='150'
-          alt={title}
-          loading='lazy'
-          src={getImagePath(image, 'w300')}
-          className='h-full w-full object-cover object-center duration-150 group-hover:scale-[1.04] group-focus:scale-[1.04]'
-        />
-      )}
-      <div className='absolute right-0 top-0 flex items-center justify-center gap-1 rounded-bl-md bg-black/70 px-[5px] py-1'>
-        <Star width='13' height='13' fill='#ffd700' stroke='#ffd700' />
-        <span className='text-xs font-light text-white'>
-          {rating.toFixed(1)}
-        </span>
-      </div>
-      <div
-        role='button'
-        aria-label='Play Now'
-        className='absolute z-20 flex items-center justify-center rounded-full bg-primary-500 p-[.6rem] opacity-0 duration-150 hover:brightness-90 group-hover:opacity-100 group-focus:opacity-100'
+    <div className='group relative overflow-hidden'>
+      <button
+        onClick={toggleWatchlist}
+        className={cn(
+          'pointer-events-auto absolute left-0 top-0 z-10 rounded-br-lg rounded-tl-lg bg-black/60 p-1.5 text-white backdrop-blur-md transition-all duration-300 hover:bg-primary-500',
+          'opacity-0 group-hover:opacity-100 group-focus:opacity-100',
+          inWatchlist && 'bg-primary-500 text-white'
+        )}
       >
-        <Play width='16' height='16' fill='#000000d5' stroke='#000000d5' />
-      </div>
-      <div className='absolute inset-0 z-10 flex flex-col justify-end gap-1 rounded-lg bg-gradient-to-t from-[#000000d0] p-3 outline-none ring-inset ring-primary-500 duration-150 group-hover:opacity-100 group-hover:ring-2 group-focus:opacity-100 group-focus:ring-2 group-[:not(:has(>img))]:opacity-100'>
-        <div className='flex items-center justify-center gap-1 text-xs text-[#d8d8d8]'>
-          <p>{new Date(releaseDate).getFullYear() || 'N/A'}</p>
-          <span>•</span>
-          <p className='uppercase'>{language}</p>
-          {quality && (
-            <>
-              <span>•</span>
-              <p>{quality}</p>
-            </>
-          )}
+        {inWatchlist ? (
+          <BookmarkCheckIcon width={16} height={16} />
+        ) : (
+          <BookmarkIcon width={16} height={16} />
+        )}
+      </button>
+      <a
+        className='relative flex aspect-[2/3] flex-col items-center justify-center overflow-hidden rounded-lg bg-[#35383f] outline-none'
+        href={getTvOrMovieUrl(media, id, slugifyTitle(title))}
+      >
+        {image && (
+          <img
+            width='300'
+            height='150'
+            alt={title}
+            loading='lazy'
+            src={getImagePath(image, 'w300')}
+            className='h-full w-full object-cover object-center duration-150 group-hover:scale-[1.04] group-focus:scale-[1.04]'
+          />
+        )}
+        <div className='absolute right-0 top-0 flex items-center justify-center gap-1 rounded-bl-md bg-black/70 px-[5px] py-1'>
+          <Star width='13' height='13' fill='#ffd700' stroke='#ffd700' />
+          <span className='text-xs font-light text-white'>
+            {rating.toFixed(1)}
+          </span>
         </div>
-        <p className='line-clamp-2 text-center text-sm font-medium leading-tight text-white'>
-          {title}
-        </p>
-      </div>
-    </a>
+        <div
+          role='button'
+          aria-label='Play Now'
+          className='absolute z-20 flex items-center justify-center rounded-full bg-primary-500 p-[.6rem] opacity-0 duration-150 hover:brightness-90 group-hover:opacity-100 group-focus:opacity-100'
+        >
+          <Play width='16' height='16' fill='#000000d5' stroke='#000000d5' />
+        </div>
+        <div className='absolute inset-0 flex flex-col justify-end gap-1 rounded-lg bg-gradient-to-t from-[#000000d0] p-3 outline-none ring-inset ring-primary-500 duration-150 group-hover:opacity-100 group-hover:ring-2 group-focus:opacity-100 group-focus:ring-2 group-[:not(:has(>img))]:opacity-100'>
+          <div className='flex items-center justify-center gap-1 text-xs text-[#d8d8d8]'>
+            <p>{new Date(releaseDate).getFullYear() || 'N/A'}</p>
+            <span>•</span>
+            <p className='uppercase'>{language}</p>
+            {quality && (
+              <>
+                <span>•</span>
+                <p>{quality}</p>
+              </>
+            )}
+          </div>
+          <p className='line-clamp-2 text-center text-sm font-medium leading-tight text-white'>
+            {title}
+          </p>
+        </div>
+      </a>
+    </div>
   )
 }

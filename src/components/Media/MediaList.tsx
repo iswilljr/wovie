@@ -15,6 +15,7 @@ export interface MediaListProps {
   title: string
   icon?: React.ReactNode
   enableEditModeOnMobile?: boolean
+  isWatchlist?: boolean
   results: Array<
     (TVWithMediaType | MovieWithMediaType | PersonWithMediaType) & {
       watching?: any
@@ -29,6 +30,7 @@ export function MediaList({
   title,
   icon,
   enableEditModeOnMobile,
+  isWatchlist,
 }: MediaListProps) {
   const editModeState = useStore($editModeState)
 
@@ -48,19 +50,19 @@ export function MediaList({
         {enableEditModeOnMobile && (
           <button
             aria-label='Enable Edit Mode'
-            className='flex size-12 items-center justify-center text-gray-400 transition-all duration-300 ease-in-out rounded-lg active:scale-75 md:hidden'
+            className='flex size-12 items-center justify-center rounded-lg text-gray-400 transition-all duration-300 ease-in-out active:scale-75 md:hidden'
             onClick={handleDelete}
           >
-            <div className='relative size-6 flex items-center justify-center'>
+            <div className='relative flex size-6 items-center justify-center'>
               <span
                 aria-hidden='true'
-                className={`absolute size-6 inset-0 flex items-center justify-center transition-all duration-300 ease-out ${editModeState.isEditMode ? 'opacity-100 scale-100 rotate-0' : 'opacity-0 scale-75 -rotate-90'}`}
+                className={`absolute inset-0 flex size-6 items-center justify-center transition-all duration-300 ease-out ${editModeState.isEditMode ? 'rotate-0 scale-100 opacity-100' : '-rotate-90 scale-75 opacity-0'}`}
               >
                 <PenOff />
               </span>
               <span
                 aria-hidden='true'
-                className={`absolute size-6 inset-0 flex items-center justify-center transition-all duration-300 ease-out ${editModeState.isEditMode ? 'opacity-0 scale-75 rotate-90' : 'opacity-100 scale-100 rotate-0'}`}
+                className={`absolute inset-0 flex size-6 items-center justify-center transition-all duration-300 ease-out ${editModeState.isEditMode ? 'rotate-90 scale-75 opacity-0' : 'rotate-0 scale-100 opacity-100'}`}
               >
                 <Edit />
               </span>
@@ -96,6 +98,7 @@ export function MediaList({
                 }
                 title={movie.media_type === 'movie' ? movie.title : movie.name}
                 watching={movie.watching}
+                isWatchlist={isWatchlist}
               />
             ) : null
           )}

@@ -2,6 +2,7 @@
 import { formatDate, getImagePath } from '@/utils'
 import { Image } from 'astro:assets'
 import type { Cast, Genre } from 'tmdb-ts'
+import { WatchlistButton } from './WatchlistButton'
 
 export interface Props {
   cast: Cast[]
@@ -11,10 +12,21 @@ export interface Props {
   rating: number
   releaseDate: string
   title: string
+  mediaType: 'movie' | 'tv'
+  id: number
 }
 
-const { cast, genres, image, overview, rating, releaseDate, title } =
-  Astro.props
+const {
+  cast,
+  genres,
+  image,
+  overview,
+  rating,
+  releaseDate,
+  title,
+  mediaType,
+  id,
+} = Astro.props
 ---
 
 <div class='flex w-full flex-row gap-6 md:flex-row' id='info'>
@@ -34,9 +46,24 @@ const { cast, genres, image, overview, rating, releaseDate, title } =
     }
   </div>
   <div class='flex w-full flex-col gap-2'>
-    <p class='line-clamp-2 text-2xl font-semibold tracking-wide'>
-      {title}
-    </p>
+    <div class='flex items-center justify-between gap-4'>
+      <p class='line-clamp-2 text-2xl font-semibold tracking-wide'>
+        {title}
+      </p>
+      <WatchlistButton
+        client:visible
+        media={{
+          id,
+          mediaType,
+          title,
+          poster_path: image ?? '',
+          backdrop_path: image ?? '',
+          vote_average: rating,
+          release_date: releaseDate,
+          original_language: 'en', // Defaulting to 'en' as it's not passed, or we should pass it
+        }}
+      />
+    </div>
     <div class='flex flex-shrink-0 flex-wrap items-center gap-2'>
       {
         genres.map(genre => (

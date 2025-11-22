@@ -5,6 +5,11 @@ import {
   multiSearch,
 } from '@/utils/tmdb'
 import { deleteItemFromWatching, getWatching } from '@/utils/watching'
+import {
+  addToWatchlist,
+  deleteFromWatchlist,
+  getWatchlist,
+} from '@/utils/watchlist'
 import { defineAction } from 'astro:actions'
 import { z } from 'astro:schema'
 
@@ -67,7 +72,7 @@ export const server = {
         const all = await getTrending('all')
         return all.results
       } catch (e) {
-        console.error("Error fetching trending all", e)
+        console.error('Error fetching trending all', e)
         return null
       }
     },
@@ -78,7 +83,7 @@ export const server = {
         const movies = await getTrending('movie')
         return movies.results
       } catch (e) {
-        console.error("Error fetching trending movies", e)
+        console.error('Error fetching trending movies', e)
         return []
       }
     },
@@ -89,7 +94,7 @@ export const server = {
         const tvShows = await getTrending('tv')
         return tvShows.results
       } catch (e) {
-        console.error("Error fetching trending tv shows", e)
+        console.error('Error fetching trending tv shows', e)
         return []
       }
     },
@@ -100,7 +105,7 @@ export const server = {
         const nowPlaying = await getNowPlaying()
         return nowPlaying.results
       } catch (e) {
-        console.error("Error fetching now playing", e)
+        console.error('Error fetching now playing', e)
         return []
       }
     },
@@ -112,6 +117,50 @@ export const server = {
         return watching
       } catch (e) {
         return null
+      }
+    },
+  }),
+  watchlist: defineAction({
+    handler: async (_, context) => {
+      try {
+        const watchlist = await getWatchlist({
+          headers: context.request.headers,
+        })
+        return watchlist
+      } catch (e) {
+        return null
+      }
+    },
+  }),
+  addToWatchlist: defineAction({
+    input: z.object({
+      id: z.number(),
+      mediaType: z.enum(['movie', 'tv']),
+    }),
+    handler: async ({ id, mediaType }, context) => {
+      try {
+        await addToWatchlist({
+          headers: context.request.headers,
+          id,
+          mediaType,
+        })
+        return true
+      } catch (e) {
+        return false
+      }
+    },
+  }),
+  deleteFromWatchlist: defineAction({
+    input: z.object({ id: z.number().or(z.string()) }),
+    handler: async ({ id }, context) => {
+      try {
+        await deleteFromWatchlist({
+          headers: context.request.headers,
+          id,
+        })
+        return true
+      } catch (e) {
+        return false
       }
     },
   }),

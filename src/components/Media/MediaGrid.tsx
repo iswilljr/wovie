@@ -49,6 +49,7 @@ export function MediaGrid({
                   : movie.first_air_date
               }
               title={'title' in movie ? movie.title : movie.name}
+              backdropPath={movie.backdrop_path}
             />
           ))}
         </div>
