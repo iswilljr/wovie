@@ -11,6 +11,14 @@ const User = defineTable({
     createdAt: column.date({ default: NOW }),
     updatedAt: column.date({ default: NOW }),
   },
+  indexes: [
+    {
+      on: ['email'],
+    },
+    {
+      on: ['isAnonymous'],
+    },
+  ],
 })
 
 const Session = defineTable({
@@ -27,6 +35,12 @@ const Session = defineTable({
   indexes: [
     {
       on: ['userId'],
+    },
+    {
+      on: ['token'],
+    },
+    {
+      on: ['userId', 'token'],
     },
   ],
 })
@@ -64,6 +78,11 @@ const Verification = defineTable({
     createdAt: column.date({ default: NOW }),
     updatedAt: column.date({ default: NOW }),
   },
+  indexes: [
+    {
+      on: ['identifier'],
+    },
+  ],
 })
 
 const Watching = defineTable({
@@ -89,6 +108,12 @@ const Watching = defineTable({
     {
       on: ['userId'],
     },
+    {
+      on: ['createdAt'],
+    },
+    {
+      on: ['updatedAt'],
+    },
   ],
 })
 
@@ -108,6 +133,9 @@ const Watchlist = defineTable({
     },
     {
       on: ['userId'],
+    },
+    {
+      on: ['createdAt'],
     },
   ],
 })
