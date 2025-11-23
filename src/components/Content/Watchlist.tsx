@@ -19,7 +19,6 @@ export function Watchlist() {
       id='watchlist'
       results={watchlist?.data ?? []}
       title='Watchlist'
-      enableEditModeOnMobile={true}
       icon={<BookmarkIcon width='18' height='18' stroke='#000' />}
     />
   )
