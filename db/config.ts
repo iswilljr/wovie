@@ -92,6 +92,26 @@ const Watching = defineTable({
   ],
 })
 
+const Watchlist = defineTable({
+  columns: {
+    id: column.number({ primaryKey: true }),
+    mediaId: column.number(),
+    mediaType: column.text(),
+    details: column.json(),
+    createdAt: column.date({ default: NOW }),
+    userId: column.text({ references: () => User.columns.id }),
+  },
+  indexes: [
+    {
+      on: ['userId', 'mediaId', 'mediaType'],
+      unique: true,
+    },
+    {
+      on: ['userId'],
+    },
+  ],
+})
+
 export default defineDb({
   tables: {
     User,
@@ -99,5 +119,6 @@ export default defineDb({
     Account,
     Verification,
     Watching,
+    Watchlist,
   },
 })

@@ -4,6 +4,8 @@ import { Progress } from '@/components/ui/progress'
 import { DeleteWatchingButton } from './DeleteWatchingButton'
 import { useStore } from '@nanostores/react'
 import { $editModeState } from '@/store/editMode'
+import { BookmarkIcon, BookmarkCheckIcon } from 'lucide-react'
+import { useWatchlist } from '@/hooks/useWatchlist'
 
 export interface MediaCardProps {
   media: 'tv' | 'movie'
@@ -15,6 +17,7 @@ export interface MediaCardProps {
   title: string
   quality?: string | undefined
 
+  isWatchlist?: boolean | undefined
   watching?: {
     runtime: number
     watchedTime: number
@@ -35,6 +38,7 @@ export function MediaCard({
   title,
   quality,
   watching,
+  isWatchlist,
 }: MediaCardProps) {
   const isWatching = watching != null
 
@@ -48,6 +52,18 @@ export function MediaCard({
     : 0
 
   const editModeState = useStore($editModeState)
+
+  const { inWatchlist, toggleWatchlist } = useWatchlist({
+    id: +id,
+    mediaType: media,
+    title,
+    backdrop_path: image,
+    vote_average: rating,
+    release_date: releaseDate,
+    original_language: language,
+    name: title,
+    first_air_date: releaseDate,
+  })
 
   return (
     <div
@@ -100,15 +116,32 @@ export function MediaCard({
       {isWatching && (
         <div
           className={cn(
-            'absolute right-2 top-2 will-change-transform transition-all duration-500 ease-[cubic-bezier(.34,1.56,.64,1)]',
+            'ease-[cubic-bezier(.34,1.56,.64,1)] absolute right-2 top-2 transition-all duration-500 will-change-transform',
             'opacity-0 md:group-hover:opacity-100 md:group-focus:opacity-100',
             editModeState.isEditMode
-              ? 'opacity-100 translate-y-0 scale-100 rotate-0 shadow-lg'
-              : 'opacity-0 -translate-y-3 scale-90 -rotate-12 shadow-none'
+              ? 'translate-y-0 rotate-0 scale-100 opacity-100 shadow-lg'
+              : ''
           )}
         >
           <DeleteWatchingButton id={id} mediaTitle={mediaTitle} />
         </div>
+      )}
+      {!isWatching && (
+        <button
+          onClick={toggleWatchlist}
+          className={cn(
+            'absolute right-2 top-2 z-10 rounded-full bg-black/50 p-1.5 text-white backdrop-blur-md transition-all duration-300 hover:bg-primary-500',
+            'opacity-0 group-hover:opacity-100 group-focus:opacity-100',
+            inWatchlist && 'bg-primary-500 text-white',
+            isWatchlist && 'opacity-100'
+          )}
+        >
+          {inWatchlist ? (
+            <BookmarkCheckIcon width={16} height={16} />
+          ) : (
+            <BookmarkIcon width={16} height={16} />
+          )}
+        </button>
       )}
     </div>
   )

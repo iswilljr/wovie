@@ -143,6 +143,8 @@ Astro.response.headers.set(
           ? result.first_air_date
           : result.release_date}
         title={mediaCardTitle}
+        id={result.id}
+        mediaType={result.media_type}
       />
       <div role='separator' class='h-[1px] w-full bg-white/20 sm:!my-16'></div>
       {
