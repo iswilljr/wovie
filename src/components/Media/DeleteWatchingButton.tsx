@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { actions } from 'astro:actions'
 import { Button } from '../ui/button'
-import { XIcon } from 'lucide-react'
+import { Trash2Icon } from 'lucide-react'
 
 export function DeleteWatchingButton({
   id,
@@ -32,9 +32,9 @@ export function DeleteWatchingButton({
     <Button
       size='icon'
       onClick={handleClick}
-      className='pointer-events-auto flex items-center justify-center gap-2 rounded-lg bg-opacity-60 px-4 py-1 text-sm text-white dark:bg-primary-500/70'
+      className='pointer-events-auto h-7 w-7 rounded-full'
     >
-      <XIcon />
+      <Trash2Icon size={16} />
       <span className='sr-only'>Delete {mediaTitle} from watching</span>
     </Button>
   )

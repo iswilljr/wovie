@@ -6,6 +6,7 @@ import { useStore } from '@nanostores/react'
 import { $editModeState } from '@/store/editMode'
 import { BookmarkIcon, BookmarkCheckIcon } from 'lucide-react'
 import { useWatchlist } from '@/hooks/useWatchlist'
+import { Button } from '../ui/button'
 
 export interface MediaCardProps {
   media: 'tv' | 'movie'
@@ -127,21 +128,25 @@ export function MediaCard({
         </div>
       )}
       {!isWatching && (
-        <button
+        <Button
           onClick={toggleWatchlist}
+          size='icon'
           className={cn(
-            'absolute right-2 top-2 z-10 rounded-full bg-black/50 p-1.5 text-white backdrop-blur-md transition-all duration-300 hover:bg-primary-500',
+            'absolute right-2 top-2 z-10 h-7 w-7 rounded-full',
             'opacity-0 group-hover:opacity-100 group-focus:opacity-100',
             inWatchlist && 'bg-primary-500 text-white',
             isWatchlist && 'opacity-100'
           )}
+          aria-label={
+            inWatchlist ? 'Remove from watchlist' : 'Add to watchlist'
+          }
         >
           {inWatchlist ? (
             <BookmarkCheckIcon width={16} height={16} />
           ) : (
             <BookmarkIcon width={16} height={16} />
           )}
-        </button>
+        </Button>
       )}
     </div>
   )
