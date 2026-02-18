@@ -16,8 +16,8 @@ export const getTrending = cache(
         'media_type' in media
           ? media.media_type
           : type === 'all'
-          ? 'movie'
-          : type,
+            ? 'movie'
+            : type,
     }))
     const results = (await getMediaResultsWithQuality<any>(
       trendingWithType
