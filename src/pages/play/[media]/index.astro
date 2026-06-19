@@ -163,31 +163,76 @@ Astro.response.headers.set('Cloudflare-CDN-Cache-Control', 'max-age=86400')
 </Layout>
 
 <script is:inline data-astro-rerun define:vars={{ mediaDetails }}>
-  function handler() {
-    let search = new URLSearchParams(window.location.search)
-    mediaDetails.season = Number(search.get('season')) || 1
-    mediaDetails.episode = Number(search.get('episode')) || 1
-    mediaDetails.sourceId = search.get('source')
+  window.__wovieWatchSession = {
+    startedAt: Date.now(),
+    saved: false,
+    mediaDetails: mediaDetails,
+  }
+
+  function getMediaDetails() {
+    var search = new URLSearchParams(window.location.search)
+    var details = window.__wovieWatchSession.mediaDetails
+    return {
+      season: Number(search.get('season')) || 1,
+      episode: Number(search.get('episode')) || 1,
+      sourceId: search.get('source'),
+      mediaId: details.mediaId,
+      mediaType: details.mediaType,
+    }
+  }
+
+  function saveWatching() {
+    var session = window.__wovieWatchSession
+    if (session.saved) return
+
+    var watchedMinutes = Math.floor(
+      (Date.now() - session.startedAt) / (1000 * 60)
+    )
+    if (watchedMinutes < 1) return
+
+    session.saved = true
+
+    var payload = Object.assign(getMediaDetails(), { watchedMinutes })
+
+    if (navigator.sendBeacon) {
+      navigator.sendBeacon(
+        '/api/watching',
+        new Blob([JSON.stringify(payload)], {
+          type: 'application/json',
+        })
+      )
+      return
+    }
+
     fetch('/api/watching', {
       method: 'POST',
+      keepalive: true,
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',
       },
-      body: JSON.stringify(mediaDetails),
+      body: JSON.stringify(payload),
     })
   }
 
-  window.clear =
-    window.clear ||
-    function clear() {
-      clearInterval(window.watchingTimeout)
-    }
-
-  if (window.watchingTimeout) {
-    window.clear()
+  function resetWatchingSession() {
+    saveWatching()
+    window.__wovieWatchSession.saved = false
+    window.__wovieWatchSession.startedAt = Date.now()
   }
 
-  window.watchingTimeout = setInterval(handler, 1000 * 60 * 5)
-  document.removeEventListener('astro:after-swap', window.clear)
-  document.addEventListener('astro:after-swap', window.clear)
+  window.__wovieSaveWatching = saveWatching
+
+  if (!window.__wovieReplaceStatePatched) {
+    window.__wovieReplaceStatePatched = true
+    var originalReplaceState = history.replaceState.bind(history)
+    history.replaceState = function () {
+      window.__wovieSaveWatching?.()
+      window.__wovieWatchSession.saved = false
+      window.__wovieWatchSession.startedAt = Date.now()
+      return originalReplaceState.apply(history, arguments)
+    }
+  }
+
+  window.addEventListener('pagehide', saveWatching, { once: true })
+  document.addEventListener('astro:before-swap', saveWatching, { once: true })
 </script>
