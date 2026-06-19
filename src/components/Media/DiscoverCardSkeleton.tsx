@@ -1,36 +1,22 @@
 export function DiscoverCardSkeleton() {
   return (
-    <div className='swiper-item relative flex h-full w-full flex-shrink-0 items-end justify-start overflow-hidden p-4 py-20 pb-[--discover-space] sm:px-12'>
-      {/* Background image skeleton */}
-      <div className='absolute inset-0 z-0 h-[30rem] min-h-[30rem] w-full animate-pulse bg-gray-700 object-cover sm:h-svh' />
-
-      <div id='opacity-layer' className='z-10'></div>
-
-      <div className='z-20 flex w-5/6 flex-col gap-2 tracking-wide md:w-[45%] md:gap-4'>
-        <div className='flex flex-col gap-1 md:gap-2'>
-          {/* Title skeleton */}
-          <div className='flex-shrink-0 py-1'>
-            <div className='h-8 w-3/4 animate-pulse rounded-md bg-gray-600 sm:h-12' />
-          </div>
-
-          {/* Info row skeleton */}
-          <div className='flex gap-3'>
-            <div className='h-4 w-16 animate-pulse rounded-md bg-gray-600' />
-            <div className='h-4 w-24 animate-pulse rounded-md bg-gray-600' />
-            <div className='h-4 w-20 animate-pulse rounded-md bg-gray-600' />
-          </div>
+    <div className='swiper-item relative flex h-full min-h-full w-full flex-shrink-0 items-end bg-surface-raised'>
+      <div className='hero-gradient absolute inset-0' />
+      <div className='cinematic-gradient absolute inset-x-0 bottom-0 h-[55%] min-h-[12rem] sm:h-[60%] sm:min-h-[16rem]' />
+      <div className='relative z-20 w-full space-y-4 px-5 pb-36 sm:px-10 sm:pb-44 lg:pl-12'>
+        <div className='h-3 w-24 animate-pulse rounded bg-white/10' />
+        <div className='h-12 w-3/4 max-w-md animate-pulse rounded-lg bg-white/10 sm:h-16' />
+        <div className='flex gap-2'>
+          <div className='h-4 w-16 animate-pulse rounded bg-white/10' />
+          <div className='h-4 w-20 animate-pulse rounded bg-white/10' />
         </div>
-
-        {/* Overview skeleton */}
         <div className='space-y-2'>
-          <div className='h-4 w-full animate-pulse rounded-md bg-gray-600' />
-          <div className='h-4 w-2/3 animate-pulse rounded-md bg-gray-600' />
+          <div className='h-3 w-full max-w-lg animate-pulse rounded bg-white/10' />
+          <div className='h-3 w-2/3 max-w-md animate-pulse rounded bg-white/10' />
         </div>
-
-        {/* Buttons skeleton */}
-        <div className='mt-2 flex gap-2'>
-          <div className='h-9 w-[7rem] animate-pulse rounded-full bg-gray-600 sm:h-11 sm:w-[10rem] sm:rounded-lg' />
-          <div className='h-9 w-[7rem] animate-pulse rounded-full bg-gray-600 sm:h-11 sm:w-[10rem] sm:rounded-lg' />
+        <div className='flex gap-3'>
+          <div className='h-11 w-32 animate-pulse rounded-xl bg-white/10' />
+          <div className='h-11 w-28 animate-pulse rounded-xl bg-white/10' />
         </div>
       </div>
     </div>

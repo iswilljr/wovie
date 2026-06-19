@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { PlayIcon } from 'lucide-react'
+import { Play } from 'lucide-react'
 import { useStore } from '@nanostores/react'
 import { $playerState } from '@/store/player'
 import { getSeasonOrEpisode } from '@/utils'
@@ -68,27 +68,34 @@ export function SelectEpisode({
   }, [episodes, mediaId, episode])
 
   return (
-    <div className='custom-scrollbars overflow-y-auto'>
-      {episodes.map(episodeDetails => (
-        <button
-          key={episodeDetails.id}
-          aria-current={episodeDetails.episode_number === episode}
-          onClick={() => handleEpisodeClick(episodeDetails.episode_number)}
-          className='group relative line-clamp-1 flex h-12 w-full flex-shrink-0 items-center justify-between gap-1 p-4 text-sm even:bg-white/5 hover:bg-white/10 hover:text-white aria-[current=true]:!bg-white/20 aria-[current=true]:!text-primary-400'
-        >
-          <p className='flex gap-2 tracking-wide'>
-            <span className='font-medium'>
-              {episodeDetails.episode_number}.
-            </span>
-            <span className='line-clamp-1 text-start font-normal'>
-              {episodeDetails.name}
-            </span>
-          </p>
-          <span className='hidden shrink-0 items-center justify-center rounded-full bg-primary-400 p-1 group-aria-[current=true]:flex'>
-            <PlayIcon width='10' height='10' fill='black' stroke='black' />
-          </span>
-        </button>
-      ))}
+    <div className='custom-scrollbars max-h-80 overflow-y-auto lg:max-h-[calc(100svh-16rem)]'>
+      {episodes.map(episodeDetails => {
+        const isActive = episodeDetails.episode_number === episode
+        return (
+          <button
+            key={episodeDetails.id}
+            aria-current={isActive}
+            onClick={() => handleEpisodeClick(episodeDetails.episode_number)}
+            className={`group flex w-full items-center justify-between gap-2 px-4 py-3 text-left text-sm transition-colors hover:bg-white/[0.04] ${
+              isActive
+                ? 'border-l-2 border-accent bg-accent/5 text-accent'
+                : 'border-l-2 border-transparent text-zinc-400'
+            }`}
+          >
+            <p className='flex min-w-0 gap-2'>
+              <span className='shrink-0 font-medium tabular-nums'>
+                {episodeDetails.episode_number}.
+              </span>
+              <span className='line-clamp-1'>{episodeDetails.name}</span>
+            </p>
+            {isActive && (
+              <span className='flex size-6 shrink-0 items-center justify-center rounded-full bg-accent text-accent-foreground'>
+                <Play className='size-2.5 fill-current' />
+              </span>
+            )}
+          </button>
+        )
+      })}
     </div>
   )
 }

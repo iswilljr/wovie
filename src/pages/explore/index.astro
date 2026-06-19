@@ -1,16 +1,12 @@
 ---
-import { Image } from 'astro:assets'
 import Layout from '@/layouts/Layout.astro'
 import { ExplorePage } from '@/components/Explore/Explore'
-import { Search as SearchIcon } from 'lucide-react'
 import {
   getMovieGenres,
   getTrending,
   getTvShowGenres,
   multiSearch,
 } from '@/utils/tmdb'
-import { getImagePath } from '@/utils'
-import type { MovieWithMediaType } from 'tmdb-ts'
 
 const query = Astro.url.searchParams.get('q') ?? ''
 
@@ -22,12 +18,6 @@ const [searchData, trendingResults, movieGenres, tvShowGenres] =
     getTvShowGenres(),
   ])
 
-const trendingMovies = trendingResults.results
-  .filter((movie): movie is MovieWithMediaType => movie.media_type === 'movie')
-  .sort((a, b) => b.vote_average - a.vote_average)
-
-const data = trendingMovies[0]
-
 const uniqueGenres = Array.from(
   new Map(
     [...movieGenres.genres, ...tvShowGenres.genres].map(genre => [
@@ -35,7 +25,7 @@ const uniqueGenres = Array.from(
       genre,
     ])
   ).values()
-)
+).sort((a, b) => a.name.localeCompare(b.name))
 
 Astro.response.headers.set(
   'Cache-Control',
@@ -49,34 +39,24 @@ Astro.response.headers.set('Cloudflare-CDN-Cache-Control', 'max-age=86400')
   description='Discover new movies and tv shows'
   image='https://wovix.app/og.png'
 >
-  <div class='min-h-svh p-4 pt-20 sm:p-12 sm:pt-20'>
-    <div id='opacity-layer' class='pointer-events-none !fixed !inset-0 -z-[1]'>
-    </div>
-    {
-      data && (
-        <Image
-          width='1280'
-          height='720'
-          src={getImagePath(data.backdrop_path, 'w300')}
-          alt={data.title}
-          class='fixed inset-0 -z-[10] aspect-video h-svh w-full object-cover blur'
-        />
-      )
-    }
-    <ExplorePage
-      client:idle
-      query={query}
-      trending={trendingResults.results}
-      searchData={searchData?.results}
-      genres={uniqueGenres}
+  <div class='relative min-h-[calc(100svh-var(--navbar-height))]'>
+    <div
+      class='pointer-events-none absolute inset-x-0 top-0 h-[28rem] bg-hero-vignette'
     >
-      <SearchIcon width='24' height='24' stroke='#9c9c9c' />
-    </ExplorePage>
+    </div>
+    <div
+      class='pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/20 to-transparent'
+    >
+    </div>
+
+    <div class='relative px-4 py-8 sm:px-8 sm:py-10 lg:px-10 lg:py-12'>
+      <ExplorePage
+        client:idle
+        query={query}
+        trending={trendingResults.results}
+        searchData={searchData?.results}
+        genres={uniqueGenres}
+      />
+    </div>
   </div>
 </Layout>
-
-<style is:global>
-  :root {
-    --discover-space: 1rem;
-  }
-</style>

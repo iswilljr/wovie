@@ -13,7 +13,7 @@ import {
   SOURCES,
   type Source,
 } from '@/utils/sources'
-import { ChevronDownIcon, InfoIcon } from 'lucide-react'
+import { ChevronDown, Info } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 
 interface SelectSourceProps {
@@ -70,13 +70,9 @@ export function SelectSource({
   }, [currentSource, mediaId, mediaType])
 
   return (
-    <div className='w-full rounded-2xl bg-white/10 p-2'>
-      <div className='flex items-center !gap-2 p-1'>
-        <span className='text-lg font-medium tracking-wide sm:text-xl'>
-          Sources
-        </span>
-      </div>
-      <div className='custom-scrollbars flex w-full flex-nowrap gap-2 overflow-x-scroll p-2 md:flex-wrap'>
+    <div className='rounded-2xl border border-border-subtle bg-surface-overlay/60 p-4'>
+      <p className='mb-3 text-sm font-medium text-zinc-300'>Sources</p>
+      <div className='custom-scrollbars flex flex-nowrap gap-2 overflow-x-auto pb-1 md:flex-wrap'>
         {firstSources.map(source => (
           <SourceItem
             key={source.id}
@@ -88,13 +84,17 @@ export function SelectSource({
         ))}
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
-            <button className='relative flex shrink-0 cursor-pointer items-center gap-2 rounded-lg bg-black/60 p-2 text-sm leading-tight tracking-wide text-white ring-primary-500 hover:ring-1'>
-              <span className='text-sm'>More</span>
-              <ChevronDownIcon className='size-4 object-cover' />
+            <button className='flex shrink-0 items-center gap-1.5 rounded-lg border border-border-subtle bg-surface-raised px-3 py-2 text-sm text-zinc-400 transition-colors hover:border-accent/30 hover:text-white'>
+              More
+              <ChevronDown className='size-4' />
             </button>
           </PopoverTrigger>
-          <PopoverContent sideOffset={6} align='end' className='w-fit p-0'>
-            <div className='custom-scrollbars flex w-full flex-col flex-wrap gap-2 overflow-x-scroll p-2'>
+          <PopoverContent
+            sideOffset={6}
+            align='end'
+            className='w-fit border-border-subtle bg-surface-raised p-2'
+          >
+            <div className='flex flex-col gap-1.5'>
               {restSources.map(source => (
                 <SourceItem
                   key={source.id}
@@ -108,11 +108,11 @@ export function SelectSource({
           </PopoverContent>
         </Popover>
       </div>
-      <div className='mt-2 flex w-fit items-center gap-2 rounded-lg bg-white/20 p-2 text-gray-300 md:mt-0'>
-        <InfoIcon className='size-5 shrink-0' />
-        <p className='text-sm'>
-          We recommend using an adblocker, some of the sources may include their
-          own ads.
+      <div className='mt-3 flex items-start gap-2 rounded-lg bg-white/[0.03] p-3 text-zinc-500'>
+        <Info className='mt-0.5 size-4 shrink-0' />
+        <p className='text-xs leading-relaxed'>
+          We recommend using an adblocker — some sources may include their own
+          ads.
         </p>
       </div>
     </div>
@@ -140,25 +140,27 @@ function SourceItem({
     )
   }, [onOpenChange, setCurrentSource, source])
 
+  const isActive = source.id === currentSourceId
+
   return (
     <button
       onClick={handleClick}
-      className={cn([
-        'relative flex shrink-0 cursor-pointer items-center gap-2 rounded-lg bg-black/60 p-2 text-sm leading-tight tracking-wide text-white ring-primary-500 hover:ring-1',
-        source.id === currentSourceId && 'bg-primary-700/20 ring-1',
-      ])}
+      className={cn(
+        'flex shrink-0 items-center gap-2 rounded-lg border px-3 py-2 text-sm transition-colors',
+        isActive
+          ? 'border-accent/40 bg-accent/10 text-accent'
+          : 'border-border-subtle bg-surface-raised text-zinc-400 hover:border-accent/20 hover:text-white'
+      )}
     >
-      <span>
-        <img
-          height='100'
-          width='100'
-          alt={`${source.name} source`}
-          src={getSourceIcon(source.id)}
-          loading='lazy'
-          className='size-4 object-cover'
-        />
-      </span>
-      <span className='text-sm'>{source.name}</span>
+      <img
+        height='16'
+        width='16'
+        alt=''
+        src={getSourceIcon(source.id)}
+        loading='lazy'
+        className='size-4 object-cover'
+      />
+      {source.name}
     </button>
   )
 }

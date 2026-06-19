@@ -16,6 +16,7 @@ export interface MediaListProps {
   icon?: React.ReactNode
   enableEditModeOnMobile?: boolean
   isWatchlist?: boolean
+  isLoading?: boolean
   results: Array<
     (TVWithMediaType | MovieWithMediaType | PersonWithMediaType) & {
       watching?: any
@@ -31,6 +32,7 @@ export function MediaList({
   icon,
   enableEditModeOnMobile,
   isWatchlist,
+  isLoading,
 }: MediaListProps) {
   const editModeState = useStore($editModeState)
 
@@ -39,48 +41,56 @@ export function MediaList({
   }, [])
 
   return (
-    <div id={id} className='flex w-full flex-col gap-6 p-4 sm:px-12'>
-      <div className='flex w-full items-center justify-between'>
-        <div className='z-10 flex w-full items-center gap-2 py-1 text-lg font-medium tracking-wide text-white md:text-2xl'>
-          <div className='flex size-6 items-center justify-center rounded bg-primary-500'>
-            {icon}
-          </div>
-          <p>{title}</p>
+    <section id={id} className='group/row px-4 sm:px-8 lg:px-10'>
+      <div className='mb-4 flex items-center justify-between'>
+        <div className='flex items-center gap-3'>
+          {icon && (
+            <div className='flex size-8 items-center justify-center rounded-lg bg-accent/15 text-accent'>
+              {icon}
+            </div>
+          )}
+          <h2 className='text-lg font-semibold tracking-tight text-white sm:text-xl'>
+            {title}
+          </h2>
         </div>
         {enableEditModeOnMobile && (
           <button
             aria-label='Enable Edit Mode'
-            className='flex size-12 items-center justify-center rounded-lg text-gray-400 transition-all duration-300 ease-in-out active:scale-75 md:hidden'
+            className='flex size-10 items-center justify-center rounded-lg text-zinc-500 transition-all active:scale-90 md:hidden'
             onClick={handleDelete}
           >
-            <div className='relative flex size-6 items-center justify-center'>
+            <div className='relative flex size-5 items-center justify-center'>
               <span
                 aria-hidden='true'
-                className={`absolute inset-0 flex size-6 items-center justify-center transition-all duration-300 ease-out ${editModeState.isEditMode ? 'rotate-0 scale-100 opacity-100' : '-rotate-90 scale-75 opacity-0'}`}
+                className={`absolute inset-0 flex items-center justify-center transition-all duration-300 ${editModeState.isEditMode ? 'rotate-0 scale-100 opacity-100' : '-rotate-90 scale-75 opacity-0'}`}
               >
-                <PenOff />
+                <PenOff className='size-5' />
               </span>
               <span
                 aria-hidden='true'
-                className={`absolute inset-0 flex size-6 items-center justify-center transition-all duration-300 ease-out ${editModeState.isEditMode ? 'rotate-90 scale-75 opacity-0' : 'rotate-0 scale-100 opacity-100'}`}
+                className={`absolute inset-0 flex items-center justify-center transition-all duration-300 ${editModeState.isEditMode ? 'rotate-90 scale-75 opacity-0' : 'rotate-0 scale-100 opacity-100'}`}
               >
-                <Edit />
+                <Edit className='size-5' />
               </span>
             </div>
           </button>
         )}
       </div>
-      <div className='relative flex items-center'>
-        <button className='swiper-button swiper-left absolute -left-12 z-20 flex size-12 items-center justify-center text-white'>
-          <ChevronLeft />
+
+      <div className='relative'>
+        <button
+          aria-label='Scroll left'
+          className='swiper-button swiper-left absolute -left-2 top-1/2 z-20 flex size-10 -translate-y-1/2 items-center justify-center rounded-full border border-border-subtle bg-surface-overlay/90 text-white backdrop-blur-sm hover:border-accent/30 sm:-left-5'
+        >
+          <ChevronLeft className='size-5' />
         </button>
         <button
-          id='swiper-right'
-          className='swiper-button swiper-right absolute -right-12 z-20 flex size-12 items-center justify-center text-white'
+          aria-label='Scroll right'
+          className='swiper-button swiper-right absolute -right-2 top-1/2 z-20 flex size-10 -translate-y-1/2 items-center justify-center rounded-full border border-border-subtle bg-surface-overlay/90 text-white backdrop-blur-sm hover:border-accent/30 sm:-right-5'
         >
-          <ChevronRight />
+          <ChevronRight className='size-5' />
         </button>
-        <div className='swiper relative z-10 flex w-full gap-4 overflow-auto rounded-2xl scrollbar-hide'>
+        <div className='swiper -mt-3 flex gap-3 overflow-x-auto pb-1 pt-3 scrollbar-hide sm:gap-4'>
           {results.map(movie =>
             movie.media_type !== 'person' ? (
               <MediaCard
@@ -102,9 +112,9 @@ export function MediaList({
               />
             ) : null
           )}
-          {results.length === 0 && <MediaCardLoader />}
+          {isLoading && results.length === 0 && <MediaCardLoader />}
         </div>
       </div>
-    </div>
+    </section>
   )
 }

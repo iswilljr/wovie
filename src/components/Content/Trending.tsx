@@ -1,22 +1,29 @@
 import useSWR from 'swr'
-import { FlameIcon } from 'lucide-react'
+import { Flame } from 'lucide-react'
 import { MediaList } from '../Media/MediaList'
 import { actions } from 'astro:actions'
 import { swrDefaultOptions } from '@/utils'
 
 export function Trending() {
-  const { data: trending } = useSWR(
+  const { data: trending, isLoading } = useSWR(
     'trendingAll',
     () => actions.trendingAll(),
     swrDefaultOptions
   )
 
+  const results = (trending?.data as any) ?? []
+
+  if (!isLoading && results.length === 0) return null
+
   return (
-    <MediaList
-      id='trending'
-      results={(trending?.data as any) ?? []}
-      title="What's Trending Today"
-      icon={<FlameIcon width='18' height='18' fill='#000' stroke='#000' />}
-    />
+    <div className='trending-bleed-overlap pb-2'>
+      <MediaList
+        id='trending'
+        isLoading={isLoading}
+        results={results}
+        title='Trending Now'
+        icon={<Flame className='size-4' strokeWidth={2} />}
+      />
+    </div>
   )
 }

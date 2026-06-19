@@ -7,15 +7,17 @@ import { Discover } from '../Media/Discover'
 
 export function Content() {
   return (
-    <>
+    <div className='relative'>
       <Discover />
-      <div className='-my-[--discover-space] sm:pb-8'>
+      <div className='relative z-10 -mt-24 sm:-mt-32'>
         <Trending />
-        <Watching />
-        <Watchlist />
-        <Movies />
-        <TVShows />
+        <div className='space-y-10 bg-surface pb-8 sm:space-y-14'>
+          <Watching />
+          <Watchlist />
+          <Movies />
+          <TVShows />
+        </div>
       </div>
-    </>
+    </div>
   )
 }

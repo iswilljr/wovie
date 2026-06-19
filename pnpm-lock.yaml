@@ -80,9 +80,6 @@ importers:
       isbot:
         specifier: 5.1.21
         version: 5.1.21
-      lucide-astro:
-        specifier: 0.456.0
-        version: 0.456.0(astro@5.15.9(@types/node@16.18.11)(@upstash/redis@1.34.7)(jiti@2.4.2)(lightningcss@1.27.0)(rollup@2.79.2)(terser@5.36.0)(typescript@5.7.3)(yaml@2.6.0))
       lucide-react:
         specifier: ^0.456.0
         version: 0.456.0(react@18.3.1)
@@ -5214,7 +5211,6 @@ packages:
 
   libsql@0.5.22:
     resolution: {integrity: sha512-NscWthMQt7fpU8lqd7LXMvT9pi+KhhmTHAJWUB/Lj6MWa0MKFv0F2V4C6WKKpjCVZl0VwcDz4nOI3CyaT1DDiA==}
-    cpu: [x64, arm64, wasm32, arm]
     os: [darwin, linux, win32]
 
   lightningcss-darwin-arm64@1.27.0:
@@ -5324,11 +5320,6 @@ packages:
   lru-cache@6.0.0:
     resolution: {integrity: sha512-Jo6dJ04CmSjuznwJSS3pUeWmd/H0ffTlkXXgwZi+eq1UCmqQwCh+eLsYOYCwY991i2Fah4h1BEMCx4qThGbsiA==}
     engines: {node: '>=10'}
-
-  lucide-astro@0.456.0:
-    resolution: {integrity: sha512-nXy48K93Yc79pxT7jm7UCNbjNyf+JuPVT+58UhvJqih1FtQULn+llKbDBfP9LRVeXaToM5a/CwQa5jiln/u+ww==}
-    peerDependencies:
-      astro: '>=2.7.1'
 
   lucide-react@0.456.0:
     resolution: {integrity: sha512-DIIGJqTT5X05sbAsQ+OhA8OtJYyD4NsEMCA/HQW/Y6ToPQ7gwbtujIoeAaup4HpHzV35SQOarKAWH8LYglB6eA==}
@@ -13318,10 +13309,6 @@ snapshots:
   lru-cache@6.0.0:
     dependencies:
       yallist: 4.0.0
-
-  lucide-astro@0.456.0(astro@5.15.9(@types/node@16.18.11)(@upstash/redis@1.34.7)(jiti@2.4.2)(lightningcss@1.27.0)(rollup@2.79.2)(terser@5.36.0)(typescript@5.7.3)(yaml@2.6.0)):
-    dependencies:
-      astro: 5.15.9(@types/node@16.18.11)(@upstash/redis@1.34.7)(jiti@2.4.2)(lightningcss@1.27.0)(rollup@2.79.2)(terser@5.36.0)(typescript@5.7.3)(yaml@2.6.0)
 
   lucide-react@0.456.0(react@18.3.1):
     dependencies:

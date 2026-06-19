@@ -3,7 +3,7 @@ import { getSource } from '@/utils/sources'
 import { getEpisodeUrl } from '@/utils/url'
 import { useStore } from '@nanostores/react'
 import { navigate } from 'astro:transitions/client'
-import { SkipBackIcon, SkipForwardIcon } from 'lucide-react'
+import { SkipBack, SkipForward } from 'lucide-react'
 
 interface NextPrevButtonsProps {
   season: number
@@ -52,33 +52,33 @@ export function NextPrevButtons({
     void navigate(getEpisodeUrl(mediaId, mediaTitle, newSeason, 1, source.id))
   }
 
+  const btnClass =
+    'group flex items-center gap-1.5 rounded-xl border border-border-subtle bg-surface-overlay px-4 py-2 text-sm font-medium text-zinc-300 transition-all hover:border-accent/30 hover:text-white active:scale-[0.98]'
+
   return (
-    <div className='flex w-full items-center justify-end gap-2 rounded-2xl bg-white/10 p-2'>
+    <div className='flex items-center justify-end gap-2'>
       {!isFirstEpisode && (
         <button
           onClick={() => handleEpisodeClick(episode - 1)}
-          className='group flex items-center justify-center gap-1 rounded-2xl bg-black/50 px-4 py-2 text-lg text-white transition-colors duration-200 active:bg-black/70 active:ring-2 active:ring-primary-500/80 active:ring-offset-0'
+          className={btnClass}
         >
-          <SkipBackIcon className='size-5 text-white transition-transform duration-200 group-hover:-translate-x-1 group-active:-translate-x-2' />
-          Prev
+          <SkipBack className='size-4 transition-transform group-hover:-translate-x-0.5' />
+          Previous
         </button>
       )}
       {!isLastEpisode && (
         <button
           onClick={() => handleEpisodeClick(episode + 1)}
-          className='group flex items-center justify-center gap-1 rounded-2xl bg-black/50 px-4 py-2 text-lg text-white active:bg-black/70 active:ring-2 active:ring-primary-500/80 active:ring-offset-0'
+          className={btnClass}
         >
           Next
-          <SkipForwardIcon className='size-5 text-white transition-transform duration-200 group-hover:translate-x-1 group-active:translate-x-2' />
+          <SkipForward className='size-4 transition-transform group-hover:translate-x-0.5' />
         </button>
       )}
       {isLastEpisode && !isLastSeason && (
-        <button
-          onClick={handleNextSeason}
-          className='group flex items-center justify-center gap-1 rounded-2xl bg-black/50 px-4 py-2 text-lg text-white active:bg-black/70 active:ring-2 active:ring-primary-500/80 active:ring-offset-0'
-        >
+        <button onClick={handleNextSeason} className={btnClass}>
           Next Season
-          <SkipForwardIcon className='size-5 text-white transition-transform duration-200 group-hover:translate-x-1 group-active:translate-x-2' />
+          <SkipForward className='size-4 transition-transform group-hover:translate-x-0.5' />
         </button>
       )}
     </div>

@@ -4,7 +4,7 @@ import { Progress } from '@/components/ui/progress'
 import { DeleteWatchingButton } from './DeleteWatchingButton'
 import { useStore } from '@nanostores/react'
 import { $editModeState } from '@/store/editMode'
-import { BookmarkIcon, BookmarkCheckIcon } from 'lucide-react'
+import { BookmarkIcon, BookmarkCheckIcon, Play } from 'lucide-react'
 import { useWatchlist } from '@/hooks/useWatchlist'
 import { Button } from '../ui/button'
 
@@ -45,7 +45,7 @@ export function MediaCard({
 
   const mediaTitle =
     media === 'tv' && isWatching
-      ? `${title} - S${watching.season}E${watching.episode}`
+      ? `${title} · S${watching.season}E${watching.episode}`
       : title
 
   const percentageWatched = isWatching
@@ -69,10 +69,9 @@ export function MediaCard({
   return (
     <div
       data-watching-id={isWatching ? id : undefined}
-      className='swiper-item group relative flex aspect-[2/1] h-fit w-full flex-shrink-0 flex-col gap-2 overflow-hidden rounded-2xl xs:w-8/12 sm:w-80'
+      className='swiper-item group relative w-[17rem] flex-shrink-0 xs:w-[18rem] sm:w-[19rem]'
     >
       <a
-        className=''
         href={getTvOrMovieUrl(
           media,
           id,
@@ -81,47 +80,52 @@ export function MediaCard({
           watching?.episode,
           watching?.sourceId
         )}
+        className='relative block overflow-hidden rounded-xl bg-surface-overlay shadow-card ring-1 ring-border-subtle transition-all duration-300 hover:-translate-y-1 hover:shadow-glow hover:ring-accent/20'
       >
-        <div className='z-0'>
+        <div className='relative aspect-[16/9] overflow-hidden'>
           {image && (
             <img
               width='780'
-              height='440'
+              height='439'
               loading='lazy'
               alt={title}
               src={getImagePath(image, 'w780')}
-              className='h-full w-full object-cover object-center duration-150 group-hover:scale-[1.03] group-focus:scale-[1.03]'
+              className='h-full w-full object-cover transition-transform duration-500 group-hover:scale-105'
             />
           )}
-        </div>
-        <div className='gradient-opacity absolute inset-0 flex h-full w-full flex-col justify-end gap-1 rounded-2xl p-3 ring-inset ring-primary-500 duration-150 group-hover:ring-2 group-focus:ring-2 md:gap-2'>
-          <p className='line-clamp-2 text-sm font-bold uppercase !leading-none tracking-wide text-white sm:text-base'>
-            {mediaTitle}
-          </p>
-          <div className='flex flex-wrap gap-1 text-xs font-normal !leading-tight tracking-wider text-primary-400'>
-            <p>Rating: {rating.toFixed(1)}</p>
-            <span>•</span>
-            <p>{formatDate(releaseDate)}</p>
-            <span>•</span>
-            <p className='uppercase'>{language}</p>
-            <span>•</span>
-            <p>{quality ?? 'HD'}</p>
+          <div className='absolute inset-0 bg-card-shine opacity-0 transition-opacity group-hover:opacity-100' />
+          <div className='absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100'>
+            <span className='flex size-10 items-center justify-center rounded-full bg-accent text-accent-foreground shadow-glow'>
+              <Play className='size-4 fill-current' />
+            </span>
+          </div>
+          <div className='cinematic-gradient absolute inset-x-0 bottom-0 h-2/3' />
+          <div className='absolute inset-x-0 bottom-0 space-y-0.5 p-3'>
+            <p className='line-clamp-2 text-sm font-medium leading-snug text-white sm:text-base'>
+              {mediaTitle}
+            </p>
+            <p className='text-[10px] text-zinc-400 sm:text-xs'>
+              {formatDate(releaseDate)} · {language.toUpperCase()} ·{' '}
+              {quality ?? 'HD'}
+            </p>
           </div>
         </div>
         {percentageWatched > 0 && (
-          <div className='absolute bottom-0 left-0 w-full duration-300 group-hover:opacity-20'>
-            <Progress className='h-1' value={percentageWatched} />
+          <div className='absolute bottom-0 left-0 right-0'>
+            <Progress
+              className='h-0.5 rounded-none bg-white/10'
+              value={percentageWatched}
+            />
           </div>
         )}
       </a>
+
       {isWatching && (
         <div
           className={cn(
-            'ease-[cubic-bezier(.34,1.56,.64,1)] absolute right-2 top-2 transition-all duration-500 will-change-transform',
-            'opacity-0 md:group-hover:opacity-100 md:group-focus:opacity-100',
-            editModeState.isEditMode
-              ? 'translate-y-0 rotate-0 scale-100 opacity-100 shadow-lg'
-              : ''
+            'absolute right-1.5 top-1.5 transition-all duration-300',
+            'opacity-0 md:group-hover:opacity-100',
+            editModeState.isEditMode && 'opacity-100'
           )}
         >
           <DeleteWatchingButton id={id} mediaTitle={mediaTitle} />
@@ -132,9 +136,9 @@ export function MediaCard({
           onClick={toggleWatchlist}
           size='icon'
           className={cn(
-            'absolute right-2 top-2 z-10 h-7 w-7 rounded-full',
-            'opacity-0 group-hover:opacity-100 group-focus:opacity-100',
-            inWatchlist && 'bg-primary-500 text-white',
+            'absolute right-1.5 top-1.5 z-10 rounded-lg bg-black/60 p-1.5 text-white backdrop-blur-sm transition-all hover:bg-accent hover:text-accent-foreground',
+            'opacity-0 group-hover:opacity-100',
+            inWatchlist && 'bg-accent text-accent-foreground opacity-100',
             isWatchlist && 'opacity-100'
           )}
           aria-label={
@@ -142,9 +146,9 @@ export function MediaCard({
           }
         >
           {inWatchlist ? (
-            <BookmarkCheckIcon width={16} height={16} />
+            <BookmarkCheckIcon width={14} height={14} />
           ) : (
-            <BookmarkIcon width={16} height={16} />
+            <BookmarkIcon width={14} height={14} />
           )}
         </Button>
       )}

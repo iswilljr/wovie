@@ -6,8 +6,6 @@ import { getTvOrMovieUrl } from '@/utils/url'
 import { Loader } from './Loader'
 import type { MultiSearchResult } from 'tmdb-ts'
 
-// const LIMIT = 3
-
 interface SearchPostProps {
   result: MultiSearchResult
   onClick?: () => void
@@ -30,27 +28,25 @@ function SearchPost({ result, onClick }: SearchPostProps) {
       key={result.id}
       onClick={onClick}
       href={getTvOrMovieUrl(result.media_type, result.id, slugifyTitle(title))}
-      className='flex aspect-[4/1] w-full flex-shrink-0 gap-1 overflow-hidden rounded-md hover:bg-white/10'
+      className='flex gap-3 rounded-xl p-2 transition-colors hover:bg-white/5'
     >
-      <div className='aspect-[3/4] h-full flex-shrink-0 overflow-hidden rounded-md bg-zinc-700/90'>
+      <div className='aspect-[2/3] h-16 flex-shrink-0 overflow-hidden rounded-lg bg-surface-overlay ring-1 ring-border-subtle'>
         {result.poster_path && (
           <img
-            src={getImagePath(result.poster_path, 'w300')}
-            width='300'
-            height='450'
+            src={getImagePath(result.poster_path, 'w154')}
+            width='154'
+            height='231'
             loading='lazy'
-            className='h-full w-full scale-105 object-cover'
+            className='h-full w-full object-cover'
           />
         )}
       </div>
-      <div className='flex h-full flex-grow flex-col gap-2 p-2'>
-        <p className='line-clamp-1 text-sm font-semibold !leading-tight text-white/90'>
+      <div className='flex min-w-0 flex-col justify-center gap-1'>
+        <p className='line-clamp-1 text-sm font-medium text-zinc-200'>
           {title}
         </p>
-        <p className='flex gap-[5px] text-[.7rem] font-medium !leading-none text-primary-400 2xl:text-xs'>
-          <span className=''>{isMovie ? 'Movie' : 'TV'}</span>
-          <span>•</span>
-          <span>{year}</span>
+        <p className='text-xs text-zinc-500'>
+          {isMovie ? 'Movie' : 'TV'} · {year}
         </p>
       </div>
     </a>
@@ -70,13 +66,10 @@ export function Search({ children }: React.ComponentProps<'div'>) {
   useOnClickOutside(ref, handleBlur)
 
   return (
-    <div
-      ref={ref}
-      className='group relative hidden flex-col items-center gap-3 sm:flex md:gap-4'
-    >
+    <div ref={ref} className='relative hidden sm:block'>
       <div
         style={{ viewTransitionName: 'search' }}
-        className='flex h-8 items-center gap-2 rounded-lg bg-white/20 px-2 backdrop-blur'
+        className='flex h-9 w-64 items-center gap-2 rounded-xl border border-border-subtle bg-surface-overlay/60 px-3 backdrop-blur-sm transition-colors focus-within:border-accent/30 focus-within:bg-surface-overlay'
       >
         {children}
         <input
@@ -84,32 +77,23 @@ export function Search({ children }: React.ComponentProps<'div'>) {
           id='search-query'
           onFocus={handleFocus}
           onChange={handleInput}
-          placeholder='Search Anything...'
-          className='w-56 bg-transparent text-xs font-normal leading-8 tracking-wide text-white/90 outline-none'
+          placeholder='Search titles...'
+          className='w-full bg-transparent text-sm text-zinc-200 outline-none placeholder:text-zinc-500'
         />
       </div>
       {query.length > 0 && (
         <div
-          className={`custom-scrollbars absolute left-0 top-full max-h-72 w-full flex-col gap-2 overflow-y-auto rounded-lg bg-black/90 p-2 ${isFocused ? 'flex' : 'hidden'}`}
+          className={`custom-scrollbars absolute left-0 top-[calc(100%+8px)] max-h-80 w-full flex-col gap-1 overflow-y-auto rounded-xl border border-border-subtle bg-surface-raised p-2 shadow-card ${isFocused ? 'flex' : 'hidden'}`}
         >
           {isLoading && <Loader />}
           {!isLoading && results.length === 0 && (
-            <p className='py-3 text-center text-gray-500'>No results found!</p>
+            <p className='py-4 text-center text-sm text-zinc-500'>
+              No results found
+            </p>
           )}
           {results.map(result => (
             <SearchPost key={result.id} result={result} onClick={handleBlur} />
           ))}
-          {/* {results.length > LIMIT && (
-            <div className='flex h-full flex-col items-center justify-end'>
-              <a
-                href={`/explore?q=${query}`}
-                onClick={handleBlur}
-                className='w-full rounded-lg px-4 py-1 text-center text-sm text-white'
-              >
-                View {results.length - LIMIT} more results
-              </a>
-            </div>
-          )} */}
         </div>
       )}
     </div>
@@ -140,14 +124,14 @@ export function SearchMobile({ children }: React.ComponentProps<'div'>) {
       <button
         onClick={handleClick}
         aria-label='Search'
-        className='flex size-8 items-center justify-center rounded-lg bg-white/20 sm:hidden'
+        className='flex size-9 items-center justify-center rounded-xl border border-border-subtle bg-surface-overlay/60'
       >
         {children}
       </button>
       {open && (
-        <div className='fixed inset-0 h-svh w-full space-y-4 bg-black/80 p-4'>
-          <div className='flex w-full items-center justify-between gap-2'>
-            <div className='flex h-8 flex-1 items-center gap-2 rounded-lg bg-white/20 px-2 backdrop-blur'>
+        <div className='fixed inset-0 z-[100] flex flex-col bg-surface/95 p-4 backdrop-blur-xl'>
+          <div className='flex items-center gap-2'>
+            <div className='flex h-11 flex-1 items-center gap-2 rounded-xl border border-border-subtle bg-surface-overlay px-3'>
               {children}
               <input
                 autoFocus
@@ -155,18 +139,18 @@ export function SearchMobile({ children }: React.ComponentProps<'div'>) {
                 id='mobile-query'
                 defaultValue={query}
                 onInput={handleInput}
-                placeholder='Search Anything...'
-                className='w-full bg-transparent text-xs font-normal leading-8 tracking-wide text-white/90 outline-none'
+                placeholder='Search titles...'
+                className='w-full bg-transparent text-sm text-zinc-200 outline-none placeholder:text-zinc-500'
               />
             </div>
             <button
-              className='flex size-8 items-center justify-center gap-2 rounded-lg bg-white/10 text-xs backdrop-blur sm:hidden sm:px-2'
+              className='flex size-11 items-center justify-center rounded-xl border border-border-subtle text-zinc-400'
               onClick={handleClick}
             >
               <svg
                 xmlns='http://www.w3.org/2000/svg'
-                width='16'
-                height='16'
+                width='18'
+                height='18'
                 viewBox='0 0 24 24'
                 fill='none'
                 stroke='currentColor'
@@ -179,7 +163,7 @@ export function SearchMobile({ children }: React.ComponentProps<'div'>) {
               </svg>
             </button>
           </div>
-          <div className='custom-scrollbars flex h-full max-h-[calc(100%-3rem)] w-full flex-col gap-2 overflow-y-auto'>
+          <div className='custom-scrollbars mt-4 flex flex-1 flex-col gap-1 overflow-y-auto'>
             {results.map(result => (
               <SearchPost
                 key={result.id}
@@ -188,15 +172,13 @@ export function SearchMobile({ children }: React.ComponentProps<'div'>) {
               />
             ))}
             {isLoading && (
-              <div className='flex h-full flex-col items-center justify-center'>
+              <div className='flex flex-1 items-center justify-center'>
                 <Loader />
               </div>
             )}
             {!isLoading && query.length > 0 && results.length === 0 && (
-              <div className='flex h-full flex-col items-center justify-center'>
-                <p className='py-3 text-center text-gray-500'>
-                  No results found!
-                </p>
+              <div className='flex flex-1 items-center justify-center'>
+                <p className='text-sm text-zinc-500'>No results found</p>
               </div>
             )}
           </div>

@@ -1,7 +1,7 @@
 ---
 import 'sonner/dist/styles.css'
+import Navbar from '@/components/Layout/Navbar.astro'
 import Footer from '@/components/Home/Footer.astro'
-import Header from '@/components/Home/Header.astro'
 import { ClientRouter } from 'astro:transitions'
 import '@/styles/globals.css'
 import { Toaster } from '@/components/ui/sonner'
@@ -11,13 +11,20 @@ interface Props {
   description: string
   image: string
   noIndex?: boolean
+  transparentBg?: boolean
 }
 
-const { title, description, image, noIndex = false } = Astro.props
+const {
+  title,
+  description,
+  image,
+  noIndex = false,
+  transparentBg = false,
+} = Astro.props
 ---
 
 <!doctype html>
-<html lang='en' class='dark'>
+<html lang='en' class:list={['dark', transparentBg && 'bg-transparent']}>
   <head>
     <meta charset='UTF-8' />
     {
@@ -28,30 +35,42 @@ const { title, description, image, noIndex = false } = Astro.props
       )
     }
     <meta name='description' content={description} />
-    <meta name='viewport' content='width=device-width' />
+    <meta name='viewport' content='width=device-width, initial-scale=1' />
     <link rel='icon' type='image/png' href='/favicon.png' />
+    <link rel='preconnect' href='https://fonts.googleapis.com' />
+    <link rel='preconnect' href='https://fonts.gstatic.com' crossorigin />
+    <link
+      href='https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap'
+      rel='stylesheet'
+    />
     <title>{title}</title>
     <ClientRouter />
-    <!-- open graph -->
     <meta property='og:image' content={image} />
     <meta property='og:image:width' content='1280' />
     <meta property='og:image:height' content='720' />
     <meta property='og:image:alt' content={title} />
     <meta property='og:title' content={title} />
     <meta property='og:description' content={description} />
-    <!-- twitter -->
     <meta name='twitter:card' content='summary_large_image' />
     <meta name='twitter:title' content={title} />
     <meta name='twitter:description' content={description} />
     <meta name='twitter:image' content={image} />
-    <!-- PWA -->
     <script is:inline src='/registerSW.js'></script>
     <link rel='manifest' href='/manifest.webmanifest' />
   </head>
-  <body>
-    <Header />
-    <slot />
-    <Footer />
+  <body
+    class:list={[
+      'overflow-x-hidden text-zinc-100 antialiased',
+      !transparentBg && 'bg-surface',
+    ]}
+  >
+    <div class='flex min-h-svh flex-col'>
+      <Navbar />
+      <main class='flex-1 pt-[var(--navbar-height)]'>
+        <slot />
+      </main>
+      <Footer />
+    </div>
     <Toaster client:idle />
   </body>
 </html>
