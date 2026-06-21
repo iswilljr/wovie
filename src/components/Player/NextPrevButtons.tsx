@@ -1,7 +1,7 @@
 import { $playerState } from '@/store/player'
+import { usePlayerEpisode } from '@/hooks/usePlayerEpisode'
 import { getSource } from '@/utils/sources'
 import { getEpisodeUrl } from '@/utils/url'
-import { useStore } from '@nanostores/react'
 import { navigate } from 'astro:transitions/client'
 import { SkipBackIcon, SkipForwardIcon } from 'lucide-react'
 
@@ -24,22 +24,26 @@ export function NextPrevButtons({
   totalSeasons,
   initialEpisode,
 }: NextPrevButtonsProps) {
-  const playerState = useStore($playerState)
-  const episode = playerState.episode ?? initialEpisode
+  const { episode } = usePlayerEpisode(mediaId, season, initialEpisode)
 
   const isFirstEpisode = episode <= firstEpisode
   const isLastEpisode = episode >= lastEpisode
   const isLastSeason = season >= totalSeasons
 
-  const handleEpisodeClick = (episode: number) => {
-    $playerState.set({ ...$playerState.get(), episode })
+  const handleEpisodeClick = (nextEpisode: number) => {
     const searchParams = new URL(window.location.href).searchParams
     const source = getSource(searchParams.get('source'))
+    $playerState.set({
+      mediaId,
+      season,
+      episode: nextEpisode,
+      source: source.id,
+    })
     window.history.replaceState(
       {},
       '',
       new URL(
-        getEpisodeUrl(mediaId, mediaTitle, season, episode, source.id),
+        getEpisodeUrl(mediaId, mediaTitle, season, nextEpisode, source.id),
         window.location.href
       ).toString()
     )

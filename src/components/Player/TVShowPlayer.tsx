@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { $playerState } from '@/store/player'
+import { $playerState, isPlayerContextValid } from '@/store/player'
 import { getTvUrl } from '@/utils/sources'
 import { slugifyTitle } from '@/utils'
 import { SelectSeason } from './SelectSeason'
@@ -42,9 +42,28 @@ export function TVShowPlayer({
 
   const iframeUrl = getTvUrl(currentSourceId, id, season, episode)
 
+  const currentState = $playerState.get()
+  if (
+    !isPlayerContextValid(currentState, id, season) ||
+    currentState.episode !== episode ||
+    currentState.source !== currentSourceId
+  ) {
+    $playerState.set({
+      mediaId: id,
+      season,
+      episode,
+      source: currentSourceId,
+    })
+  }
+
   useEffect(() => {
-    $playerState.set({ ...$playerState.get(), episode })
-  }, [episode])
+    $playerState.set({
+      mediaId: id,
+      season,
+      episode,
+      source: currentSourceId,
+    })
+  }, [id, season, episode, currentSourceId])
 
   return (
     <div className='mt-4 flex w-full flex-col-reverse gap-2 shadow-2xl lg:flex-row'>

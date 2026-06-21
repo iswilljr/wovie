@@ -1,8 +1,7 @@
 import { useEffect } from 'react'
 import { PlayIcon } from 'lucide-react'
-import { useStore } from '@nanostores/react'
 import { $playerState } from '@/store/player'
-import { getSeasonOrEpisode } from '@/utils'
+import { usePlayerEpisode } from '@/hooks/usePlayerEpisode'
 import { getEpisodeUrl } from '@/utils/url'
 import { getSource, getTvUrl } from '@/utils/sources'
 import type { Episode } from 'tmdb-ts'
@@ -22,18 +21,22 @@ export function SelectEpisode({
   mediaTitle,
   initialEpisode,
 }: SelectEpisodeProps) {
-  const playerState = useStore($playerState)
-  const episode = playerState.episode ?? initialEpisode
+  const { episode } = usePlayerEpisode(mediaId, season, initialEpisode)
 
-  const handleEpisodeClick = (episode: number) => {
-    $playerState.set({ ...$playerState.get(), episode })
+  const handleEpisodeClick = (nextEpisode: number) => {
     const searchParams = new URL(window.location.href).searchParams
     const source = getSource(searchParams.get('source'))
+    $playerState.set({
+      mediaId,
+      season,
+      episode: nextEpisode,
+      source: source.id,
+    })
     window.history.replaceState(
       {},
       '',
       new URL(
-        getEpisodeUrl(mediaId, mediaTitle, season, episode, source.id),
+        getEpisodeUrl(mediaId, mediaTitle, season, nextEpisode, source.id),
         window.location.href
       ).toString()
     )
@@ -41,23 +44,16 @@ export function SelectEpisode({
 
   useEffect(() => {
     const playerVideo = document.querySelector('#player-video')
-    const currentEpisodeNumber = $playerState.get().episode
-    const episodeIndex = episodes.findIndex(
-      episodeDetails => episodeDetails.episode_number === currentEpisodeNumber
+    const episodeDetails = episodes.find(
+      details => details.episode_number === episode
     )
-
-    const episodeDetails = episodes[episodeIndex]
 
     if (!playerVideo || !episodeDetails) return
 
     const container = playerVideo.parentElement
     const olsSrc = playerVideo.getAttribute('src')
     const searchParams = new URL(window.location.href).searchParams
-
     const source = getSource(searchParams.get('source'))
-    const season = getSeasonOrEpisode(searchParams.get('season'))
-    const episode = episodeDetails.episode_number
-
     const newSrc = getTvUrl(source.id, mediaId, season, episode)
 
     if (olsSrc === newSrc || !container) return
@@ -65,7 +61,7 @@ export function SelectEpisode({
     playerVideo.remove()
     playerVideo.setAttribute('src', newSrc)
     container?.append(playerVideo)
-  }, [episodes, mediaId, episode])
+  }, [episodes, mediaId, season, episode])
 
   return (
     <div className='custom-scrollbars overflow-y-auto'>

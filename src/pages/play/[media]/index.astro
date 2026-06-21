@@ -40,7 +40,7 @@ if (media === 'tv') {
   seasonDetails = tvShowSeason
 }
 
-if (!result) {
+if (!result || (media === 'tv' && !seasonDetails)) {
   return Astro.rewrite('/404')
 }
 
@@ -105,7 +105,8 @@ Astro.response.headers.set('Cloudflare-CDN-Cache-Control', 'max-age=86400')
       {
         result.media_type === 'tv' ? (
           <TVShowPlayer
-            client:idle
+            client:load
+            key={`${result.id}-${season}-${episode}-${currentSource.id}`}
             season={season}
             result={result}
             episode={episode}
@@ -125,7 +126,8 @@ Astro.response.headers.set('Cloudflare-CDN-Cache-Control', 'max-age=86400')
             </div>
             <div>
               <SelectSource
-                client:idle
+                client:load
+                key={`${result.id}-${currentSource.id}`}
                 mediaType='movie'
                 mediaId={result.id}
                 currentSourceId={currentSource.id}

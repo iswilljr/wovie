@@ -30,6 +30,10 @@ export function SelectSource({
   const [open, setOpen] = useState(false)
   const [currentSource, setCurrentSource] = useState(getSource(currentSourceId))
 
+  useEffect(() => {
+    setCurrentSource(getSource(currentSourceId))
+  }, [currentSourceId])
+
   const currentSourceIndex = SOURCES.findIndex(
     source => source.id === currentSource.id
   )
