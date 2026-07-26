@@ -63,6 +63,10 @@ export async function getSeasonDetails(id: number, season: number) {
   return await tmdb.tvShows.season(id, season)
 }
 
+export async function findByImdbId(imdbId: string) {
+  return await tmdb.find.byExternalId(imdbId, { external_source: 'imdb_id' })
+}
+
 export async function getReleaseDates(id: number) {
   return await tmdb.movies.releaseDates(id)
 }
