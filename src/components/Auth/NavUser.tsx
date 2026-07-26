@@ -1,5 +1,6 @@
 import { LogOutIcon } from 'lucide-react'
 import { useSession } from '@/hooks/use-session'
+import { useSimklRedirect } from '@/hooks/use-simkl'
 import { Separator } from '@/components/ui/separator'
 import {
   Popover,
@@ -7,6 +8,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover'
 import { AuthDialog } from '@/components/Auth/Auth'
+import { SimklMenu } from '@/components/Auth/SimklMenu'
 import { client } from '@/utils/auth/react'
 
 async function handleLogout() {
@@ -16,6 +18,8 @@ async function handleLogout() {
 
 export function NavUser() {
   const { user, isLoading, isAuthenticated } = useSession()
+
+  useSimklRedirect()
 
   if (isLoading || !isAuthenticated) {
     return <AuthDialog />
@@ -31,7 +35,7 @@ export function NavUser() {
         </button>
       </PopoverTrigger>
       <PopoverContent
-        className='w-56 max-w-40 overflow-hidden rounded-lg p-0'
+        className='w-56 overflow-hidden rounded-lg p-0'
         align='end'
         sideOffset={8}
       >
@@ -45,6 +49,7 @@ export function NavUser() {
             </div>
           </div>
         </div>
+        <SimklMenu />
         <Separator />
         <div className='p-1'>
           <button

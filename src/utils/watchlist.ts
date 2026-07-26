@@ -2,11 +2,7 @@ import { db, desc, and, eq, Watchlist } from 'astro:db'
 import { auth } from './auth/server'
 import type { MovieWithMediaType, TVWithMediaType } from 'tmdb-ts'
 import { getMovie, getTVShow } from './tmdb'
-import {
-  pushWatchlistAdd,
-  pushWatchlistRemove,
-  toSimklRef,
-} from './simkl/sync'
+import { pushWatchlistAdd, pushWatchlistRemove, toSimklRef } from './simkl/sync'
 
 type MovieOrTV = MovieWithMediaType | TVWithMediaType
 

@@ -166,13 +166,14 @@ export async function pushWatchProgress(
       return
     }
 
-    await simklFetch('/sync/history', {
-      token,
-      method: 'POST',
-      body: toSimklPayload(media, {
-        seasons: [{ number: season, episodes: [{ number: episode }] }],
-      }),
-    })
+    const watched =
+      media.mediaType === 'movie'
+        ? toSimklPayload(media)
+        : toSimklPayload(media, {
+            seasons: [{ number: season, episodes: [{ number: episode }] }],
+          })
+
+    await simklFetch('/sync/history', { token, method: 'POST', body: watched })
   })
 }
 
@@ -289,15 +290,18 @@ export async function importWatchlist(
     const batch = pending.slice(index, index + IMPORT_CONCURRENCY)
 
     const results = await Promise.all(
-      batch.map(async item =>
-        await importItem(userId, item).catch(error => {
+      batch.map(item =>
+        importItem(userId, item).catch(error => {
           console.error('Unable to import Simkl item', error)
           return false
         })
       )
     )
 
-    results.forEach(result => (result ? imported++ : skipped++))
+    for (const result of results) {
+      if (result) imported++
+      else skipped++
+    }
   }
 
   await setLastImportedAt(userId)
