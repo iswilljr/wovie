@@ -1,4 +1,5 @@
 import { auth } from '@/utils/auth/server'
+import { pushWatchProgress } from '@/utils/simkl/sync'
 import { getSource } from '@/utils/sources'
 import { getMovie, getSeasonDetails, getTVShow } from '@/utils/tmdb'
 import type { APIRoute } from 'astro'
@@ -31,7 +32,7 @@ export const POST: APIRoute = async ({ request }) => {
     const input = InputDataSchema.parse(await request.json())
 
     const watching = await getWatchingMovieOrShow(input, session.user.id)
-    const { details, runtime, watchedTime } = await getWatchingDetails(
+    const { details, runtime, watchedTime, isNew } = await getWatchingDetails(
       input,
       watching
     )
@@ -51,20 +52,32 @@ export const POST: APIRoute = async ({ request }) => {
           sourceId: source.id,
         })
         .where(eq(Watching.id, watching.id))
-
-      return new Response('Updated watching data')
+    } else {
+      await db.insert(Watching).values({
+        ...input,
+        runtime,
+        details,
+        watchedTime,
+        sourceId: source.id,
+        userId: session.user.id,
+      })
     }
 
-    await db.insert(Watching).values({
-      ...input,
-      runtime,
-      details,
-      watchedTime,
-      sourceId: source.id,
-      userId: session.user.id,
-    })
+    await pushWatchProgress(
+      session.user.id,
+      { tmdbId: input.mediaId, mediaType: input.mediaType },
+      {
+        runtime,
+        watchedTime,
+        season: input.season,
+        episode: input.episode,
+        previousWatchedTime: isNew ? null : (watching?.watchedTime ?? null),
+      }
+    )
 
-    return new Response('Added to watching list')
+    return new Response(
+      watching != null ? 'Updated watching data' : 'Added to watching list'
+    )
   } catch (error) {
     console.error(error)
     return new Response('Unable to add watching data', { status: 500 })
@@ -123,5 +136,5 @@ async function getWatchingDetails(
 
   if (watchedTime > runtime) watchedTime = runtime
 
-  return { details, runtime, watchedTime }
+  return { details, runtime, watchedTime, isNew }
 }

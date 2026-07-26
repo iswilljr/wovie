@@ -10,8 +10,21 @@ import {
   deleteFromWatchlist,
   getWatchlist,
 } from '@/utils/watchlist'
+import {
+  deleteSimklAccount,
+  getSimklAccount,
+  getSimklUserId,
+} from '@/utils/simkl/account'
+import { isSimklEnabled } from '@/utils/simkl/client'
+import { importWatchlist } from '@/utils/simkl/sync'
 import { defineAction } from 'astro:actions'
 import { z } from 'astro:schema'
+
+const disconnectedSimkl = {
+  enabled: isSimklEnabled,
+  connected: false,
+  userName: null,
+}
 
 export const server = {
   discoverByGenre: defineAction({
@@ -161,6 +174,58 @@ export const server = {
         return true
       } catch (e) {
         return false
+      }
+    },
+  }),
+  simklStatus: defineAction({
+    handler: async (_, context) => {
+      try {
+        if (!isSimklEnabled) return disconnectedSimkl
+
+        const userId = await getSimklUserId(context.request.headers)
+
+        if (!userId) return disconnectedSimkl
+
+        const account = await getSimklAccount(userId)
+
+        return {
+          enabled: true,
+          connected: account != null,
+          userName: account?.userName ?? null,
+        }
+      } catch (e) {
+        console.error('Error fetching Simkl status', e)
+        return disconnectedSimkl
+      }
+    },
+  }),
+  disconnectSimkl: defineAction({
+    handler: async (_, context) => {
+      try {
+        const userId = await getSimklUserId(context.request.headers)
+
+        if (!userId) return false
+
+        await deleteSimklAccount(userId)
+
+        return true
+      } catch (e) {
+        console.error('Error disconnecting Simkl account', e)
+        return false
+      }
+    },
+  }),
+  importSimklWatchlist: defineAction({
+    handler: async (_, context) => {
+      try {
+        const userId = await getSimklUserId(context.request.headers)
+
+        if (!userId) return null
+
+        return await importWatchlist(userId)
+      } catch (e) {
+        console.error('Error importing Simkl watchlist', e)
+        return null
       }
     },
   }),

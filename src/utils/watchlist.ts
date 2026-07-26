@@ -2,6 +2,11 @@ import { db, desc, and, eq, Watchlist } from 'astro:db'
 import { auth } from './auth/server'
 import type { MovieWithMediaType, TVWithMediaType } from 'tmdb-ts'
 import { getMovie, getTVShow } from './tmdb'
+import {
+  pushWatchlistAdd,
+  pushWatchlistRemove,
+  toSimklRef,
+} from './simkl/sync'
 
 type MovieOrTV = MovieWithMediaType | TVWithMediaType
 
@@ -67,6 +72,8 @@ export async function addToWatchlist({
       userId: session.user.id,
     })
     .onConflictDoNothing()
+
+  await pushWatchlistAdd(session.user.id, toSimklRef(media))
 }
 
 export async function deleteFromWatchlist({
@@ -84,11 +91,29 @@ export async function deleteFromWatchlist({
     throw new Error('Not authenticated')
   }
 
-  await db
-    .delete(Watchlist)
-    .where(
-      and(eq(Watchlist.userId, session.user.id), eq(Watchlist.mediaId, +id))
-    )
+  const where = and(
+    eq(Watchlist.userId, session.user.id),
+    eq(Watchlist.mediaId, +id)
+  )
+
+  const item = await db
+    .select({
+      mediaId: Watchlist.mediaId,
+      mediaType: Watchlist.mediaType,
+    })
+    .from(Watchlist)
+    .where(where)
+    .limit(1)
+    .then(rows => rows.at(0))
+
+  await db.delete(Watchlist).where(where)
+
+  if (item) {
+    await pushWatchlistRemove(session.user.id, {
+      tmdbId: item.mediaId,
+      mediaType: item.mediaType === 'movie' ? 'movie' : 'tv',
+    })
+  }
 }
 
 export async function checkWatchlist({

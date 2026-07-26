@@ -68,6 +68,23 @@ async function push(
   }
 }
 
+type TmdbDetails = Awaited<
+  ReturnType<typeof getMovie> | ReturnType<typeof getTVShow>
+>
+
+export function toSimklRef(media: TmdbDetails): SimklMediaRef {
+  const isMovie = media.media_type === 'movie'
+  const date = isMovie ? media.release_date : media.first_air_date
+  const year = Number(date?.slice(0, 4))
+
+  return {
+    tmdbId: media.id,
+    mediaType: media.media_type,
+    title: isMovie ? media.title : media.name,
+    year: Number.isFinite(year) ? year : undefined,
+  }
+}
+
 function toSimklMedia({ tmdbId, title, year }: SimklMediaRef): SimklMediaItem {
   const media: SimklMediaItem = { ids: { tmdb: tmdbId.toString() } }
 
