@@ -65,6 +65,27 @@ BETTER_AUTH_TRUSTED_ORIGINS="https://wovix.app"
 BETTER_AUTH_SECRET="your-secret-key"
 ```
 
+### Simkl (optional)
+
+[Simkl](https://simkl.com) keeps a user's watchlist and watch history in sync across every app they use. When it is configured, logged in users can connect their Simkl account from the account menu to:
+
+- send everything they save in Wovie to their Simkl "Plan to Watch" list, and remove it again when they unsave it,
+- import that same list back into Wovie,
+- report what they are watching, marking a movie or episode as watched once they pass 80% of it.
+
+To get your `SIMKL_CLIENT_ID` and `SIMKL_CLIENT_SECRET`:
+
+- Go to the [Simkl developer settings](https://simkl.com/settings/developer/) and create a new app.
+- Set the redirect uri to `<YOUR_URL>/api/simkl/callback`, it has to match your `BETTER_AUTH_URL` exactly.
+- Copy the generated values into the variables below.
+
+```bash
+SIMKL_CLIENT_ID="your-client-id"
+SIMKL_CLIENT_SECRET="your-client-secret"
+```
+
+Both variables are optional. Leave them empty and Wovie hides the integration entirely, nothing else changes.
+
 ## Setting Environment Variables on Vercel
 
 - Log in to Vercel: Go to Vercel's website and log in to your account.
