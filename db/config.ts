@@ -140,6 +140,28 @@ const Watchlist = defineTable({
   ],
 })
 
+const SimklAccount = defineTable({
+  columns: {
+    id: column.text({ primaryKey: true }),
+    userId: column.text({ references: () => User.columns.id }),
+    accessToken: column.text(),
+    tokenType: column.text({ optional: true }),
+    scope: column.text({ optional: true }),
+    simklUserId: column.text({ optional: true }),
+    userName: column.text({ optional: true }),
+    avatarUrl: column.text({ optional: true }),
+    lastImportedAt: column.date({ optional: true }),
+    createdAt: column.date({ default: NOW }),
+    updatedAt: column.date({ default: NOW }),
+  },
+  indexes: [
+    {
+      on: ['userId'],
+      unique: true,
+    },
+  ],
+})
+
 export default defineDb({
   tables: {
     User,
@@ -148,5 +170,6 @@ export default defineDb({
     Verification,
     Watching,
     Watchlist,
+    SimklAccount,
   },
 })

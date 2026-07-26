@@ -70,6 +70,10 @@ export default defineConfig({
 
       // Quality Label
       SHOW_REAL_MOVIE_QUALITY: OptionalBoolean,
+
+      // Simkl https://simkl.com/settings/developer/
+      SIMKL_CLIENT_ID: OptionalString,
+      SIMKL_CLIENT_SECRET: OptionalString,
     },
   },
   vite: {
