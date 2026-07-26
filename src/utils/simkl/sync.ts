@@ -213,10 +213,19 @@ async function resolveTmdbId(item: PlanToWatchItem) {
   return match?.id ?? null
 }
 
-async function importItem(userId: string, item: PlanToWatchItem) {
+type ImportStatus = 'imported' | 'saved' | 'failed'
+
+async function importItem(
+  userId: string,
+  item: PlanToWatchItem,
+  savedKeys: Set<string>
+): Promise<ImportStatus> {
   const tmdbId = await resolveTmdbId(item)
 
-  if (!tmdbId) return false
+  if (!tmdbId) return 'failed'
+
+  // Titles without a tmdb id on Simkl are only known once they are resolved
+  if (savedKeys.has(`${item.mediaType}:${tmdbId}`)) return 'saved'
 
   const details =
     item.mediaType === 'movie'
@@ -233,7 +242,7 @@ async function importItem(userId: string, item: PlanToWatchItem) {
     })
     .onConflictDoNothing()
 
-  return true
+  return 'imported'
 }
 
 function getPlanToWatch(token: string, type: 'movies' | 'shows') {
@@ -291,16 +300,16 @@ export async function importWatchlist(
 
     const results = await Promise.all(
       batch.map(item =>
-        importItem(userId, item).catch(error => {
+        importItem(userId, item, savedKeys).catch((error): ImportStatus => {
           console.error('Unable to import Simkl item', error)
-          return false
+          return 'failed'
         })
       )
     )
 
     for (const result of results) {
-      if (result) imported++
-      else skipped++
+      if (result === 'imported') imported++
+      if (result === 'failed') skipped++
     }
   }
 
