@@ -92,7 +92,7 @@ export async function deleteFromWatchlist({
     eq(Watchlist.mediaId, +id)
   )
 
-  const item = await db
+  const [item] = await db
     .select({
       mediaId: Watchlist.mediaId,
       mediaType: Watchlist.mediaType,
@@ -100,7 +100,6 @@ export async function deleteFromWatchlist({
     .from(Watchlist)
     .where(where)
     .limit(1)
-    .then(rows => rows.at(0))
 
   await db.delete(Watchlist).where(where)
 
