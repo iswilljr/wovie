@@ -1,12 +1,14 @@
 import { cn } from '@/utils'
 import { MediaPoster } from './MediaPoster'
-import type { Movie, Recommendation, TV } from 'tmdb-ts'
+import type { Movie, Recommendation, TV, TvRecommendation } from 'tmdb-ts'
 import { MediaPostsLoader } from '../Loader'
 
 export interface MediaGridProps {
   media: 'tv' | 'movie'
   title: string
-  results: Array<(Movie | TV | Recommendation) & { quality?: string }>
+  results: Array<
+    (Movie | TV | Recommendation | TvRecommendation) & { quality?: string }
+  >
   class?: string
   icon?: React.ReactNode
 }
