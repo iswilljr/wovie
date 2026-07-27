@@ -16,7 +16,7 @@ export function SignInForm({ onSignUp }: { onSignUp: () => void }) {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     if (isLoading) return
     try {
       e.preventDefault()

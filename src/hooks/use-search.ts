@@ -38,7 +38,11 @@ export function useSearchResults({
     }
   )
 
-  const handleInput = useCallback<React.ChangeEventHandler<HTMLInputElement>>(
+  // Bound to `onChange` on desktop and `onInput` on mobile, whose event types
+  // are unrelated in React 19, so widen to the shared supertype.
+  const handleInput = useCallback<
+    React.EventHandler<React.SyntheticEvent<HTMLInputElement>>
+  >(
     e => {
       setQuery(e.currentTarget.value)
     },
