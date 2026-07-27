@@ -3,7 +3,7 @@ import { getSource } from '@/utils/sources'
 import { getMovie, getSeasonDetails, getTVShow } from '@/utils/tmdb'
 import type { APIRoute } from 'astro'
 import { db, Watching, NOW, and, eq } from 'astro:db'
-import { z } from 'astro:schema'
+import { z } from 'astro/zod'
 
 type WatchingData = typeof Watching.$inferSelect
 type InputData = z.infer<typeof InputDataSchema>
