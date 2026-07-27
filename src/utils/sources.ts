@@ -88,7 +88,6 @@ export const sources: Source[] = [
 
 export const SOURCES = [...sources].sort((a, b) => b.rank - a.rank)
 
-// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 export const DEFAULT_SOURCE = SOURCES[0]!
 
 export function getSource(sourceId?: string | null) {

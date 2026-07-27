@@ -59,7 +59,7 @@ export function useSearchResults({
       setIsLoading(true)
 
       const searchAction = await actions.search({ query }).catch(() => null)
-      const results = (searchAction?.data ?? []) as MultiSearchResult[]
+      const results = searchAction?.data ?? []
       searchResultsStore.setKey(query, results)
       setResults(results)
       setIsLoading(false)
