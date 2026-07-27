@@ -71,7 +71,7 @@ export function SelectSource({
 
   return (
     <div className='w-full rounded-2xl bg-white/10 p-2'>
-      <div className='flex items-center !gap-2 p-1'>
+      <div className='flex items-center gap-2! p-1'>
         <span className='text-lg font-medium tracking-wide sm:text-xl'>
           Sources
         </span>

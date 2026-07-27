@@ -26,7 +26,7 @@ export function MediaGrid({
     <div className={cn(['flex w-full flex-col gap-6 p-4 sm:px-12', className])}>
       <div className='z-10 flex w-full items-center gap-2 py-1'>
         {showIcon && (
-          <div className='flex size-6 items-center justify-center rounded bg-primary-500'>
+          <div className='flex size-6 items-center justify-center rounded-sm bg-primary-500'>
             {icon}
           </div>
         )}

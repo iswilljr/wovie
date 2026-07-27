@@ -9,7 +9,7 @@ export function Content() {
   return (
     <>
       <Discover />
-      <div className='-my-[--discover-space] sm:pb-8'>
+      <div className='-my-(--discover-space) sm:pb-8'>
         <Trending />
         <Watching />
         <Watchlist />

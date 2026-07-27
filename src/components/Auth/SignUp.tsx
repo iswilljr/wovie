@@ -53,7 +53,7 @@ export function SignUpForm({ onSignIn }: { onSignIn: () => void }) {
           src='/favicon.png'
           alt='Your Company'
         />
-        <h2 className='mt-1 text-balance text-center text-2xl/9 font-bold tracking-tight'>
+        <h2 className='mt-1 text-center text-2xl/9 font-bold tracking-tight text-balance'>
           Create your account
         </h2>
       </div>

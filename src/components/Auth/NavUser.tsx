@@ -24,7 +24,7 @@ export function NavUser() {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <button className='flex size-7 flex-1 items-center justify-center rounded bg-white text-left text-sm leading-tight text-black'>
+        <button className='flex size-7 flex-1 items-center justify-center rounded-sm bg-white text-left text-sm leading-tight text-black'>
           <span className='truncate font-semibold'>
             {user?.name.slice(0, 1)}
           </span>

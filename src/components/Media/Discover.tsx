@@ -15,7 +15,7 @@ export function Discover() {
   return (
     <div
       id='discover'
-      className='relative z-0 flex h-[30rem] min-h-[30rem] w-full items-center sm:h-svh sm:max-h-[50rem]'
+      className='relative z-0 flex h-120 min-h-120 w-full items-center sm:h-svh sm:max-h-200'
     >
       <button className='swiper-button swiper-left absolute left-0 z-20 flex size-12 items-center justify-center text-white'>
         <ChevronLeft />
@@ -26,7 +26,7 @@ export function Discover() {
       >
         <ChevronRight />
       </button>
-      <div className='swiper flex h-[30rem] min-h-[30rem] w-full overflow-auto scrollbar-hide sm:h-svh sm:max-h-[50rem]'>
+      <div className='swiper scrollbar-hide flex h-120 min-h-120 w-full overflow-auto sm:h-svh sm:max-h-200'>
         {nowPlaying?.data?.map(movie => (
           <DiscoverCard
             key={movie.id}

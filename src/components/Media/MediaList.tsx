@@ -42,7 +42,7 @@ export function MediaList({
     <div id={id} className='flex w-full flex-col gap-6 p-4 sm:px-12'>
       <div className='flex w-full items-center justify-between'>
         <div className='z-10 flex w-full items-center gap-2 py-1 text-lg font-medium tracking-wide text-white md:text-2xl'>
-          <div className='flex size-6 items-center justify-center rounded bg-primary-500'>
+          <div className='flex size-6 items-center justify-center rounded-sm bg-primary-500'>
             {icon}
           </div>
           <p>{title}</p>
@@ -56,13 +56,13 @@ export function MediaList({
             <div className='relative flex size-6 items-center justify-center'>
               <span
                 aria-hidden='true'
-                className={`absolute inset-0 flex size-6 items-center justify-center transition-all duration-300 ease-out ${editModeState.isEditMode ? 'rotate-0 scale-100 opacity-100' : '-rotate-90 scale-75 opacity-0'}`}
+                className={`absolute inset-0 flex size-6 items-center justify-center transition-all duration-300 ease-out ${editModeState.isEditMode ? 'scale-100 rotate-0 opacity-100' : 'scale-75 -rotate-90 opacity-0'}`}
               >
                 <PenOff />
               </span>
               <span
                 aria-hidden='true'
-                className={`absolute inset-0 flex size-6 items-center justify-center transition-all duration-300 ease-out ${editModeState.isEditMode ? 'rotate-90 scale-75 opacity-0' : 'rotate-0 scale-100 opacity-100'}`}
+                className={`absolute inset-0 flex size-6 items-center justify-center transition-all duration-300 ease-out ${editModeState.isEditMode ? 'scale-75 rotate-90 opacity-0' : 'scale-100 rotate-0 opacity-100'}`}
               >
                 <Edit />
               </span>
@@ -80,7 +80,7 @@ export function MediaList({
         >
           <ChevronRight />
         </button>
-        <div className='swiper relative z-10 flex w-full gap-4 overflow-auto rounded-2xl scrollbar-hide'>
+        <div className='swiper relative z-10 scrollbar-hide flex w-full gap-4 overflow-auto rounded-2xl'>
           {results.map(movie =>
             movie.media_type !== 'person' ? (
               <MediaCard

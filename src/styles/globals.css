@@ -1,3 +1,46 @@
+@import 'tailwindcss';
+
+@plugin 'tailwind-scrollbar-hide';
+@plugin 'tailwindcss-animate';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --breakpoint-xs: 450px;
+
+  --color-primary-50: #eff6ff;
+  --color-primary-100: #dbeafe;
+  --color-primary-200: #bfdbfe;
+  --color-primary-300: #93c5fd;
+  --color-primary-400: #60a5fa;
+  --color-primary-500: #3b82f6;
+  --color-primary-600: #2563eb;
+  --color-primary-700: #1d4ed8;
+  --color-primary-800: #1e40af;
+  --color-primary-900: #1e3a8a;
+  --color-primary-950: #172554;
+
+  --ease-jump-in: cubic-bezier(0.6, -0.28, 0.735, 0.045);
+}
+
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+}
+
 :root {
   --sb-track-color: transparent;
   --sb-thumb-color: #ffffff6b;
@@ -42,7 +85,8 @@ code {
   height: 100%;
   position: absolute;
   inset: 0;
-  background: linear-gradient(
+  background:
+    linear-gradient(
       180deg,
       rgba(255, 255, 255, 0) 0%,
       rgba(0, 0, 0, 0.6235294118) 90%

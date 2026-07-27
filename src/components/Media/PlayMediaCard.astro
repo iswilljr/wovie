@@ -31,7 +31,7 @@ const {
 
 <div class='flex w-full flex-row gap-6 md:flex-row' id='info'>
   <div
-    class='hidden aspect-[2/3] h-fit w-[20%] flex-shrink-0 overflow-hidden rounded-lg bg-white/10 shadow-lg md:block'
+    class='hidden aspect-2/3 h-fit w-[20%] shrink-0 overflow-hidden rounded-lg bg-white/10 shadow-lg md:block'
   >
     {
       image && (
@@ -66,17 +66,17 @@ const {
         }}
       />
     </div>
-    <div class='flex flex-shrink-0 flex-wrap items-center gap-2'>
+    <div class='flex shrink-0 flex-wrap items-center gap-2'>
       {
         genres.map(genre => (
-          <p class='pointer-events-none flex select-none items-center justify-center rounded-md bg-primary-500/20 px-3 py-[6px] text-center text-sm font-medium text-primary-400'>
+          <p class='pointer-events-none flex items-center justify-center rounded-md bg-primary-500/20 px-3 py-[6px] text-center text-sm font-medium text-primary-400 select-none'>
             {genre.name}
           </p>
         ))
       }
     </div>
     <div class='rounded-lg bg-white/10 p-2'>
-      <p class='line-clamp-4 text-pretty text-sm text-white/80 lg:text-sm'>
+      <p class='line-clamp-4 text-sm text-pretty text-white/80 lg:text-sm'>
         {overview}
       </p>
     </div>
@@ -97,12 +97,12 @@ const {
           {cast.length === 0 ? 'n/a' : cast.map(s => s.name).join(', ')}
         </span>
       </div>
-      <div class='mt-1 flex max-w-96 gap-2 overflow-x-auto scrollbar-hide'>
+      <div class='mt-1 scrollbar-hide flex max-w-96 gap-2 overflow-x-auto'>
         {
           cast.map(person => (
             <p
               title={person.name}
-              class='relative size-12 flex-shrink-0 overflow-hidden rounded-full bg-white/20'
+              class='relative size-12 shrink-0 overflow-hidden rounded-full bg-white/20'
             >
               {person.profile_path && (
                 <Image

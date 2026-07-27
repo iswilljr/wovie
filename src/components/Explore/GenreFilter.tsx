@@ -51,7 +51,7 @@ export function GenreFilter({
                 id={`genre-${genre.id}`}
                 checked={selectedGenres.includes(genre.id)}
                 onChange={() => onGenreChange(genre.id)}
-                className='h-4 w-4 rounded border-gray-300 bg-transparent text-primary-600 focus:ring-primary-500'
+                className='h-4 w-4 rounded-sm border-gray-300 bg-transparent text-primary-600 focus:ring-primary-500'
               />
               <span className='text-sm font-medium text-white'>
                 {genre.name}

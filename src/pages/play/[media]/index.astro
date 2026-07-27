@@ -79,14 +79,14 @@ Astro.response.headers.set('Cloudflare-CDN-Cache-Control', 'max-age=86400')
   image={getImagePath(result.backdrop_path, 'w1280')}
 >
   <div class='min-h-svh p-4 pt-20 sm:p-12 sm:pt-28'>
-    <div id='opacity-layer' class='pointer-events-none !fixed !inset-0 -z-[1]'>
+    <div id='opacity-layer' class='pointer-events-none fixed! inset-0! z-[-1]'>
     </div>
     <Image
       width='1280'
       height='720'
       src={getImagePath(result.backdrop_path, 'w300')}
       alt={mediaTitle}
-      class='fixed inset-0 -z-[10] aspect-video h-svh w-full object-cover blur'
+      class='fixed inset-0 -z-10 aspect-video h-svh w-full object-cover blur-sm'
     />
     <div
       class:list={['z-20 mx-auto space-y-4', isTV ? 'max-w-7xl' : 'max-w-5xl']}
@@ -114,7 +114,7 @@ Astro.response.headers.set('Cloudflare-CDN-Cache-Control', 'max-age=86400')
           />
         ) : (
           <div class='space-y-4'>
-            <div class='aspect-video w-full flex-grow rounded-2xl bg-white/10 shadow-2xl'>
+            <div class='aspect-video w-full grow rounded-2xl bg-white/10 shadow-2xl'>
               <iframe
                 id='player-video'
                 title={mediaTitle}
@@ -147,13 +147,13 @@ Astro.response.headers.set('Cloudflare-CDN-Cache-Control', 'max-age=86400')
         id={result.id}
         mediaType={result.media_type}
       />
-      <div role='separator' class='h-[1px] w-full bg-white/20 sm:!my-16'></div>
+      <div role='separator' class='h-px w-full bg-white/20 sm:my-16!'></div>
       {
         result.recommendations.results.length > 0 && (
           <MediaGrid
             media={media}
             title='You might also Like'
-            class='!p-0 sm:!p-0 [&_h2]:font-normal'
+            class='p-0! sm:p-0! [&_h2]:font-normal'
             results={result.recommendations.results}
           />
         )

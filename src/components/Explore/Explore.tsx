@@ -65,7 +65,7 @@ export function ExplorePage({
   return (
     <div ref={ref} className='relative flex flex-col items-center gap-4'>
       <div
-        className='flex h-12 w-full items-center gap-2 rounded-lg bg-white/20 px-4 text-lg backdrop-blur'
+        className='flex h-12 w-full items-center gap-2 rounded-lg bg-white/20 px-4 text-lg backdrop-blur-sm'
         style={{ viewTransitionName: 'search' }}
       >
         {children}
@@ -77,7 +77,7 @@ export function ExplorePage({
             onChange={handleInput}
             defaultValue={initialQuery}
             placeholder='Search Anything...'
-            className='w-full bg-transparent text-lg font-normal leading-8 tracking-wide text-white/90 outline-none'
+            className='w-full bg-transparent text-lg leading-8 font-normal tracking-wide text-white/90 outline-hidden'
           />
         </form>
         <GenreFilter

@@ -69,7 +69,7 @@ export function MediaCard({
   return (
     <div
       data-watching-id={isWatching ? id : undefined}
-      className='swiper-item group relative flex aspect-[2/1] h-fit w-full flex-shrink-0 flex-col gap-2 overflow-hidden rounded-2xl xs:w-8/12 sm:w-80'
+      className='swiper-item group relative flex aspect-2/1 h-fit w-full shrink-0 flex-col gap-2 overflow-hidden rounded-2xl xs:w-8/12 sm:w-80'
     >
       <a
         className=''
@@ -94,11 +94,11 @@ export function MediaCard({
             />
           )}
         </div>
-        <div className='gradient-opacity absolute inset-0 flex h-full w-full flex-col justify-end gap-1 rounded-2xl p-3 ring-inset ring-primary-500 duration-150 group-hover:ring-2 group-focus:ring-2 md:gap-2'>
-          <p className='line-clamp-2 text-sm font-bold uppercase !leading-none tracking-wide text-white sm:text-base'>
+        <div className='gradient-opacity absolute inset-0 flex h-full w-full flex-col justify-end gap-1 rounded-2xl p-3 ring-primary-500 duration-150 ring-inset group-hover:ring-2 group-focus:ring-2 md:gap-2'>
+          <p className='line-clamp-2 text-sm leading-none! font-bold tracking-wide text-white uppercase sm:text-base'>
             {mediaTitle}
           </p>
-          <div className='flex flex-wrap gap-1 text-xs font-normal !leading-tight tracking-wider text-primary-400'>
+          <div className='flex flex-wrap gap-1 text-xs leading-tight! font-normal tracking-wider text-primary-400'>
             <p>Rating: {rating.toFixed(1)}</p>
             <span>•</span>
             <p>{formatDate(releaseDate)}</p>
@@ -117,10 +117,10 @@ export function MediaCard({
       {isWatching && (
         <div
           className={cn(
-            'ease-[cubic-bezier(.34,1.56,.64,1)] absolute right-2 top-2 transition-all duration-500 will-change-transform',
+            'absolute top-2 right-2 transition-all duration-500 ease-[cubic-bezier(.34,1.56,.64,1)] will-change-transform',
             'opacity-0 md:group-hover:opacity-100 md:group-focus:opacity-100',
             editModeState.isEditMode
-              ? 'translate-y-0 rotate-0 scale-100 opacity-100 shadow-lg'
+              ? 'translate-y-0 scale-100 rotate-0 opacity-100 shadow-lg'
               : ''
           )}
         >
@@ -132,7 +132,7 @@ export function MediaCard({
           onClick={toggleWatchlist}
           size='icon'
           className={cn(
-            'absolute right-2 top-2 z-10 h-7 w-7 rounded-full',
+            'absolute top-2 right-2 z-10 h-7 w-7 rounded-full',
             'opacity-0 group-hover:opacity-100 group-focus:opacity-100',
             inWatchlist && 'bg-primary-500 text-white',
             isWatchlist && 'opacity-100'

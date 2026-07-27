@@ -23,7 +23,7 @@ export function AuthContent({
           <img
             src='/auth/auth-1280x720.jpg'
             alt='avatar'
-            className='aspect-[499/806] h-auto w-full object-cover object-bottom opacity-80'
+            className='aspect-499/806 h-auto w-full object-cover object-bottom opacity-80'
           />
         </picture>
       </div>
@@ -44,7 +44,7 @@ export function AuthDialog() {
           aria-label='Log in'
           className='rounded-full bg-transparent text-white'
         >
-          <CircleUserRoundIcon className='!size-7' />
+          <CircleUserRoundIcon className='size-7!' />
         </button>
       </DialogTrigger>
       <DialogContent className='max-w-3xl border-0 sm:min-h-0'>

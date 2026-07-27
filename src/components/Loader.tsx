@@ -35,7 +35,7 @@ export function MediaPostsLoader() {
       {loaders.map((_, i) => (
         <div
           key={i}
-          className='group relative flex aspect-[2/3] animate-pulse flex-col items-center justify-center overflow-hidden rounded-lg bg-white/20 outline-none'
+          className='group relative flex aspect-2/3 animate-pulse flex-col items-center justify-center overflow-hidden rounded-lg bg-white/20 outline-hidden'
           style={{}}
         ></div>
       ))}
@@ -51,7 +51,7 @@ export function MediaCardLoader() {
       {loaders.map((_, i) => (
         <div
           key={i}
-          className='group relative flex aspect-[2/1] h-fit w-full flex-shrink-0 animate-pulse flex-col gap-2 overflow-hidden rounded-2xl bg-white/20 xs:w-8/12 sm:w-80'
+          className='group relative flex aspect-2/1 h-fit w-full shrink-0 animate-pulse flex-col gap-2 overflow-hidden rounded-2xl bg-white/20 xs:w-8/12 sm:w-80'
         />
       ))}
     </>

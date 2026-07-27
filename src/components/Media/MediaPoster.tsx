@@ -75,7 +75,7 @@ export function MediaPoster(props: Props) {
       <button
         onClick={toggleWatchlist}
         className={cn(
-          'pointer-events-auto absolute left-[1.5px] top-[1.5px] z-10 rounded-br-lg rounded-tl-md bg-black/60 p-1.5 text-white backdrop-blur-md transition-all duration-300 hover:bg-primary-500',
+          'pointer-events-auto absolute top-[1.5px] left-[1.5px] z-10 rounded-tl-md rounded-br-lg bg-black/60 p-1.5 text-white backdrop-blur-md transition-all duration-300 hover:bg-primary-500',
           'opacity-0 group-hover:opacity-100 group-focus:opacity-100',
           inWatchlist && 'bg-primary-500 text-white'
         )}
@@ -87,7 +87,7 @@ export function MediaPoster(props: Props) {
         )}
       </button>
       <a
-        className='relative flex aspect-[2/3] flex-col items-center justify-center overflow-hidden rounded-lg bg-[#35383f] outline-none'
+        className='relative flex aspect-2/3 flex-col items-center justify-center overflow-hidden rounded-lg bg-[#35383f] outline-hidden'
         href={getTvOrMovieUrl(media, id, slugifyTitle(title))}
       >
         {image && (
@@ -100,7 +100,7 @@ export function MediaPoster(props: Props) {
             className='h-full w-full object-cover object-center duration-150 group-hover:scale-[1.04] group-focus:scale-[1.04]'
           />
         )}
-        <div className='absolute right-0 top-0 flex items-center justify-center gap-1 rounded-bl-md bg-black/70 px-[5px] py-1'>
+        <div className='absolute top-0 right-0 flex items-center justify-center gap-1 rounded-bl-md bg-black/70 px-[5px] py-1'>
           <Star width='13' height='13' fill='#ffd700' stroke='#ffd700' />
           <span className='text-xs font-light text-white'>
             {rating.toFixed(1)}
@@ -109,11 +109,11 @@ export function MediaPoster(props: Props) {
         <div
           role='button'
           aria-label='Play Now'
-          className='absolute z-20 flex items-center justify-center rounded-full bg-primary-500 p-[.6rem] opacity-0 duration-150 hover:brightness-90 group-hover:opacity-100 group-focus:opacity-100'
+          className='absolute z-20 flex items-center justify-center rounded-full bg-primary-500 p-[.6rem] opacity-0 duration-150 group-hover:opacity-100 group-focus:opacity-100 hover:brightness-90'
         >
           <Play width='16' height='16' fill='#000000d5' stroke='#000000d5' />
         </div>
-        <div className='absolute inset-0 flex flex-col justify-end gap-1 rounded-lg bg-gradient-to-t from-[#000000d0] p-3 outline-none ring-inset ring-primary-500 duration-150 group-hover:opacity-100 group-hover:ring-2 group-focus:opacity-100 group-focus:ring-2 group-[:not(:has(>img))]:opacity-100'>
+        <div className='absolute inset-0 flex flex-col justify-end gap-1 rounded-lg bg-linear-to-t from-[#000000d0] p-3 ring-primary-500 outline-hidden duration-150 ring-inset group-hover:opacity-100 group-hover:ring-2 group-focus:opacity-100 group-focus:ring-2 group-[:not(:has(>img))]:opacity-100'>
           <div className='flex items-center justify-center gap-1 text-xs text-[#d8d8d8]'>
             <p>{new Date(releaseDate).getFullYear() || 'N/A'}</p>
             <span>•</span>
@@ -125,7 +125,7 @@ export function MediaPoster(props: Props) {
               </>
             )}
           </div>
-          <p className='line-clamp-2 text-center text-sm font-medium leading-tight text-white'>
+          <p className='line-clamp-2 text-center text-sm leading-tight font-medium text-white'>
             {title}
           </p>
         </div>

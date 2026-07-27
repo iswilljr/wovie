@@ -50,7 +50,7 @@ Astro.response.headers.set('Cloudflare-CDN-Cache-Control', 'max-age=86400')
   image='https://wovix.app/og.png'
 >
   <div class='min-h-svh p-4 pt-20 sm:p-12 sm:pt-20'>
-    <div id='opacity-layer' class='pointer-events-none !fixed !inset-0 -z-[1]'>
+    <div id='opacity-layer' class='pointer-events-none fixed! inset-0! z-[-1]'>
     </div>
     {
       data && (
@@ -59,7 +59,7 @@ Astro.response.headers.set('Cloudflare-CDN-Cache-Control', 'max-age=86400')
           height='720'
           src={getImagePath(data.backdrop_path, 'w300')}
           alt={data.title}
-          class='fixed inset-0 -z-[10] aspect-video h-svh w-full object-cover blur'
+          class='fixed inset-0 -z-10 aspect-video h-svh w-full object-cover blur-sm'
         />
       )
     }

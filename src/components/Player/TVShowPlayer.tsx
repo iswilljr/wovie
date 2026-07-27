@@ -48,7 +48,7 @@ export function TVShowPlayer({
 
   return (
     <div className='mt-4 flex w-full flex-col-reverse gap-2 shadow-2xl lg:flex-row'>
-      <div className='flex h-[25rem] flex-col overflow-auto rounded-2xl bg-white/10 lg:aspect-video lg:h-[unset] lg:w-80'>
+      <div className='flex h-100 flex-col overflow-auto rounded-2xl bg-white/10 lg:aspect-video lg:h-[unset] lg:w-80'>
         <div className='flex h-14 w-full items-center justify-between gap-2 overflow-hidden bg-white/5 px-3 py-4'>
           <p>Episodes</p>
           <SelectSeason
@@ -67,7 +67,7 @@ export function TVShowPlayer({
           mediaId={id}
         />
       </div>
-      <div className='flex flex-grow flex-col gap-2'>
+      <div className='flex grow flex-col gap-2'>
         <div className='rounded-2xl bg-white/10'>
           <iframe
             id='player-video'

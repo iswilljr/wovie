@@ -74,7 +74,7 @@ export function SelectEpisode({
           key={episodeDetails.id}
           aria-current={episodeDetails.episode_number === episode}
           onClick={() => handleEpisodeClick(episodeDetails.episode_number)}
-          className='group relative line-clamp-1 flex h-12 w-full flex-shrink-0 items-center justify-between gap-1 p-4 text-sm even:bg-white/5 hover:bg-white/10 hover:text-white aria-[current=true]:!bg-white/20 aria-[current=true]:!text-primary-400'
+          className='group relative line-clamp-1 flex h-12 w-full shrink-0 items-center justify-between gap-1 p-4 text-sm even:bg-white/5 hover:bg-white/10 hover:text-white aria-current:bg-white/20! aria-current:text-primary-400!'
         >
           <p className='flex gap-2 tracking-wide'>
             <span className='font-medium'>
@@ -84,7 +84,7 @@ export function SelectEpisode({
               {episodeDetails.name}
             </span>
           </p>
-          <span className='hidden shrink-0 items-center justify-center rounded-full bg-primary-400 p-1 group-aria-[current=true]:flex'>
+          <span className='hidden shrink-0 items-center justify-center rounded-full bg-primary-400 p-1 group-aria-current:flex'>
             <PlayIcon width='10' height='10' fill='black' stroke='black' />
           </span>
         </button>

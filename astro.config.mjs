@@ -1,5 +1,5 @@
 import { defineConfig, envField } from 'astro/config'
-import tailwind from '@astrojs/tailwind'
+import tailwind from '@tailwindcss/vite'
 import react from '@astrojs/react'
 import vercel from '@astrojs/vercel'
 import cloudflare from '@astrojs/cloudflare'
@@ -41,7 +41,7 @@ export default defineConfig({
   prefetch: false,
   site: SITE_URL,
   adapter: cloudflareAdapterEnabled ? cloudflare() : vercel(),
-  integrations: [tailwind(), db(), react(), sitemap()],
+  integrations: [db(), react(), sitemap()],
   env: {
     schema: {
       // TMDB
@@ -74,6 +74,7 @@ export default defineConfig({
   },
   vite: {
     plugins: [
+      tailwind(),
       legacy({
         targets: ['Chrome >= 70', 'defaults', 'not IE 11'],
         additionalLegacyPolyfills: ['regenerator-runtime/runtime'],

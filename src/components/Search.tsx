@@ -30,9 +30,9 @@ function SearchPost({ result, onClick }: SearchPostProps) {
       key={result.id}
       onClick={onClick}
       href={getTvOrMovieUrl(result.media_type, result.id, slugifyTitle(title))}
-      className='flex aspect-[4/1] w-full flex-shrink-0 gap-1 overflow-hidden rounded-md hover:bg-white/10'
+      className='flex aspect-4/1 w-full shrink-0 gap-1 overflow-hidden rounded-md hover:bg-white/10'
     >
-      <div className='aspect-[3/4] h-full flex-shrink-0 overflow-hidden rounded-md bg-zinc-700/90'>
+      <div className='aspect-3/4 h-full shrink-0 overflow-hidden rounded-md bg-zinc-700/90'>
         {result.poster_path && (
           <img
             src={getImagePath(result.poster_path, 'w300')}
@@ -43,11 +43,11 @@ function SearchPost({ result, onClick }: SearchPostProps) {
           />
         )}
       </div>
-      <div className='flex h-full flex-grow flex-col gap-2 p-2'>
-        <p className='line-clamp-1 text-sm font-semibold !leading-tight text-white/90'>
+      <div className='flex h-full grow flex-col gap-2 p-2'>
+        <p className='line-clamp-1 text-sm leading-tight! font-semibold text-white/90'>
           {title}
         </p>
-        <p className='flex gap-[5px] text-[.7rem] font-medium !leading-none text-primary-400 2xl:text-xs'>
+        <p className='flex gap-[5px] text-[.7rem] leading-none! font-medium text-primary-400 2xl:text-xs'>
           <span className=''>{isMovie ? 'Movie' : 'TV'}</span>
           <span>•</span>
           <span>{year}</span>
@@ -76,7 +76,7 @@ export function Search({ children }: React.ComponentProps<'div'>) {
     >
       <div
         style={{ viewTransitionName: 'search' }}
-        className='flex h-8 items-center gap-2 rounded-lg bg-white/20 px-2 backdrop-blur'
+        className='flex h-8 items-center gap-2 rounded-lg bg-white/20 px-2 backdrop-blur-sm'
       >
         {children}
         <input
@@ -85,12 +85,12 @@ export function Search({ children }: React.ComponentProps<'div'>) {
           onFocus={handleFocus}
           onChange={handleInput}
           placeholder='Search Anything...'
-          className='w-56 bg-transparent text-xs font-normal leading-8 tracking-wide text-white/90 outline-none'
+          className='w-56 bg-transparent text-xs leading-8 font-normal tracking-wide text-white/90 outline-hidden'
         />
       </div>
       {query.length > 0 && (
         <div
-          className={`custom-scrollbars absolute left-0 top-full max-h-72 w-full flex-col gap-2 overflow-y-auto rounded-lg bg-black/90 p-2 ${isFocused ? 'flex' : 'hidden'}`}
+          className={`custom-scrollbars absolute top-full left-0 max-h-72 w-full flex-col gap-2 overflow-y-auto rounded-lg bg-black/90 p-2 ${isFocused ? 'flex' : 'hidden'}`}
         >
           {isLoading && <Loader />}
           {!isLoading && results.length === 0 && (
@@ -147,7 +147,7 @@ export function SearchMobile({ children }: React.ComponentProps<'div'>) {
       {open && (
         <div className='fixed inset-0 h-svh w-full space-y-4 bg-black/80 p-4'>
           <div className='flex w-full items-center justify-between gap-2'>
-            <div className='flex h-8 flex-1 items-center gap-2 rounded-lg bg-white/20 px-2 backdrop-blur'>
+            <div className='flex h-8 flex-1 items-center gap-2 rounded-lg bg-white/20 px-2 backdrop-blur-sm'>
               {children}
               <input
                 autoFocus
@@ -156,11 +156,11 @@ export function SearchMobile({ children }: React.ComponentProps<'div'>) {
                 defaultValue={query}
                 onInput={handleInput}
                 placeholder='Search Anything...'
-                className='w-full bg-transparent text-xs font-normal leading-8 tracking-wide text-white/90 outline-none'
+                className='w-full bg-transparent text-xs leading-8 font-normal tracking-wide text-white/90 outline-hidden'
               />
             </div>
             <button
-              className='flex size-8 items-center justify-center gap-2 rounded-lg bg-white/10 text-xs backdrop-blur sm:hidden sm:px-2'
+              className='flex size-8 items-center justify-center gap-2 rounded-lg bg-white/10 text-xs backdrop-blur-sm sm:hidden sm:px-2'
               onClick={handleClick}
             >
               <svg
