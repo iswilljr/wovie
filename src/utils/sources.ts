@@ -35,13 +35,13 @@ export const sources: Source[] = [
     tvUrl: 'https://vidsrc.cc/v2/embed/tv/{id}/{season}/{episode}',
     rank: 6.92,
   },
-  // {
-  //   id: 'moviesapi.club',
-  //   name: 'Movies Club',
-  //   movieUrl: 'https://moviesapi.club/movie/{id}',
-  //   tvUrl: 'https://moviesapi.club/tv/{id}-{season}-{episode}',
-  //   rank: 67,
-  // },
+  {
+    id: 'moviesapi.to',
+    name: 'MoviesAPI',
+    movieUrl: 'https://moviesapi.to/movie/{id}',
+    tvUrl: 'https://moviesapi.to/tv/{id}/{season}/{episode}',
+    rank: 2.5,
+  },
   {
     id: 'vidlink.pro',
     name: 'Vid Link',
