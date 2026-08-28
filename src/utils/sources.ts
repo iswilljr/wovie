@@ -38,8 +38,8 @@ export const sources: Source[] = [
   {
     id: 'moviesapi.to',
     name: 'MoviesAPI',
-    movieUrl: 'https://moviesapi.to/movie/{id}',
-    tvUrl: 'https://moviesapi.to/tv/{id}-{season}-{episode}',
+    movieUrl: 'https://moviesapi.to/movie/{id}?theme=3b82f6',
+    tvUrl: 'https://moviesapi.to/tv/{id}-{season}-{episode}?theme=3b82f6',
     rank: 67,
   },
   {
