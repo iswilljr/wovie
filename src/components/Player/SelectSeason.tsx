@@ -38,13 +38,12 @@ export function SelectSeason({
       name='select-season'
       onChange={handleChange}
       defaultValue={activeSeason}
-      className='flex items-center rounded-md border border-white/70 bg-black/50 px-2 py-1 text-sm text-white'
+      className='rounded-lg border border-border-subtle bg-surface-raised px-2 py-1 text-xs text-zinc-300 outline-none focus:border-accent/40'
     >
       {seasons.map(seasonDetails => (
         <option
           key={seasonDetails.season_number}
           value={seasonDetails.season_number}
-          className='text-sm'
         >
           {seasonDetails.name}
         </option>

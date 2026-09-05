@@ -9,8 +9,9 @@ export const prerender = true
   title='Wovie - Watch Movies & TV Shows Free'
   description='Watch movies and tv shows online'
   image='https://wovix.app/og.png'
+  transparentBg={true}
 >
-  <Content client:idle />
+  <Content client:load />
 </Layout>
 
 <script is:inline data-astro-rerun>
@@ -72,10 +73,14 @@ export const prerender = true
             ? 0
             : activeItemIndex + 1
 
-        items[newItemIndex].scrollIntoView({
+        var item = items[newItemIndex]
+        var scrollLeft =
+          item.offsetLeft - swiper.clientWidth / 2 + item.clientWidth / 2
+        var maxScroll = swiper.scrollWidth - swiper.clientWidth
+
+        swiper.scrollTo({
+          left: Math.min(Math.max(0, scrollLeft), maxScroll),
           behavior: 'smooth',
-          block: 'nearest',
-          inline: 'center',
         })
       })
     })

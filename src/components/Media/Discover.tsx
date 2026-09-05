@@ -6,7 +6,7 @@ import useSWR from 'swr'
 import { DiscoverCardSkeleton } from './DiscoverCardSkeleton'
 
 export function Discover() {
-  const { data: nowPlaying } = useSWR(
+  const { data: nowPlaying, isLoading } = useSWR(
     'nowPlaying',
     () => actions.nowPlaying(),
     swrDefaultOptions
@@ -15,19 +15,24 @@ export function Discover() {
   return (
     <div
       id='discover'
-      className='relative z-0 flex h-[30rem] min-h-[30rem] w-full items-center sm:h-svh sm:max-h-[50rem]'
+      className='group/row relative z-0 -mt-[var(--navbar-height)] h-[calc(70svh+var(--navbar-height))] min-h-[calc(28rem+var(--navbar-height))] w-full overflow-hidden sm:h-[calc(85svh+var(--navbar-height))]'
     >
-      <button className='swiper-button swiper-left absolute left-0 z-20 flex size-12 items-center justify-center text-white'>
-        <ChevronLeft />
+      <div className='pointer-events-none absolute inset-0 bg-hero-vignette' />
+      <div className='discover-bleed-fade pointer-events-none absolute inset-x-0 bottom-0 z-10 h-[55%] min-h-[16rem] sm:h-[60%] sm:min-h-[20rem]' />
+      <button
+        aria-label='Previous'
+        className='swiper-button swiper-left absolute left-2 top-1/2 z-30 flex size-11 -translate-y-1/2 items-center justify-center rounded-full border border-border-subtle bg-surface-overlay/80 text-white backdrop-blur-sm transition-all hover:border-accent/30 hover:bg-surface-overlay sm:left-4'
+      >
+        <ChevronLeft className='size-5' />
       </button>
       <button
-        id='swiper-right'
-        className='swiper-button swiper-right absolute right-0 z-20 flex size-12 items-center justify-center text-white'
+        aria-label='Next'
+        className='swiper-button swiper-right absolute right-2 top-1/2 z-30 flex size-11 -translate-y-1/2 items-center justify-center rounded-full border border-border-subtle bg-surface-overlay/80 text-white backdrop-blur-sm transition-all hover:border-accent/30 hover:bg-surface-overlay sm:right-4'
       >
-        <ChevronRight />
+        <ChevronRight className='size-5' />
       </button>
-      <div className='swiper flex h-[30rem] min-h-[30rem] w-full overflow-auto scrollbar-hide sm:h-svh sm:max-h-[50rem]'>
-        {nowPlaying?.data?.map(movie => (
+      <div className='swiper flex h-full min-h-full w-full overflow-x-auto scrollbar-hide'>
+        {nowPlaying?.data?.map((movie, i) => (
           <DiscoverCard
             key={movie.id}
             media='movie'
@@ -39,12 +44,11 @@ export function Discover() {
             title={movie.title}
             overview={movie.overview}
             quality={movie.quality}
+            index={i}
           />
         ))}
 
-        {(nowPlaying?.data?.length == null || nowPlaying.data.length === 0) && (
-          <DiscoverCardSkeleton />
-        )}
+        {isLoading && <DiscoverCardSkeleton />}
       </div>
     </div>
   )

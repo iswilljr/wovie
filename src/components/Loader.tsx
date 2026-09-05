@@ -20,39 +20,40 @@ export function Spinner({ className }: { className?: string }) {
 
 export function Loader() {
   return (
-    <div className='flex items-center justify-center gap-2 py-3 text-gray-500'>
+    <div className='flex items-center justify-center gap-2 py-6 text-zinc-500'>
       <Spinner />
-      <p>Loading...</p>
+      <p className='text-sm'>Loading...</p>
     </div>
   )
 }
 
 export function MediaPostsLoader() {
-  const loaders = [...new Array(20).keys()]
+  const loaders = [...new Array(12).keys()]
 
   return (
-    <div className='relative z-10 grid w-full grid-cols-[repeat(auto-fill,minmax(150px,1fr))] flex-wrap gap-4'>
+    <div className='grid grid-cols-[repeat(auto-fill,minmax(9.5rem,1fr))] gap-3 sm:grid-cols-[repeat(auto-fill,minmax(10.5rem,1fr))] sm:gap-4'>
       {loaders.map((_, i) => (
         <div
           key={i}
-          className='group relative flex aspect-[2/3] animate-pulse flex-col items-center justify-center overflow-hidden rounded-lg bg-white/20 outline-none'
-          style={{}}
-        ></div>
+          className='aspect-[2/3] animate-pulse rounded-xl bg-surface-overlay ring-1 ring-border-subtle'
+        />
       ))}
     </div>
   )
 }
 
 export function MediaCardLoader() {
-  const loaders = [...new Array(20).keys()]
+  const loaders = [...new Array(8).keys()]
 
   return (
     <>
       {loaders.map((_, i) => (
         <div
           key={i}
-          className='group relative flex aspect-[2/1] h-fit w-full flex-shrink-0 animate-pulse flex-col gap-2 overflow-hidden rounded-2xl bg-white/20 xs:w-8/12 sm:w-80'
-        />
+          className='w-[17rem] flex-shrink-0 animate-pulse rounded-xl bg-surface-overlay ring-1 ring-border-subtle xs:w-[18rem] sm:w-[19rem]'
+        >
+          <div className='aspect-[16/9]' />
+        </div>
       ))}
     </>
   )

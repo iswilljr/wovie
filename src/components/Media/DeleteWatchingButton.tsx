@@ -32,7 +32,7 @@ export function DeleteWatchingButton({
     <Button
       size='icon'
       onClick={handleClick}
-      className='pointer-events-auto h-7 w-7 rounded-full'
+      className='pointer-events-auto rounded-lg border border-border-subtle bg-surface-overlay/90 text-zinc-300 hover:border-red-500/40 hover:bg-red-500/20 hover:text-red-400'
     >
       <Trash2Icon size={16} />
       <span className='sr-only'>Delete {mediaTitle} from watching</span>

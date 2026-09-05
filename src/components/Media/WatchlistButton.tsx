@@ -24,8 +24,8 @@ export function WatchlistButton({ media }: WatchlistButtonProps) {
     <button
       onClick={toggleWatchlist}
       className={cn(
-        'flex items-center justify-center rounded-full bg-white/10 p-2 text-white transition-all duration-300 hover:bg-primary-500',
-        inWatchlist && 'bg-primary-500 text-white'
+        'flex items-center justify-center rounded-xl border border-border-subtle bg-surface-overlay p-2.5 text-zinc-300 transition-all hover:border-accent/30 hover:bg-accent hover:text-accent-foreground',
+        inWatchlist && 'border-accent/40 bg-accent text-accent-foreground'
       )}
       title={inWatchlist ? 'Remove from Watchlist' : 'Add to Watchlist'}
     >

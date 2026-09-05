@@ -9,6 +9,7 @@ export interface MediaGridProps {
   results: Array<(Movie | TV | Recommendation) & { quality?: string }>
   class?: string
   icon?: React.ReactNode
+  isLoading?: boolean
 }
 
 export function MediaGrid({
@@ -17,23 +18,24 @@ export function MediaGrid({
   title,
   class: className,
   icon,
+  isLoading,
 }: MediaGridProps) {
-  const showIcon = icon != null
-
   return (
-    <div className={cn(['flex w-full flex-col gap-6 p-4 sm:px-12', className])}>
-      <div className='z-10 flex w-full items-center gap-2 py-1'>
-        {showIcon && (
-          <div className='flex size-6 items-center justify-center rounded bg-primary-500'>
+    <section className={cn(['px-4 sm:px-8 lg:px-10', className])}>
+      <div className='mb-4 flex items-center gap-3'>
+        {icon && (
+          <div className='flex size-8 items-center justify-center rounded-lg bg-accent/15 text-accent'>
             {icon}
           </div>
         )}
-        <h2 className='text-lg font-medium tracking-wide text-white md:text-2xl'>
+        <h2 className='text-lg font-semibold tracking-tight text-white sm:text-xl'>
           {title}
         </h2>
       </div>
-      {results.length > 0 ? (
-        <div className='relative z-10 grid w-full grid-cols-[repeat(auto-fill,minmax(150px,1fr))] flex-wrap gap-4'>
+      {isLoading && results.length === 0 ? (
+        <MediaPostsLoader />
+      ) : results.length > 0 ? (
+        <div className='grid grid-cols-[repeat(auto-fill,minmax(9.5rem,1fr))] gap-3 sm:grid-cols-[repeat(auto-fill,minmax(10.5rem,1fr))] sm:gap-4'>
           {results.map(movie => (
             <MediaPoster
               key={movie.id}
@@ -53,9 +55,7 @@ export function MediaGrid({
             />
           ))}
         </div>
-      ) : (
-        <MediaPostsLoader />
-      )}
-    </div>
+      ) : null}
+    </section>
   )
 }

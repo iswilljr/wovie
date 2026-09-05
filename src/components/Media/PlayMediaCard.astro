@@ -4,7 +4,7 @@ import { Image } from 'astro:assets'
 import type { Cast, Genre } from 'tmdb-ts'
 import { WatchlistButton } from './WatchlistButton'
 
-export interface Props {
+interface Props {
   cast: Cast[]
   genres: Genre[]
   image: string | undefined
@@ -29,96 +29,95 @@ const {
 } = Astro.props
 ---
 
-<div class='flex w-full flex-row gap-6 md:flex-row' id='info'>
-  <div
-    class='hidden aspect-[2/3] h-fit w-[20%] flex-shrink-0 overflow-hidden rounded-lg bg-white/10 shadow-lg md:block'
-  >
+<section
+  class='rounded-2xl border border-border-subtle bg-surface-overlay/60 p-5 backdrop-blur-sm sm:p-6'
+  id='info'
+>
+  <div class='flex flex-col gap-6 md:flex-row'>
     {
       image && (
-        <Image
-          src={getImagePath(image, 'w300')}
-          width='300'
-          height='450'
-          alt={title}
-          class='h-full w-full object-cover object-center'
-        />
+        <div class='mx-auto aspect-[2/3] w-36 flex-shrink-0 overflow-hidden rounded-xl ring-1 ring-border-subtle md:mx-0 md:w-44'>
+          <Image
+            src={getImagePath(image, 'w342')}
+            width='342'
+            height='513'
+            alt={title}
+            class='h-full w-full object-cover'
+          />
+        </div>
       )
     }
-  </div>
-  <div class='flex w-full flex-col gap-2'>
-    <div class='flex items-center justify-between gap-4'>
-      <p class='line-clamp-2 text-2xl font-semibold tracking-wide'>
-        {title}
-      </p>
-      <WatchlistButton
-        client:visible
-        media={{
-          id,
-          mediaType,
-          title,
-          poster_path: image ?? '',
-          backdrop_path: image ?? '',
-          vote_average: rating,
-          release_date: releaseDate,
-          name: title,
-          first_air_date: releaseDate,
-          original_language: 'en', // Defaulting to 'en' as it's not passed, or we should pass it
-        }}
-      />
-    </div>
-    <div class='flex flex-shrink-0 flex-wrap items-center gap-2'>
-      {
-        genres.map(genre => (
-          <p class='pointer-events-none flex select-none items-center justify-center rounded-md bg-primary-500/20 px-3 py-[6px] text-center text-sm font-medium text-primary-400'>
-            {genre.name}
-          </p>
-        ))
-      }
-    </div>
-    <div class='rounded-lg bg-white/10 p-2'>
-      <p class='line-clamp-4 text-pretty text-sm text-white/80 lg:text-sm'>
-        {overview}
-      </p>
-    </div>
-    <div class='flex flex-col gap-1 tracking-wide'>
-      <div class='text-sm font-medium'>
-        Date:
-        <span class='font-light tracking-wider'>
-          {formatDate(releaseDate)}
-        </span>
+    <div class='min-w-0 flex-1 space-y-4'>
+      <div class='flex items-start justify-between gap-4'>
+        <div>
+          <h2 class='text-xl font-bold tracking-tight text-white sm:text-2xl'>
+            {title}
+          </h2>
+          <div
+            class='mt-2 flex flex-wrap items-center gap-3 text-sm text-zinc-500'
+          >
+            <span class='font-medium text-accent'>{rating.toFixed(1)} ★</span>
+            <span>{formatDate(releaseDate)}</span>
+            <span class='capitalize'>{mediaType}</span>
+          </div>
+        </div>
+        <WatchlistButton
+          client:visible
+          media={{
+            id,
+            mediaType,
+            title,
+            poster_path: image ?? '',
+            backdrop_path: image ?? '',
+            vote_average: rating,
+            release_date: releaseDate,
+            name: title,
+            first_air_date: releaseDate,
+            original_language: 'en',
+          }}
+        />
       </div>
-      <div class='text-sm font-medium'>
-        Rating:
-        <span class='font-light'>{rating.toFixed(1)}</span>
-      </div>
-      <div class='line-clamp-2 text-sm font-medium'>
-        Cast:
-        <span class='font-light'>
-          {cast.length === 0 ? 'n/a' : cast.map(s => s.name).join(', ')}
-        </span>
-      </div>
-      <div class='mt-1 flex max-w-96 gap-2 overflow-x-auto scrollbar-hide'>
+
+      <div class='flex flex-wrap gap-1.5'>
         {
-          cast.map(person => (
-            <p
-              title={person.name}
-              class='relative size-12 flex-shrink-0 overflow-hidden rounded-full bg-white/20'
-            >
-              {person.profile_path && (
-                <Image
-                  src={getImagePath(person.profile_path, 'w45')}
-                  width='45'
-                  height='45'
-                  loading='lazy'
-                  alt={`${person.name} as ${person.character} in ${title}`}
-                  class='h-full w-full object-cover object-center'
-                />
-              )}
-              <span class='sr-only'>{person.name}</span>
-            </p>
+          genres.map(genre => (
+            <span class='rounded-md bg-accent/10 px-2.5 py-1 text-xs font-medium text-accent'>
+              {genre.name}
+            </span>
           ))
         }
       </div>
+
+      <p class='text-sm leading-relaxed text-zinc-400'>{overview}</p>
+
+      {
+        cast.length > 0 && (
+          <div>
+            <p class='mb-2 text-xs font-medium uppercase tracking-wider text-zinc-500'>
+              Cast
+            </p>
+            <div class='flex gap-2 overflow-x-auto pb-1 scrollbar-hide'>
+              {cast.slice(0, 12).map(person => (
+                <div
+                  title={person.name}
+                  class='size-10 flex-shrink-0 overflow-hidden rounded-full bg-surface-raised ring-1 ring-border-subtle'
+                >
+                  {person.profile_path && (
+                    <Image
+                      src={getImagePath(person.profile_path, 'w45')}
+                      width='45'
+                      height='45'
+                      loading='lazy'
+                      alt={person.name}
+                      class='h-full w-full object-cover'
+                    />
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )
+      }
     </div>
   </div>
-</div>
+</section>

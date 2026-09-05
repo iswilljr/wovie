@@ -1,25 +1,28 @@
 import useSWR from 'swr'
-import { BookmarkIcon } from 'lucide-react'
+import { Bookmark } from 'lucide-react'
 import { MediaList } from '../Media/MediaList'
 import { actions } from 'astro:actions'
 import { swrDefaultOptions } from '@/utils'
 
 export function Watchlist() {
-  const { data: watchlist } = useSWR(
+  const { data: watchlist, isLoading } = useSWR(
     'watchlist',
     () => actions.watchlist(),
     swrDefaultOptions
   )
 
-  if (watchlist?.data != null && watchlist.data.length === 0) return null
+  if (!isLoading && (!watchlist?.data || watchlist.data.length === 0))
+    return null
 
   return (
     <MediaList
       isWatchlist
       id='watchlist'
+      isLoading={isLoading}
       results={watchlist?.data ?? []}
-      title='Watchlist'
-      icon={<BookmarkIcon width='18' height='18' stroke='#000' />}
+      title='My Watchlist'
+      enableEditModeOnMobile={true}
+      icon={<Bookmark className='size-4' strokeWidth={2} />}
     />
   )
 }

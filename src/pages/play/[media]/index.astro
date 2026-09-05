@@ -8,6 +8,7 @@ import { getImagePath, getSeasonOrEpisode } from '@/utils'
 import { getMovieUrl, getSource } from '@/utils/sources'
 import { getMovie, getSeasonDetails, getTVShow } from '@/utils/tmdb'
 import { Image } from 'astro:assets'
+import { ChevronLeft } from 'lucide-react'
 
 const { media: slugParam } = Astro.params
 
@@ -68,8 +69,6 @@ Astro.response.headers.set(
   'public, max-age=60, s-maxage=86400, stale-while-revalidate=86400'
 )
 Astro.response.headers.set('Cloudflare-CDN-Cache-Control', 'max-age=86400')
-
-// Astro.response.status = 404
 ---
 
 <Layout
@@ -77,31 +76,40 @@ Astro.response.headers.set('Cloudflare-CDN-Cache-Control', 'max-age=86400')
   title={`${mediaTitle} | Wovie`}
   description={`Watch ${mediaTitle} on Wovie. ${result.overview}`}
   image={getImagePath(result.backdrop_path, 'w1280')}
+  transparentBg={!!result.backdrop_path}
 >
-  <div class='min-h-svh p-4 pt-20 sm:p-12 sm:pt-28'>
-    <div id='opacity-layer' class='pointer-events-none !fixed !inset-0 -z-[1]'>
-    </div>
-    <Image
-      width='1280'
-      height='720'
-      src={getImagePath(result.backdrop_path, 'w300')}
-      alt={mediaTitle}
-      class='fixed inset-0 -z-[10] aspect-video h-svh w-full object-cover blur'
-    />
+  <div class='relative min-h-[calc(100svh-var(--navbar-height))]'>
+    {
+      result.backdrop_path && (
+        <>
+          <Image
+            width='1280'
+            height='720'
+            src={getImagePath(result.backdrop_path, 'w1280')}
+            alt=''
+            class='pointer-events-none fixed inset-0 -z-20 h-svh w-full scale-105 object-cover object-top blur-sm'
+          />
+          <div class='hero-gradient pointer-events-none fixed inset-0 -z-10' />
+          <div class='cinematic-gradient pointer-events-none fixed inset-0 -z-10' />
+          <div class='pointer-events-none fixed inset-0 -z-10 bg-hero-vignette' />
+        </>
+      )
+    }
+
     <div
-      class:list={['z-20 mx-auto space-y-4', isTV ? 'max-w-7xl' : 'max-w-5xl']}
+      class:list={[
+        'relative z-10 mx-auto px-4 py-4 sm:px-8 lg:px-10',
+        isTV ? 'max-w-7xl' : 'max-w-5xl',
+      ]}
     >
-      <div class='mx-auto flex w-full justify-between px-3 text-gray-300'>
-        <div class='flex w-full items-center gap-2'>
-          <a class='shrink-0 hover:underline' href='/'>Home</a>
-          <span class='pointer-events-none select-none'>/</span>
-          <p class='shrink-0 cursor-default'>{isTV ? 'Show' : 'Movie'}</p>
-          <span class='pointer-events-none select-none'>/</span>
-          <p class='line-clamp-1 cursor-default text-primary-400'>
-            {mediaCardTitle}
-          </p>
-        </div>
-      </div>
+      <a
+        href='/'
+        class='mb-4 inline-flex items-center gap-1.5 text-sm text-zinc-500 transition-colors hover:text-accent'
+      >
+        <ChevronLeft width='16' height='16' />
+        Back
+      </a>
+
       {
         result.media_type === 'tv' ? (
           <TVShowPlayer
@@ -114,48 +122,51 @@ Astro.response.headers.set('Cloudflare-CDN-Cache-Control', 'max-age=86400')
           />
         ) : (
           <div class='space-y-4'>
-            <div class='aspect-video w-full flex-grow rounded-2xl bg-white/10 shadow-2xl'>
+            <div class='overflow-hidden rounded-2xl border border-border-subtle bg-black shadow-card ring-1 ring-border-subtle'>
               <iframe
                 id='player-video'
                 title={mediaTitle}
-                class='aspect-video w-full rounded-2xl bg-transparent'
+                class='aspect-video w-full bg-black'
                 allowfullscreen
                 src={iframeUrl}
               />
             </div>
-            <div>
-              <SelectSource
-                client:idle
-                mediaType='movie'
-                mediaId={result.id}
-                currentSourceId={currentSource.id}
-              />
-            </div>
+            <SelectSource
+              client:idle
+              mediaType='movie'
+              mediaId={result.id}
+              currentSourceId={currentSource.id}
+            />
           </div>
         )
       }
-      <PlayMediaCard
-        cast={result.credits.cast}
-        genres={result.genres}
-        image={result.poster_path}
-        overview={result.overview}
-        rating={result.vote_average}
-        releaseDate={result.media_type === 'tv'
-          ? result.first_air_date
-          : result.release_date}
-        title={mediaCardTitle}
-        id={result.id}
-        mediaType={result.media_type}
-      />
-      <div role='separator' class='h-[1px] w-full bg-white/20 sm:!my-16'></div>
+
+      <div class='mt-8'>
+        <PlayMediaCard
+          cast={result.credits.cast}
+          genres={result.genres}
+          image={result.poster_path}
+          overview={result.overview}
+          rating={result.vote_average}
+          releaseDate={result.media_type === 'tv'
+            ? result.first_air_date
+            : result.release_date}
+          title={mediaCardTitle}
+          id={result.id}
+          mediaType={result.media_type}
+        />
+      </div>
+
       {
         result.recommendations.results.length > 0 && (
-          <MediaGrid
-            media={media}
-            title='You might also Like'
-            class='!p-0 sm:!p-0 [&_h2]:font-normal'
-            results={result.recommendations.results}
-          />
+          <div class='mt-12 border-t border-border-subtle pt-10'>
+            <MediaGrid
+              media={media}
+              title='More Like This'
+              class='!px-0'
+              results={result.recommendations.results}
+            />
+          </div>
         )
       }
     </div>

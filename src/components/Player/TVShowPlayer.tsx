@@ -8,7 +8,7 @@ import { SelectEpisode } from './SelectEpisode'
 import { NextPrevButtons } from './NextPrevButtons'
 import type { getSeasonDetails, getTVShow } from '@/utils/tmdb'
 
-export interface Props {
+interface Props {
   season: number
   episode: number
   currentSourceId: string
@@ -47,10 +47,10 @@ export function TVShowPlayer({
   }, [episode])
 
   return (
-    <div className='mt-4 flex w-full flex-col-reverse gap-2 shadow-2xl lg:flex-row'>
-      <div className='flex h-[25rem] flex-col overflow-auto rounded-2xl bg-white/10 lg:aspect-video lg:h-[unset] lg:w-80'>
-        <div className='flex h-14 w-full items-center justify-between gap-2 overflow-hidden bg-white/5 px-3 py-4'>
-          <p>Episodes</p>
+    <div className='flex w-full flex-col gap-4 lg:flex-row lg:gap-6'>
+      <div className='order-2 flex w-full flex-col overflow-hidden rounded-2xl border border-border-subtle bg-surface-overlay/60 backdrop-blur-sm lg:order-1 lg:w-80 lg:flex-shrink-0'>
+        <div className='flex items-center justify-between gap-2 border-b border-border-subtle px-4 py-3'>
+          <p className='text-sm font-medium text-zinc-300'>Episodes</p>
           <SelectSeason
             id={id}
             seasons={tvSeasons}
@@ -67,15 +67,16 @@ export function TVShowPlayer({
           mediaId={id}
         />
       </div>
-      <div className='flex flex-grow flex-col gap-2'>
-        <div className='rounded-2xl bg-white/10'>
+
+      <div className='order-1 min-w-0 flex-1 space-y-4 lg:order-2'>
+        <div className='overflow-hidden rounded-2xl border border-border-subtle bg-black shadow-card'>
           <iframe
             id='player-video'
             title={`${name} - S${season}E${episode}`}
-            className='aspect-video w-full rounded-2xl bg-transparent'
+            className='aspect-video w-full bg-black'
             allowFullScreen
             src={iframeUrl}
-          ></iframe>
+          />
         </div>
         <NextPrevButtons
           mediaId={id}

@@ -1,0 +1,158 @@
+---
+import { NavUser } from '@/components/Auth/NavUser'
+import { Search, SearchMobile } from '@/components/Search'
+import { Home, Compass, Search as SearchIcon, Menu, X } from 'lucide-react'
+
+const pathname = Astro.url.pathname
+
+const links = [
+  { href: '/', label: 'Home', icon: Home },
+  { href: '/explore', label: 'Explore', icon: Compass },
+]
+---
+
+<header class='fixed inset-x-0 top-0 z-50 backdrop-blur-sm'>
+  <div
+    class='relative mx-auto flex h-[var(--navbar-height)] items-center gap-3 bg-transparent px-4 [text-shadow:0_1px_4px_rgba(0,0,0,0.85)] sm:gap-4 sm:px-6 lg:px-8'
+  >
+    <a href='/' class='flex shrink-0 items-center gap-2'>
+      <span
+        class='flex size-8 items-center justify-center rounded-lg bg-accent text-sm font-bold text-accent-foreground'
+      >
+        W
+      </span>
+      <span
+        class='hidden text-lg font-semibold tracking-tight text-white xs:inline'
+        >Wovie</span
+      >
+    </a>
+
+    <nav
+      class='hidden items-center gap-0.5 sm:gap-1 md:absolute md:left-1/2 md:flex md:-translate-x-1/2'
+    >
+      {
+        links.map(({ href, label, icon: Icon }) => {
+          const isActive =
+            href === '/' ? pathname === '/' : pathname.startsWith(href)
+
+          return (
+            <a
+              href={href}
+              aria-label={label}
+              class:list={[
+                'flex items-center gap-2 rounded-xl px-2.5 py-2 text-sm font-medium transition-all duration-200 sm:px-3.5',
+                isActive
+                  ? 'bg-accent/10 text-accent'
+                  : 'text-zinc-400 hover:bg-white/5 hover:text-white',
+              ]}
+            >
+              <Icon
+                width='18'
+                height='18'
+                stroke={isActive ? '#3b82f6' : 'currentColor'}
+              />
+              <span class='hidden sm:inline'>{label}</span>
+            </a>
+          )
+        })
+      }
+    </nav>
+
+    <div class='ml-auto flex items-center gap-2'>
+      <Search client:idle transition:persist>
+        <SearchIcon width='16' height='16' stroke='#71717a' />
+      </Search>
+      <SearchMobile client:idle transition:persist>
+        <SearchIcon width='16' height='16' stroke='#71717a' />
+      </SearchMobile>
+      <NavUser client:idle />
+      <button
+        type='button'
+        id='mobile-menu-toggle'
+        aria-label='Open menu'
+        aria-expanded='false'
+        aria-controls='mobile-menu'
+        class='flex size-9 items-center justify-center rounded-xl border border-border-subtle bg-surface-overlay/60 text-zinc-400 transition-colors hover:text-white md:hidden'
+      >
+        <Menu
+          id='mobile-menu-open'
+          width='18'
+          height='18'
+          stroke='currentColor'
+        />
+        <X
+          id='mobile-menu-close'
+          width='18'
+          height='18'
+          stroke='currentColor'
+          className='hidden'
+        />
+      </button>
+    </div>
+  </div>
+
+  <div
+    id='mobile-menu'
+    class='hidden border-t border-border-subtle bg-surface-raised/95 backdrop-blur-xl md:hidden'
+  >
+    <nav class='flex flex-col gap-1 px-4 py-3'>
+      {
+        links.map(({ href, label, icon: Icon }) => {
+          const isActive =
+            href === '/' ? pathname === '/' : pathname.startsWith(href)
+
+          return (
+            <a
+              href={href}
+              class:list={[
+                'flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200',
+                isActive
+                  ? 'bg-accent/10 text-accent'
+                  : 'text-zinc-400 hover:bg-white/5 hover:text-white',
+              ]}
+            >
+              <Icon
+                width='18'
+                height='18'
+                stroke={isActive ? '#3b82f6' : 'currentColor'}
+              />
+              {label}
+            </a>
+          )
+        })
+      }
+    </nav>
+  </div>
+</header>
+
+<script>
+  function setupMobileMenu() {
+    const toggle = document.getElementById('mobile-menu-toggle')
+    const menu = document.getElementById('mobile-menu')
+    const openIcon = document.getElementById('mobile-menu-open')
+    const closeIcon = document.getElementById('mobile-menu-close')
+
+    if (!toggle || !menu || !openIcon || !closeIcon) return
+
+    const setOpen = (open: boolean) => {
+      menu.classList.toggle('hidden', !open)
+      openIcon.classList.toggle('hidden', open)
+      closeIcon.classList.toggle('hidden', !open)
+      toggle.setAttribute('aria-expanded', String(open))
+      toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu')
+    }
+
+    toggle.addEventListener('click', () => {
+      setOpen(menu.classList.contains('hidden'))
+    })
+
+    menu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => setOpen(false))
+    })
+
+    document.addEventListener('astro:page-load', () => setOpen(false))
+  }
+
+  setupMobileMenu()
+  document.addEventListener('astro:page-load', setupMobileMenu)
+</script>

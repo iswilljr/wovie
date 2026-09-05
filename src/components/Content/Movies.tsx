@@ -1,22 +1,27 @@
 import useSWR from 'swr'
-import { ClapperboardIcon } from 'lucide-react'
+import { Clapperboard } from 'lucide-react'
 import { MediaGrid } from '../Media/MediaGrid'
 import { actions } from 'astro:actions'
 import { swrDefaultOptions } from '@/utils'
 
 export function Movies() {
-  const { data: trendingMovies } = useSWR(
+  const { data: trendingMovies, isLoading } = useSWR(
     'trendingMovies',
     () => actions.trendingMovies(),
     swrDefaultOptions
   )
 
+  const results = (trendingMovies?.data as any) ?? []
+
+  if (!isLoading && results.length === 0) return null
+
   return (
     <MediaGrid
-      title='Movies'
+      title='Popular Movies'
       media='movie'
-      results={(trendingMovies?.data as any) ?? []}
-      icon={<ClapperboardIcon width='18' height='18' stroke='#000' />}
+      isLoading={isLoading}
+      results={results}
+      icon={<Clapperboard className='size-4' strokeWidth={2} />}
     />
   )
 }

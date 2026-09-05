@@ -30,7 +30,7 @@ export const auth = betterAuth({
     }),
   ],
   secret: BETTER_AUTH_SECRET,
-  trustedOrigins: ['https://wovix.app'],
+  trustedOrigins: ['https://wovix.app', 'http://localhost:4321'],
   baseURL: BETTER_AUTH_URL,
   session: {
     cookieCache: {
